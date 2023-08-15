@@ -21,6 +21,7 @@ POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 print('Randomly generating UE positions Success')
 
 POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
+POSITIONS = [(-13000, -20711)]
 
 
 # ===================== Running Experiment =============================
@@ -32,31 +33,48 @@ def monitor_timestamp(env):
 
 
 env = simpy.Environment()
-# Deploy Satellites
-satellite2 = targetSatellite(2, 0, 0, SATELLITE_V, SATELLITE_SATELLITE_DELAY, env)
+# Deploy source Satellite
 
-satellite1 = Satellite(
+satellite_source = Satellite(
     identity=1,
     position_x=0,
     position_y=0,
     velocity=SATELLITE_V,
     satellite_ground_delay=SATELLITE_GROUND_DELAY,
-    target_satellite=satellite2,
     ISL_delay=SATELLITE_SATELLITE_DELAY,
     env=env)
 
+UEs = {}
+satellites = {1: satellite_source}
+
 # Deploying UEs following randomly generated positions
 for index, position in enumerate(POSITIONS, start=1):
-    satellite1.UEs[index] = UE(
+    UEs[index] = UE(
         identity=index,
         position_x=position[0],
         position_y=position[1],
-        serving_satellite=satellite1,
+        serving_satellite=satellite_source,
         satellite_ground_delay=SATELLITE_GROUND_DELAY,
         env=env)
+
+# Deploying other satellites
+for i in range(2, NUMBER_SATELLITES + 1):
+    satellites[i] = Satellite(
+        identity=i,
+        position_x=0,
+        position_y=0,
+        velocity=SATELLITE_V,
+        satellite_ground_delay=SATELLITE_GROUND_DELAY,
+        ISL_delay=SATELLITE_SATELLITE_DELAY,
+        env=env
+    )
+
+for identity in satellites:
+    satellites[identity].UEs = UEs
+    satellites[identity].satellites = satellites
 
 # env.process(monitor_timestamp(env))
 print('==========================================')
 print('============= Experiment Log =============')
 print('==========================================')
-env.run(until=10)
+env.run(until=500)

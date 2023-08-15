@@ -3,20 +3,19 @@ import json
 import simpy
 
 
-class Satellite(object):
+class Satellite:
     def __init__(self,
                  identity,
                  position_x,
                  position_y,
                  velocity,
                  satellite_ground_delay,
-                 target_satellite,
                  ISL_delay,
                  env):
 
         # Config Initialization
+        self.type = "satellite"
         self.ISL_delay = ISL_delay
-        self.target_satellite = target_satellite
         self.satellite_ground_delay = satellite_ground_delay
         self.identity = identity
         self.env = env
@@ -25,55 +24,103 @@ class Satellite(object):
         self.velocity = velocity
 
         # Logic Initialization
-        self.handover_request_Q = simpy.Store(env)
-        self.configuration_response_Q = simpy.Store(env)
-        self.UEs = {}
+        self.messageQ = simpy.Store(env)
+        self.UEs = None
+        self.satellites = None
         self.cpus = simpy.Resource(env, 8)  # Concurrent processing
 
         # Running process
         self.env.process(self.init())  # Print Deployment information
         self.env.process(self.update_position())
-        self.env.process(self.process_handover_request())
+        self.env.process(self.handle_messages())
 
     def init(self):
         print(f"Satellite {self.identity} deployed at time {self.env.now}")
         yield self.env.timeout(1)
 
-    def send_message(self, delay, msg, Q, target):
-        print(f"Satellite {self.identity} sends {target.identity}: message {msg} at {self.env.now}")
+    def send_message(self, delay, msg, Q, to):
+        msg['from'] = self.identity
+        msg['to'] = to.identity
+        msg = json.dumps(msg)
+        print(f"Satellite {self.identity} sends {to.type} {to.identity} the message {msg} at {self.env.now}")
         yield self.env.timeout(delay)
         Q.put(msg)
 
+    # =================== Satellite functions ======================
+
     # The satellite receives the handover request from the UE
-    def process_handover_request(self):
+    def handle_messages(self):
         while True:
-            msg = yield self.handover_request_Q.get()
-            print(f"Satellite {self.identity} receives msg:{msg} at time {self.env.now}")
-            sender = json.loads(msg)['ueid']
-            self.env.process(self.cpu_processing(sender))
+            msg = yield self.messageQ.get()
+            print(f"Satellite {self.identity} start handling msg:{msg} at time {self.env.now}")
+            data = json.loads(msg)
+            self.env.process(self.cpu_processing(data))
 
-    def process_configuration_response(self):
-        while True:
-            msg = yield self.handover_request_Q.get()
-            print(f"Satellite {self.identity} receives msg:{msg} at time {self.env.now}")
-            sender = json.loads(msg)['ueid']
-            self.env.process(self.cpu_processing(sender))
-
-    def cpu_processing(self, ueid):
+    # The logic will be handled here
+    def cpu_processing(self, msg):
         with self.cpus.request() as request:
-            UE = self.UEs[ueid]
-            if UE.active:
+            # handle handover request from UE
+            if msg['type'] == 'UE handover request':
+                ueid = msg['from']
+                UE = self.UEs[ueid]
+                if self.connected(UE):
+                    yield request
+                    yield self.env.timeout(1)  # CPU process time
+                if self.connected(UE):
+                    # send the response to UE
+                    data = {
+                        "type": "target configuration request",
+                        "ueid": ueid
+                    }
+                    # for now, just send it to the satellite 2. TODO
+                    target_satellite = self.satellites[2]
+                    self.env.process(
+                        self.send_message(
+                            delay=self.ISL_delay,
+                            msg=data,
+                            Q=target_satellite.messageQ,
+                            to=target_satellite
+                        )
+                    )
+            elif msg['type'] == 'target configuration response':
+                satellite_id = msg['from']
+                ueid = msg['ueid']
+                UE = self.UEs[ueid]
+                if self.connected(UE):
+                    yield request
+                    yield self.env.timeout(1)  # CPU process time
+                if self.connected(UE):
+                    # send the response to UE
+                    data = {
+                        "type": "handover request response",
+                    }
+                    self.env.process(
+                        self.send_message(
+                            delay=self.satellite_ground_delay,
+                            msg=data,
+                            Q=UE.messageQ,
+                            to=UE
+                        )
+                    )
+            elif msg['type'] == 'target configuration request':
+                satellite_id = msg['from']
+                ueid = msg['ueid']
                 yield request
-                yield self.env.timeout(1)
-            if UE.active:
-                # return the response to UE
+                yield self.env.timeout(1)  # CPU process time
+                # send the response to UE
                 data = {
-                    "type": "handover request response",
-                    "satid": self.identity,
-                    "ueid": UE.identity}
-                msg = json.dumps(data)
-                self.env.process(self.send_message(self.satellite_ground_delay, msg, UE.responseQ, UE))
-            #   print(f"Satellite {self.identity} sends response {res} at time {env.now}")
+                    "type": "target configuration response",
+                    "ueid": ueid
+                }
+                source_satellite = self.satellites[satellite_id]
+                self.env.process(
+                    self.send_message(
+                        delay=self.ISL_delay,
+                        msg=data,
+                        Q=source_satellite.messageQ,
+                        to=source_satellite
+                    )
+                )
 
     def update_position(self):
         while True:
@@ -84,33 +131,6 @@ class Satellite(object):
             # direction set to right
             self.position_x += self.velocity * ratio
 
-        # For convenience, the target satellite is first separated.
-
-
-class targetSatellite(object):
-    def __init__(self, identity, x, y, v, ISL_delay, env):
-        self.ISL_delay = ISL_delay
-        self.identity = identity
-        self.env = env
-        self.x = x
-        self.y = y
-        self.v = v
-        # This Q is for computing the response to source satellite
-        self.configure_request_Q = simpy.Store(env)
-
-        self.cpus = simpy.Resource(env, 8)  # Concurrent processing
-
-        self.env.process(self.init())
-
-    # self.env.process(self.process_handover_request())
-
-    def init(self):
-        print(f"Satellite {self.identity} deployed at time {self.env.now}")
-        yield self.env.timeout(1)
-
-    def process_configuration_request(self):
-        while True:
-            msg = yield self.configureQ.get()
-            print(f"Satellite {self.identity} receives msg:{msg} at time {self.env.now}")
-            # sender = msg[]
-            self.env.process(self.cpu_processing())
+    # ==================== Utils (Not related to Simpy) ==============
+    def connected(self, UE):
+        return UE.active and UE.serving_satellite.identity == self.identity
