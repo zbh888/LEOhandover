@@ -1,9 +1,9 @@
-import json
-
 import simpy
 
+from Base import *
 
-class Satellite:
+
+class Satellite(Base):
     def __init__(self,
                  identity,
                  position_x,
@@ -13,14 +13,16 @@ class Satellite:
                  ISL_delay,
                  env):
 
+        Base.__init__(self,
+                      identity=identity,
+                      position_x=position_x,
+                      position_y=position_y,
+                      env=env,
+                      satellite_ground_delay=satellite_ground_delay,
+                      object_type="satellite")
+
         # Config Initialization
-        self.type = "satellite"
         self.ISL_delay = ISL_delay
-        self.satellite_ground_delay = satellite_ground_delay
-        self.identity = identity
-        self.env = env
-        self.position_x = position_x
-        self.position_y = position_y
         self.velocity = velocity
 
         # Logic Initialization
@@ -34,27 +36,16 @@ class Satellite:
         self.env.process(self.update_position())
         self.env.process(self.handle_messages())
 
-    def init(self):
-        print(f"Satellite {self.identity} deployed at time {self.env.now}")
-        yield self.env.timeout(1)
-
-    def send_message(self, delay, msg, Q, to):
-        msg['from'] = self.identity
-        msg['to'] = to.identity
-        msg = json.dumps(msg)
-        print(f"Satellite {self.identity} sends {to.type} {to.identity} the message {msg} at {self.env.now}")
-        yield self.env.timeout(delay)
-        Q.put(msg)
+    def handle_messages(self):
+        while True:
+            msg = yield self.messageQ.get()
+            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
+            data = json.loads(msg)
+            self.env.process(self.cpu_processing(data))
 
     # =================== Satellite functions ======================
 
     # The satellite receives the handover request from the UE
-    def handle_messages(self):
-        while True:
-            msg = yield self.messageQ.get()
-            print(f"Satellite {self.identity} start handling msg:{msg} at time {self.env.now}")
-            data = json.loads(msg)
-            self.env.process(self.cpu_processing(data))
 
     # The logic will be handled here
     def cpu_processing(self, msg):
@@ -133,4 +124,4 @@ class Satellite:
 
     # ==================== Utils (Not related to Simpy) ==============
     def connected(self, UE):
-        return UE.active and UE.serving_satellite.identity == self.identity
+        return (UE.active and UE.serving_satellite.identity == self.identity)
