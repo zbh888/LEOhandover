@@ -19,12 +19,9 @@ print(f"  #Example: approximate {number_handover} need to be handed over within 
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 print('Randomly generating UE positions Success')
-utils.draw_from_positions(POSITIONS)
 
 POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
 POSITIONS = [(-13000, -20711)]
-
-
 
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
@@ -80,3 +77,20 @@ print('==========================================')
 print('============= Experiment Log =============')
 print('==========================================')
 env.run(until=500)
+
+print('==========================================')
+print('============= Experiment Ends =============')
+print('==========================================')
+counter_request = 0
+counter_success = 0
+Success_UE_Positions = []
+for i in UEs:
+    ue = UEs[i]
+    if ue.hasNoHandoverRequest == False:
+        counter_request += 1
+    if ue.hasNoHandoverConfiguration == False:
+        counter_success += 1
+        Success_UE_Positions.append((ue.position_x, ue.position_y))
+print(f"{counter_request} UEs sent the handover requests")
+print(f"{counter_success} UEs received the handover configuration")
+utils.draw_from_positions(POSITIONS, Success_UE_Positions)
