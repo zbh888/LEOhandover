@@ -19,9 +19,11 @@ print(f"  #Example: approximate {number_handover} need to be handed over within 
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 print('Randomly generating UE positions Success')
+utils.draw_from_positions(POSITIONS)
 
 POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
 POSITIONS = [(-13000, -20711)]
+
 
 
 # ===================== Running Experiment =============================

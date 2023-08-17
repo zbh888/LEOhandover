@@ -2,6 +2,8 @@ import random
 
 import math
 
+import matplotlib.pyplot as plt
+
 
 # The number of devices requiring handover
 def handout(R, N, d):
@@ -17,9 +19,15 @@ def generate_points(n, R, x, y):
         theta = random.uniform(0, 1) * 2 * math.pi
         px = x + r * math.cos(theta)
         py = y + r * math.sin(theta)
-        return (px, py)
+        return px, py
 
     points = []
     for i in range(n):
         points.append(generate_one(R, x, y))
     return points
+
+
+def draw_from_positions(POSITIONS):
+    x_coords, y_coords = zip(*POSITIONS)
+    plt.scatter(x_coords, y_coords, color='blue', s=0.05)
+    plt.savefig('res_positions.png', dpi=300, bbox_inches='tight')
