@@ -97,4 +97,5 @@ class UE(Base):
     def outside_coverage(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
-        return d >= 25 * 1000
+        # TODO this is not accurate
+        return d >= 25 * 1000 and self.position_x < self.serving_satellite.position_x

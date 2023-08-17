@@ -20,8 +20,8 @@ print(f"  #Example: approximate {number_handover} need to be handed over within 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 print('Randomly generating UE positions Success')
 
-POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
-POSITIONS = [(-13000, -20711)]
+#POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
+#POSITIONS = [(-13000, -20711)]
 
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
@@ -36,7 +36,7 @@ env = simpy.Environment()
 
 satellite_source = Satellite(
     identity=1,
-    position_x=0,
+    position_x=-SATELLITE_R, # TODO Not accurate
     position_y=0,
     velocity=SATELLITE_V,
     satellite_ground_delay=SATELLITE_GROUND_DELAY,
@@ -72,11 +72,11 @@ for identity in satellites:
     satellites[identity].UEs = UEs
     satellites[identity].satellites = satellites
 
-# env.process(monitor_timestamp(env))
+env.process(monitor_timestamp(env))
 print('==========================================')
 print('============= Experiment Log =============')
 print('==========================================')
-env.run(until=500)
+env.run(until=DURATION)
 
 print('==========================================')
 print('============= Experiment Ends =============')
@@ -94,3 +94,5 @@ for i in UEs:
 print(f"{counter_request} UEs sent the handover requests")
 print(f"{counter_success} UEs received the handover configuration")
 utils.draw_from_positions(POSITIONS, Success_UE_Positions)
+
+print(satellite_source.position_x, satellite_source.position_y)

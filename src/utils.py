@@ -41,3 +41,4 @@ def draw_from_positions(total_positions, success_position):
         x_coords, y_coords = zip(*success_position)
         plt.scatter(x_coords, y_coords, color='red', s=0.5)
     plt.savefig('res_positions.png', dpi=300, bbox_inches='tight')
+
