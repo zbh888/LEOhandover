@@ -1,6 +1,7 @@
 import simpy
 
 from Base import *
+from config import *
 
 
 class Satellite(Base):
@@ -29,7 +30,7 @@ class Satellite(Base):
         self.messageQ = simpy.Store(env)
         self.UEs = None
         self.satellites = None
-        self.cpus = simpy.Resource(env, 8)  # Concurrent processing
+        self.cpus = simpy.Resource(env, SATELLITE_CPU)  # Concurrent processing
 
         # Running process
         self.env.process(self.init())  # Print Deployment information
@@ -37,6 +38,7 @@ class Satellite(Base):
         self.env.process(self.handle_messages())
 
     def handle_messages(self):
+        """ Get the task from message Q and start a CPU processing process """
         while True:
             msg = yield self.messageQ.get()
             print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
@@ -45,22 +47,29 @@ class Satellite(Base):
 
     # =================== Satellite functions ======================
 
-    # The satellite receives the handover request from the UE
-
-    # The logic will be handled here
     def cpu_processing(self, msg):
+        """ Processing the task from the message Q
+
+        Args:
+            msg: the json object from message Q
+
+        """
         with self.cpus.request() as request:
-            # handle handover request from UE
-            if msg['type'] == 'UE handover request':
+            # Get the task and processing time
+            task = msg['task']
+            processing_time = PROCESSING_TIME[task]
+
+            # handle the task by cases
+            if task == MEASUREMENT_REPORT:
                 ueid = msg['from']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
                     yield request
-                    yield self.env.timeout(1)  # CPU process time
+                    yield self.env.timeout(processing_time)
                 if self.connected(UE):
                     # send the response to UE
                     data = {
-                        "type": "target configuration request",
+                        "task": HANDOVER_REQUEST,
                         "ueid": ueid
                     }
                     # for now, just send it to the satellite 2. TODO
@@ -73,17 +82,16 @@ class Satellite(Base):
                             to=target_satellite
                         )
                     )
-            elif msg['type'] == 'target configuration response':
+            elif task == HANDOVER_ACKNOWLEDGE:
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
                     yield request
-                    yield self.env.timeout(1)  # CPU process time
+                    yield self.env.timeout(processing_time)
                 if self.connected(UE):
-                    # send the response to UE
                     data = {
-                        "type": "handover request response",
+                        "task": RRC_RECONFIGURATION,
                     }
                     self.env.process(
                         self.send_message(
@@ -93,14 +101,13 @@ class Satellite(Base):
                             to=UE
                         )
                     )
-            elif msg['type'] == 'target configuration request':
+            elif task == HANDOVER_REQUEST:
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 yield request
-                yield self.env.timeout(1)  # CPU process time
-                # send the response to UE
+                yield self.env.timeout(processing_time)
                 data = {
-                    "type": "target configuration response",
+                    "task": HANDOVER_ACKNOWLEDGE,
                     "ueid": ueid
                 }
                 source_satellite = self.satellites[satellite_id]
@@ -114,6 +121,7 @@ class Satellite(Base):
                 )
 
     def update_position(self):
+        """ Continuous updating the object location. """
         while True:
             yield self.env.timeout(1)  # Time between position updates
             # Update x and y based on velocity
@@ -124,4 +132,4 @@ class Satellite(Base):
 
     # ==================== Utils (Not related to Simpy) ==============
     def connected(self, UE):
-        return (UE.active and UE.serving_satellite.identity == self.identity)
+        return UE.active and UE.serving_satellite.identity == self.identity

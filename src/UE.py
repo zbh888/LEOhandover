@@ -2,6 +2,7 @@ import math
 import simpy
 
 from Base import *
+from config import *
 
 
 class UE(Base):
@@ -26,7 +27,7 @@ class UE(Base):
 
         # Logic Initialization
         self.messageQ = simpy.Store(env)
-        self.cpus = simpy.Resource(env, 8)
+        self.cpus = simpy.Resource(env, UE_CPU)
         self.satellites = None
         self.active = True
         self.hasNoHandoverConfiguration = True
@@ -40,11 +41,28 @@ class UE(Base):
         env.process(self.service_monitor())
 
     # =================== UE functions ======================
+    def handle_messages(self):
+        while True:
+            msg = yield self.messageQ.get()
+            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
+            data = json.loads(msg)
+            self.env.process(self.cpu_processing(data))
+
+    def cpu_processing(self, msg):
+        with self.cpus.request() as request:
+            task = msg['task']
+            if task == RRC_RECONFIGURATION:
+                yield request
+                satid = msg['from']
+                if satid == self.serving_satellite.identity and self.active:
+                    self.hasNoHandoverConfiguration = False
+                    print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+
     def handover_request_monitor(self):
         while self.active:
             if self.send_request_condition():
                 data = {
-                    "type": "UE handover request",
+                    "task": MEASUREMENT_REPORT,
                 }
                 self.env.process(
                     self.send_message(
@@ -57,22 +75,6 @@ class UE(Base):
                 self.hasNoHandoverRequest = False
             else:
                 yield self.env.timeout(1)
-
-    def handle_messages(self):
-        while True:
-            msg = yield self.messageQ.get()
-            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
-            data = json.loads(msg)
-            self.env.process(self.cpu_processing(data))
-
-    def cpu_processing(self, msg):
-        with self.cpus.request() as request:
-            if msg['type'] == 'handover request response':
-                yield request
-                satid = msg['from']
-                if satid == self.serving_satellite.identity and self.active:
-                    self.hasNoHandoverConfiguration = False
-                    print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
 
     def service_monitor(self):
         while True:

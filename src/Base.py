@@ -24,6 +24,15 @@ class Base:
         yield self.env.timeout(1)
 
     def send_message(self, delay, msg, Q, to):
+        """ Send the message with delay simulation
+
+        Args:
+            delay: The message propagation delay
+            msg: the json object needs to be sent
+            Q: the Q of the receiver
+            to: the receiver object
+
+        """
         msg['from'] = self.identity
         msg['to'] = to.identity
         msg = json.dumps(msg)
