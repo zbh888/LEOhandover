@@ -31,11 +31,11 @@ def generate_points(n, R, x, y):
 def draw_from_positions(unrequested_positions, success_position, requested_position, label, dir):
     if len(unrequested_positions) != 0:
         x_coords, y_coords = zip(*unrequested_positions)
-        plt.scatter(x_coords, y_coords, color='red', s=5)
+        plt.scatter(x_coords, y_coords, color='red', s=0.5)
     if len(success_position) != 0:
         x_coords, y_coords = zip(*success_position)
-        plt.scatter(x_coords, y_coords, color='blue', s=5)
+        plt.scatter(x_coords, y_coords, color='blue', s=0.5)
     if len(requested_position) != 0:
         x_coords, y_coords = zip(*requested_position)
-        plt.scatter(x_coords, y_coords, color='green', s=5)
+        plt.scatter(x_coords, y_coords, color='green', s=0.5)
     plt.savefig(f'{dir}/res_positions_{label}.png', dpi=300, bbox_inches='tight')

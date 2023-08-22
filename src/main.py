@@ -6,8 +6,10 @@ from UE import *
 from config import *
 
 dir = "defaultres"
-if len(sys.argv) != 1: # This is a tuning process
+if len(sys.argv) != 1: # This is for automation
     dir = sys.argv[1]
+    SATELLITE_CPU = int(sys.argv[2])
+    SATELLITE_GROUND_DELAY = int(sys.argv[3])
 
 file_path = f"res/{dir}"
 file = open(file_path + "/config_res.txt", "w")
