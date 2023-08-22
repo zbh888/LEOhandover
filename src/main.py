@@ -5,22 +5,28 @@ from Satellite import *
 from UE import *
 from config import *
 
-print("System Configuration:")
-print(f"  #Satellite Radius: {SATELLITE_R} m")
-print(f"  #Satellite speed: {SATELLITE_V} m/s")
-print(f"  #Number of UEs: {NUMBER_UE}")
-print(f"  #Satellite to ground delay: {SATELLITE_GROUND_DELAY} ms")
-print(f"  #Inter Satellite delay: {SATELLITE_SATELLITE_DELAY} ms")
+dir = "defaultres"
+if len(sys.argv) != 1: # This is a tuning process
+    dir = sys.argv[1]
+
+file_path = f"res/{dir}"
+file = open(file_path + "/config_res.txt", "w")
+# Close the file
+file.write("System Configuration:\n")
+file.write(f"  #Satellite Radius: {SATELLITE_R} m\n")
+file.write(f"  #Satellite speed: {SATELLITE_V} m/s\n")
+file.write(f"  #Number of UEs: {NUMBER_UE}\n")
+file.write(f"  #Satellite CPU number: {SATELLITE_CPU}\n")
+file.write(f"  #Satellite to ground delay: {SATELLITE_GROUND_DELAY} ms\n")
+file.write(f"  #Inter Satellite delay: {SATELLITE_SATELLITE_DELAY} ms\n")
 
 t = 1
 d = SATELLITE_V * t
 number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
-print(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds")
+file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+file.close()
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
-print('Randomly generating UE positions Success')
-
-
 # POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
 # POSITIONS = [(-13000, -20711)]
 
@@ -46,7 +52,7 @@ def stats_collector(env, UEs, satellites, timestep):
                 request_UE_positions.append(pos)
             else:
                 unrequested_UE_positions.append(pos)
-        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now)
+        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now, file_path + "/graph")
         yield env.timeout(timestep)
 
 
@@ -100,16 +106,16 @@ env.run(until=DURATION)
 print('==========================================')
 print('============= Experiment Ends =============')
 print('==========================================')
-# counter_request = 0
-# counter_success = 0
-# Success_UE_Positions = []
-# for i in UEs:
-#     ue = UEs[i]
-#     if ue.hasNoHandoverRequest == False:
-#         counter_request += 1
-#     if ue.hasNoHandoverConfiguration == False:
-#         counter_success += 1
-#         Success_UE_Positions.append((ue.position_x, ue.position_y))
-# print(f"{counter_request} UEs sent the handover requests")
-# print(f"{counter_success} UEs received the handover configuration")
-# utils.draw_from_positions(POSITIONS, Success_UE_Positions)
+
+file = open(file_path + "/config_res.txt", "a")
+counter_request = 0
+counter_success = 0
+for i in UEs:
+    ue = UEs[i]
+    if ue.hasHandoverConfiguration:
+        counter_success += 1
+    if ue.sentHandoverRequest:
+        counter_request += 1
+file.write(f"{counter_request} UEs sent the handover requests\n")
+file.write(f"{counter_success} UEs received the handover configuration\n")
+file.close()

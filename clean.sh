@@ -1,3 +1,4 @@
 #!/bin/bash
 
-rm res*
+rm -rf res
+mkdir res
