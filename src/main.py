@@ -36,9 +36,17 @@ def stats_collector(env, UEs, satellites, timestep):
     while True:
         success_UE_positions = []
         request_UE_positions = []
-        total_UE_positions = []
+        unrequested_UE_positions = []
         for ue_id in UEs:
             ue = UEs[ue_id]
+            pos = (ue.position_x, ue.position_y)
+            if ue.hasHandoverConfiguration: # success
+                success_UE_positions.append(pos)
+            elif ue.sentHandoverRequest:
+                request_UE_positions.append(pos)
+            else:
+                unrequested_UE_positions.append(pos)
+        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now)
         yield env.timeout(timestep)
 
 
@@ -84,7 +92,7 @@ for identity in satellites:
     satellites[identity].satellites = satellites
 
 env.process(monitor_timestamp(env))
-env.process(stats_collector(env, UEs, satellites, 20))
+env.process(stats_collector(env, UEs, satellites, 200))
 print('==========================================')
 print('============= Experiment Log =============')
 print('==========================================')
@@ -92,16 +100,16 @@ env.run(until=DURATION)
 print('==========================================')
 print('============= Experiment Ends =============')
 print('==========================================')
-counter_request = 0
-counter_success = 0
-Success_UE_Positions = []
-for i in UEs:
-    ue = UEs[i]
-    if ue.hasNoHandoverRequest == False:
-        counter_request += 1
-    if ue.hasNoHandoverConfiguration == False:
-        counter_success += 1
-        Success_UE_Positions.append((ue.position_x, ue.position_y))
-print(f"{counter_request} UEs sent the handover requests")
-print(f"{counter_success} UEs received the handover configuration")
-utils.draw_from_positions(POSITIONS, Success_UE_Positions)
+# counter_request = 0
+# counter_success = 0
+# Success_UE_Positions = []
+# for i in UEs:
+#     ue = UEs[i]
+#     if ue.hasNoHandoverRequest == False:
+#         counter_request += 1
+#     if ue.hasNoHandoverConfiguration == False:
+#         counter_success += 1
+#         Success_UE_Positions.append((ue.position_x, ue.position_y))
+# print(f"{counter_request} UEs sent the handover requests")
+# print(f"{counter_success} UEs received the handover configuration")
+# utils.draw_from_positions(POSITIONS, Success_UE_Positions)
