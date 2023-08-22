@@ -1,9 +1,7 @@
 import random
 
 import math
-from PIL import Image
 import matplotlib.pyplot as plt
-import os
 
 
 # The number of devices requiring handover

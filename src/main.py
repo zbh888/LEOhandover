@@ -6,7 +6,7 @@ from UE import *
 from config import *
 
 dir = "defaultres"
-if len(sys.argv) != 1: # This is for automation
+if len(sys.argv) != 1:  # This is for automation
     dir = sys.argv[1]
     SATELLITE_CPU = int(sys.argv[2])
     SATELLITE_GROUND_DELAY = int(sys.argv[3])
@@ -29,6 +29,8 @@ file.write(f"  #Example: approximate {number_handover} need to be handed over wi
 file.close()
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
+
+
 # POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
 # POSITIONS = [(-13000, -20711)]
 
@@ -48,13 +50,14 @@ def stats_collector(env, UEs, satellites, timestep):
         for ue_id in UEs:
             ue = UEs[ue_id]
             pos = (ue.position_x, ue.position_y)
-            if ue.hasHandoverConfiguration: # success
+            if ue.hasHandoverConfiguration:  # success
                 success_UE_positions.append(pos)
             elif ue.sentHandoverRequest:
                 request_UE_positions.append(pos)
             else:
                 unrequested_UE_positions.append(pos)
-        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now, file_path + "/graph")
+        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now,
+                                  file_path + "/graph")
         yield env.timeout(timestep)
 
 
