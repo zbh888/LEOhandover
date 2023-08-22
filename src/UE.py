@@ -30,8 +30,8 @@ class UE(Base):
         self.cpus = simpy.Resource(env, UE_CPU)
         self.satellites = None
         self.active = True
-        self.hasNoHandoverConfiguration = True
-        self.hasNoHandoverRequest = True
+        self.hasHandoverConfiguration = False
+        self.sentHandoverRequest = False
 
         # Running Process
         env.process(self.init())
@@ -55,7 +55,7 @@ class UE(Base):
                 yield request
                 satid = msg['from']
                 if satid == self.serving_satellite.identity and self.active:
-                    self.hasNoHandoverConfiguration = False
+                    self.hasHandoverConfiguration = True
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
 
     def handover_request_monitor(self):
@@ -72,7 +72,7 @@ class UE(Base):
                         to=self.serving_satellite
                     )
                 )
-                self.hasNoHandoverRequest = False
+                self.sentHandoverRequest = True
             else:
                 yield self.env.timeout(1)
 
@@ -91,7 +91,7 @@ class UE(Base):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
         decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x
-                    and self.hasNoHandoverConfiguration and self.hasNoHandoverRequest)
+                    and not self.hasHandoverConfiguration and not self.sentHandoverRequest)
         return decision
 
     def outside_coverage(self):
