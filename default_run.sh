@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p "res"
 DIR="defaultres"
 mkdir "res/$DIR"
 mkdir "res/$DIR/graph"
