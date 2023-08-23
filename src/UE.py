@@ -33,12 +33,15 @@ class UE(Base):
         self.hasHandoverConfiguration = False
         self.sentHandoverRequest = False
 
+        self.lock = False  # I only want this to perform one handover
+        self.targetID = None
+        self.sentRrcReconfigurationComplete = False
+
         # Running Process
         env.process(self.init())
         env.process(self.handle_messages())
 
-        env.process(self.handover_request_monitor())
-        env.process(self.service_monitor())
+        env.process(self.action_monitor())
 
     # =================== UE functions ======================
     def handle_messages(self):
@@ -55,12 +58,17 @@ class UE(Base):
                 yield request
                 satid = msg['from']
                 if satid == self.serving_satellite.identity and self.active:
+                    # get candidate target
+                    targets = msg['targets']
+                    # choose target
+                    self.targetID = targets[0]
                     self.hasHandoverConfiguration = True
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
 
-    def handover_request_monitor(self):
-        while self.active:
-            if self.send_request_condition():
+    def action_monitor(self):
+        while True:
+            # send measurement report
+            if self.send_request_condition() and self.active and not self.lock:
                 data = {
                     "task": MEASUREMENT_REPORT,
                 }
@@ -73,20 +81,36 @@ class UE(Base):
                     )
                 )
                 self.sentHandoverRequest = True
-            else:
-                yield self.env.timeout(1)
-
-    def service_monitor(self):
-        while True:
-            if self.outside_coverage():
+                self.lock = True
+            if self.hasHandoverConfiguration:  # When the UE has the configuration
+                if self.targetID and self.covered_by(self.targetID) and not self.sentRrcReconfigurationComplete:
+                    target = self.satellites[self.targetID]
+                    data = {
+                        "task": RRC_RECONFIGURATION_COMPLETE,
+                    }
+                    self.env.process(
+                        self.send_message(
+                            delay=self.satellite_ground_delay,
+                            msg=data,
+                            Q=target.messageQ,
+                            to=target
+                        )
+                    )
+                    self.sentRrcReconfigurationComplete = True
+            # switch to inactive
+            if self.outside_coverage() and self.active:
                 print(
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.active = False
-                break
-            else:
-                yield self.env.timeout(1)  # Wait for 1 time unit before testing again
+            yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============
+    def covered_by(self, satelliteID):
+        satellite = self.satellites[satelliteID]
+        d = math.sqrt(((self.position_x - satellite.position_x) ** 2) + (
+                (self.position_y - satellite.position_y) ** 2))
+        return d <= 25 * 1000
+
     def send_request_condition(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))

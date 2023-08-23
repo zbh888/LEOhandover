@@ -92,6 +92,7 @@ class Satellite(Base):
                 if self.connected(UE):
                     data = {
                         "task": RRC_RECONFIGURATION,
+                        "targets": [satellite_id],
                     }
                     self.env.process(
                         self.send_message(
