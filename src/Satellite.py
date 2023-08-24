@@ -149,4 +149,7 @@ class Satellite(Base):
 
     # ==================== Utils (Not related to Simpy) ==============
     def connected(self, UE):
-        return UE.state != INACTIVE and UE.serving_satellite.identity == self.identity
+        if UE.serving_satellite is None:
+            return False
+        else:
+            return UE.serving_satellite.identity == self.identity
