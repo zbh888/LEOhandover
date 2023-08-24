@@ -26,10 +26,15 @@ PROCESSING_TIME = {
 SATELLITE_CPU = 1
 UE_CPU = 4
 
+# The UE is actively communicating with source base station
+# and the UE has not made any action
 ACTIVE = "ACTIVE"
 # The UE sent the measurement report and waiting for configuration
 WAITING_RRC_CONFIGURATION = "WAITING_RRC_CONFIGURATION"
 # The UE lost the connection without being RRC configured
+# MEANING that the UE failed to be handoff.
 INACTIVE = "INACTIVE"
+# The UE has received the RRC configuration message
 RRC_CONFIGURED = "RRC_CONFIGURED"
+# The UE has sent the random access request with RRC_RECONFIGURATION_COMPLETE
 WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE = "WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE"
