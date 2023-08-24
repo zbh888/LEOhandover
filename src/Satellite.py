@@ -120,6 +120,22 @@ class Satellite(Base):
                         to=source_satellite
                     )
                 )
+            elif task == RRC_RECONFIGURATION_COMPLETE:
+                ue_id = msg['from']
+                UE = self.UEs[ue_id]
+                yield request
+                yield self.env.timeout(processing_time)
+                data = {
+                    "task": RRC_RECONFIGURATION_COMPLETE_RESPONSE,
+                }
+                self.env.process(
+                    self.send_message(
+                        delay=self.satellite_ground_delay,
+                        msg=data,
+                        Q=UE.messageQ,
+                        to=UE
+                    )
+                )
 
     def update_position(self):
         """ Continuous updating the object location. """

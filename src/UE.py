@@ -28,14 +28,17 @@ class UE(Base):
         # Logic Initialization
         self.messageQ = simpy.Store(env)
         self.cpus = simpy.Resource(env, UE_CPU)
+        self.state = ACTIVE
         self.satellites = None
+
         self.active = True
         self.hasHandoverConfiguration = False
         self.sentHandoverRequest = False
+        self.sentRrcReconfigurationComplete = False
+        self.handoverComplete = False
 
         self.lock = False  # I only want this to perform one handover
         self.targetID = None
-        self.sentRrcReconfigurationComplete = False
 
         # Running Process
         env.process(self.init())
@@ -64,6 +67,14 @@ class UE(Base):
                     self.targetID = targets[0]
                     self.hasHandoverConfiguration = True
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+            elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
+                yield request
+                satid = msg['from']
+                satellite = self.satellites[satid]
+                if self.covered_by(satid):
+                    self.serving_satellite = satellite
+                    self.handoverComplete = True
+                    print(f"{self.type} {self.identity} finished handover at {env.now}")
 
     def action_monitor(self):
         while True:
