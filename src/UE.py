@@ -60,7 +60,7 @@ class UE(Base):
             if task == RRC_RECONFIGURATION:
                 yield request
                 satid = msg['from']
-                if satid == self.serving_satellite.identity and self.active:
+                if satid == self.serving_satellite.identity and self.state == WAITING_RRC_CONFIGURATION:
                     # get candidate target
                     targets = msg['targets']
                     # choose target
@@ -74,12 +74,12 @@ class UE(Base):
                 if self.covered_by(satid):
                     self.serving_satellite = satellite
                     self.handoverComplete = True
-                    print(f"{self.type} {self.identity} finished handover at {env.now}")
+                    print(f"{self.type} {self.identity} finished handover at {self.env.now}")
 
     def action_monitor(self):
         while True:
             # send measurement report
-            if self.send_request_condition() and self.active and not self.lock:
+            if self.send_request_condition() and self.state == ACTIVE and not self.lock:
                 data = {
                     "task": MEASUREMENT_REPORT,
                 }
@@ -91,7 +91,7 @@ class UE(Base):
                         to=self.serving_satellite
                     )
                 )
-                self.sentHandoverRequest = True
+                self.state = WAITING_RRC_CONFIGURATION
                 self.lock = True
             if self.hasHandoverConfiguration:  # When the UE has the configuration
                 if self.targetID and self.covered_by(self.targetID) and not self.sentRrcReconfigurationComplete:
@@ -109,10 +109,10 @@ class UE(Base):
                     )
                     self.sentRrcReconfigurationComplete = True
             # switch to inactive
-            if self.outside_coverage() and self.active:
+            if self.outside_coverage() and self.state != INACTIVE:
                 print(
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
-                self.active = False
+                self.state = INACTIVE
             yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============
@@ -126,7 +126,7 @@ class UE(Base):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
         decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x
-                    and not self.hasHandoverConfiguration and not self.sentHandoverRequest)
+                    and self.state == ACTIVE)
         return decision
 
     def outside_coverage(self):
