@@ -12,6 +12,8 @@ class Satellite(Base):
                  velocity,
                  satellite_ground_delay,
                  ISL_delay,
+                 core_delay,
+                 AMF,
                  env):
 
         Base.__init__(self,
@@ -25,9 +27,11 @@ class Satellite(Base):
         # Config Initialization
         self.ISL_delay = ISL_delay
         self.velocity = velocity
+        self.core_delay = core_delay
 
         # Logic Initialization
         self.messageQ = simpy.Store(env)
+        self.AMF = AMF
         self.UEs = None
         self.satellites = None
         self.cpus = simpy.Resource(env, SATELLITE_CPU)  # Concurrent processing
@@ -134,6 +138,17 @@ class Satellite(Base):
                         msg=data,
                         Q=UE.messageQ,
                         to=UE
+                    )
+                )
+                data2 = {
+                    "task": PATH_SHIFT_REQUEST,
+                }
+                self.env.process(
+                    self.send_message(
+                        delay=self.core_delay,
+                        msg=data2,
+                        Q=self.AMF.messageQ,
+                        to=self.AMF
                     )
                 )
 

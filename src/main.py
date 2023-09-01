@@ -4,6 +4,7 @@ import utils
 from Satellite import *
 from UE import *
 from config import *
+from AMF import *
 
 dir = "defaultres"
 if len(sys.argv) != 1:  # This is for automation
@@ -62,20 +63,26 @@ def stats_collector(env, UEs, satellites, timestep):
 
 
 env = simpy.Environment()
+# Deploy Core Function AMF
+
+amf = AMF(core_delay=CORE_DELAY, env=env)
+
 # Deploy source Satellite
 
 satellite_source = Satellite(
     identity=1,
-    position_x=-SATELLITE_R,  # TODO Not accurate
+    position_x=0,
     position_y=0,
     velocity=SATELLITE_V,
     satellite_ground_delay=SATELLITE_GROUND_DELAY,
     ISL_delay=SATELLITE_SATELLITE_DELAY,
+    core_delay=CORE_DELAY,
+    AMF=amf,
     env=env)
 
 UEs = {}
-satellites = {1: satellite_source}
-
+satellites = {}
+satellites[1] = satellite_source
 # Deploying UEs following randomly generated positions
 for index, position in enumerate(POSITIONS, start=1):
     UEs[index] = UE(
@@ -90,17 +97,26 @@ for index, position in enumerate(POSITIONS, start=1):
 for i in range(2, NUMBER_SATELLITES + 1):
     satellites[i] = Satellite(
         identity=i,
-        position_x=0,
+        position_x=-15 * 1000,
         position_y=0,
         velocity=SATELLITE_V,
         satellite_ground_delay=SATELLITE_GROUND_DELAY,
         ISL_delay=SATELLITE_SATELLITE_DELAY,
+        core_delay=CORE_DELAY,
+        AMF=amf,
         env=env
     )
+
+# Connecting objects
 
 for identity in satellites:
     satellites[identity].UEs = UEs
     satellites[identity].satellites = satellites
+
+for identity in UEs:
+    UEs[identity].satellites = satellites
+
+amf.satellites = satellites
 
 env.process(monitor_timestamp(env))
 env.process(stats_collector(env, UEs, satellites, 200))
