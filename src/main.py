@@ -51,9 +51,9 @@ def stats_collector(env, UEs, satellites, timestep):
         for ue_id in UEs:
             ue = UEs[ue_id]
             pos = (ue.position_x, ue.position_y)
-            if ue.hasHandoverConfiguration:  # success
+            if ue.handoverfinish:  # success
                 success_UE_positions.append(pos)
-            elif ue.sentHandoverRequest:
+            elif ue.state != ACTIVE:
                 request_UE_positions.append(pos)
             else:
                 unrequested_UE_positions.append(pos)
@@ -131,12 +131,12 @@ print('==========================================')
 file = open(file_path + "/config_res.txt", "a")
 counter_request = 0
 counter_success = 0
-for i in UEs:
-    ue = UEs[i]
-    if ue.hasHandoverConfiguration:
-        counter_success += 1
-    if ue.sentHandoverRequest:
-        counter_request += 1
+# for i in UEs:
+#     ue = UEs[i]
+#     if ue.hasHandoverConfiguration:
+#         counter_success += 1
+#     if ue.sentHandoverRequest:
+#         counter_request += 1
 file.write(f"{counter_request} UEs sent the handover requests\n")
 file.write(f"{counter_success} UEs received the handover configuration\n")
 file.close()

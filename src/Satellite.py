@@ -155,6 +155,7 @@ class Satellite(Base):
     def update_position(self):
         """ Continuous updating the object location. """
         while True:
+            #print((len(self.messageQ.items)))
             yield self.env.timeout(1)  # Time between position updates
             # Update x and y based on velocity
             # Calculate time ratio

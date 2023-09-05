@@ -1,0 +1,10 @@
+System Configuration:
+  #Satellite Radius: 25000 m
+  #Satellite speed: 7560.0 m/s
+  #Number of UEs: 100
+  #Satellite CPU number: 1
+  #Satellite to ground delay: 30 ms
+  #Inter Satellite delay: 10 ms
+  #Example: approximate 19.17777591287804 need to be handed over within 1 seconds
+0 UEs sent the handover requests
+0 UEs received the handover configuration

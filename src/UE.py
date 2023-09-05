@@ -26,6 +26,9 @@ class UE(Base):
         self.serving_satellite = serving_satellite
 
         # Logic Initialization
+        self.sendingtime = None
+        self.endingtime = None
+
         self.messageQ = simpy.Store(env)
         self.cpus = simpy.Resource(env, UE_CPU)
         self.state = ACTIVE
@@ -69,6 +72,7 @@ class UE(Base):
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
                     self.handoverfinish = True
+                    self.endingtime = self.env.now
 
     def action_monitor(self):
         while True:
@@ -85,9 +89,11 @@ class UE(Base):
                         to=self.serving_satellite
                     )
                 )
+                self.sendingtime = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
+            # send random access request
             if self.state == RRC_CONFIGURED:  # When the UE has the configuration
-                if self.targetID and self.covered_by(self.targetID): # The condition can be added here
+                if self.targetID and self.covered_by(self.targetID):  # The condition can be added here
                     target = self.satellites[self.targetID]
                     data = {
                         "task": RRC_RECONFIGURATION_COMPLETE,
@@ -107,6 +113,7 @@ class UE(Base):
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.serving_satellite = None
                 if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION:
+                    print(f"UE {self.identity} handover failure at time {self.env.now}")
                     self.state = INACTIVE
             yield self.env.timeout(1)
 
