@@ -57,8 +57,12 @@ def stats_collector(env, UEs, satellites, timestep):
                 request_UE_positions.append(pos)
             else:
                 unrequested_UE_positions.append(pos)
+        satellite_positions = []
+        for s_id in satellites:
+            s = satellites[s_id]
+            satellite_positions.append((s.position_x, s.position_y))
         utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now,
-                                  file_path + "/graph")
+                                  file_path + "/graph", satellite_positions, SATELLITE_R)
         yield env.timeout(timestep)
 
 

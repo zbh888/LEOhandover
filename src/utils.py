@@ -2,6 +2,7 @@ import random
 
 import math
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 
 
 # The number of devices requiring handover
@@ -26,7 +27,14 @@ def generate_points(n, R, x, y):
     return points
 
 
-def draw_from_positions(unrequested_positions, success_position, requested_position, label, dir):
+def draw_from_positions(unrequested_positions, success_position, requested_position, label, dir, satellite_pos, R):
+    plt.close('all')
+    plt.clf()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    x_range = (-1.2*R, 1.2*R)
+    y_range = (-1.2*R, 1.2*R)
+    plt.xlim(x_range)
+    plt.ylim(y_range)
     if len(unrequested_positions) != 0:
         x_coords, y_coords = zip(*unrequested_positions)
         plt.scatter(x_coords, y_coords, color='red', s=0.5)
@@ -36,4 +44,9 @@ def draw_from_positions(unrequested_positions, success_position, requested_posit
     if len(requested_position) != 0:
         x_coords, y_coords = zip(*requested_position)
         plt.scatter(x_coords, y_coords, color='green', s=0.5)
+    x_coords, y_coords = zip(*satellite_pos)
+    plt.scatter(x_coords, y_coords, color='black', s=10)
+    for point in satellite_pos:
+        circle = Circle((point[0], point[1]), R, color='black', fill=False, linewidth=0.5)
+        ax.add_patch(circle)
     plt.savefig(f'{dir}/res_positions_{label}.png', dpi=300, bbox_inches='tight')
