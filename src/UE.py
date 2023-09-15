@@ -90,7 +90,21 @@ class UE(Base):
                     )
                 )
                 self.sendingtime = self.env.now
+                self.timer = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
+            if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD:
+                self.timer = self.env.now
+                data = {
+                    "task": RETRANSMISSION,
+                }
+                self.env.process(
+                    self.send_message(
+                        delay=self.satellite_ground_delay,
+                        msg=data,
+                        Q=self.serving_satellite.messageQ,
+                        to=self.serving_satellite
+                    )
+                )
             # send random access request
             if self.state == RRC_CONFIGURED:  # When the UE has the configuration
                 if self.targetID and self.covered_by(self.targetID):  # The condition can be added here
