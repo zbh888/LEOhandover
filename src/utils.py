@@ -10,8 +10,10 @@ class DataCollection:
         self.draw_path = graph_path
         self.x = []
         self.numberMessages = {}
+        self.numberUEWaitingResponse = []
 
     def draw(self):
+        # plot
         for id in self.numberMessages:
             plt.close('all')
             plt.clf()
@@ -22,6 +24,16 @@ class DataCollection:
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of messages')
             plt.savefig(self.draw_path + '/sat_' + str(id) + 'numberMessages' + '.png')
+        # plot
+        plt.close('all')
+        plt.clf()
+        y = self.numberUEWaitingResponse
+        x = self.x
+        plt.plot(x, y)
+        plt.xlabel('Time (ms)')
+        plt.ylabel('Number of UE waiting for RRC configuration')
+        plt.title('number of UEs waiting for response')
+        plt.savefig(self.draw_path + '/numberUEwaitingforRRC.png')
 
 
 # The number of devices requiring handover

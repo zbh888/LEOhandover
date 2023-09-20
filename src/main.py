@@ -58,7 +58,7 @@ def global_stats_collector_draw_middle(env, UEs, satellites, timestep):
             pos = (ue.position_x, ue.position_y)
             if ue.handoverfinish:  # success
                 success_UE_positions.append(pos)
-            elif ue.state != ACTIVE:
+            elif ue.state != ACTIVE: # TODO This part may needs some change
                 request_UE_positions.append(pos)
             else:
                 unrequested_UE_positions.append(pos)
@@ -84,6 +84,12 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
             if id not in data.numberMessages:
                 data.numberMessages[id] = []
             data.numberMessages[id].append(len(satellite.messageQ.items))
+        numberUEWaitingRRC = 0
+        for id in UEs:
+            UE = UEs[id]
+            if UE.state == WAITING_RRC_CONFIGURATION:
+                numberUEWaitingRRC += 1
+        data.numberUEWaitingResponse.append(numberUEWaitingRRC)
         yield env.timeout(timestep)
 
 
