@@ -99,44 +99,31 @@ env = simpy.Environment()
 amf = AMF(core_delay=CORE_DELAY, env=env)
 
 # Deploy source Satellite
-
-satellite_source = Satellite(
-    identity=1,
-    position_x=0,
-    position_y=0,
-    velocity=SATELLITE_V,
-    satellite_ground_delay=SATELLITE_GROUND_DELAY,
-    ISL_delay=SATELLITE_SATELLITE_DELAY,
-    core_delay=CORE_DELAY,
-    AMF=amf,
-    env=env)
-
 UEs = {}
 satellites = {}
-satellites[1] = satellite_source
+
+for sat_id in POS_SATELLITES:
+    pos = POS_SATELLITES[sat_id]
+    satellites[sat_id] = Satellite(
+        identity=sat_id,
+        position_x=pos[0],
+        position_y=pos[1],
+        velocity=SATELLITE_V,
+        satellite_ground_delay=SATELLITE_GROUND_DELAY,
+        ISL_delay=SATELLITE_SATELLITE_DELAY,
+        core_delay=CORE_DELAY,
+        AMF=amf,
+        env=env)
+
 # Deploying UEs following randomly generated positions
 for index, position in enumerate(POSITIONS, start=1):
     UEs[index] = UE(
         identity=index,
         position_x=position[0],
         position_y=position[1],
-        serving_satellite=satellite_source,
+        serving_satellite=satellites[1],
         satellite_ground_delay=SATELLITE_GROUND_DELAY,
         env=env)
-
-# Deploying other satellites
-for i in range(2, NUMBER_SATELLITES + 1):
-    satellites[i] = Satellite(
-        identity=i,
-        position_x=-15 * 1000,
-        position_y=0,
-        velocity=SATELLITE_V,
-        satellite_ground_delay=SATELLITE_GROUND_DELAY,
-        ISL_delay=SATELLITE_SATELLITE_DELAY,
-        core_delay=CORE_DELAY,
-        AMF=amf,
-        env=env
-    )
 
 # Connecting objects
 
