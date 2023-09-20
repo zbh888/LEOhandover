@@ -7,8 +7,13 @@ SATELLITE_SATELLITE_DELAY = 10
 CORE_DELAY = 10
 DURATION = 15000
 RETRANSMIT = True
-RETRANSMIT_THRESHOLD = 5
+RETRANSMIT_THRESHOLD = 65
+MAX_RETRANSMIT = 5
 # Parameters
+#TODO
+# 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.
+# 1.1 If restricting only one random access is weird, we can assign UEs during configuration.
+# 2. Handover Decision should be set too.
 
 # This labels the initial position of satellites
 POS_SATELLITES = {

@@ -94,7 +94,7 @@ class UE(Base):
                 self.sendingtime = self.env.now
                 self.timer = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
-            if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < RETRANSMIT_THRESHOLD:
+            if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
                 data = {
                     "task": RETRANSMISSION,
