@@ -1,10 +1,9 @@
 import sys
 
 import utils
+from AMF import *
 from Satellite import *
 from UE import *
-from config import *
-from AMF import *
 
 dir = "defaultres"
 if len(sys.argv) != 1:  # This is for automation
@@ -43,7 +42,13 @@ def monitor_timestamp(env):
         yield env.timeout(1)
 
 
-def stats_collector(env, UEs, satellites, timestep):
+'''
+The function draws screenshot of global Status. 
+As drawing takes time, the timestep has to be big.
+'''
+
+
+def global_stats_collector_draw_middle(env, UEs, satellites, timestep):
     while True:
         success_UE_positions = []
         request_UE_positions = []
@@ -63,6 +68,22 @@ def stats_collector(env, UEs, satellites, timestep):
             satellite_positions.append((s.position_x, s.position_y))
         utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now,
                                   file_path + "/graph", satellite_positions, SATELLITE_R)
+        yield env.timeout(timestep)
+
+
+'''
+This function collects information but draws in the end of the simulation.
+'''
+
+
+def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
+    while True:
+        data.x.append(env.now)
+        for id in satellites:
+            satellite = satellites[id]
+            if id not in data.numberMessages:
+                data.numberMessages[id] = []
+            data.numberMessages[id].append(len(satellite.messageQ.items))
         yield env.timeout(timestep)
 
 
@@ -123,7 +144,9 @@ for identity in UEs:
 amf.satellites = satellites
 
 env.process(monitor_timestamp(env))
-env.process(stats_collector(env, UEs, satellites, 200))
+env.process(global_stats_collector_draw_middle(env, UEs, satellites, 200))
+data = utils.DataCollection(file_path + "/graph_data")
+env.process(global_stats_collector_draw_final(env, data, UEs, satellites, 1))
 print('==========================================')
 print('============= Experiment Log =============')
 print('==========================================')
@@ -131,6 +154,9 @@ env.run(until=DURATION)
 print('==========================================')
 print('============= Experiment Ends =============')
 print('==========================================')
+
+# draw from data
+data.draw()
 
 file = open(file_path + "/config_res.txt", "a")
 counter_request = 0

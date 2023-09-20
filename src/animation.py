@@ -12,7 +12,7 @@ def get_numeric_value(filename):
 def draw_animation(image_directory):
     image_files = [f"{image_directory}/{file}" for file in sorted(os.listdir(image_directory), key=get_numeric_value) if
                    file.lower().endswith((".png", ".jpg", ".jpeg"))]
-    print(image_files)
+    # print(image_files) # debug purpose
     images = [Image.open(file) for file in image_files]
     gif_path = f"{image_directory}/animation.gif"
     images[0].save(gif_path, save_all=True, append_images=images[1:], loop=0, duration=200)  # Adjust duration as needed

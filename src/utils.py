@@ -5,6 +5,25 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
 
+class DataCollection:
+    def __init__(self, graph_path):
+        self.draw_path = graph_path
+        self.x = []
+        self.numberMessages = {}
+
+    def draw(self):
+        for id in self.numberMessages:
+            plt.close('all')
+            plt.clf()
+            y = self.numberMessages[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'numberMessages' + '.png')
+
+
 # The number of devices requiring handover
 def handout(R, N, d):
     pi = math.pi
