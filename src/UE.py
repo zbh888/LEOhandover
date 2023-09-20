@@ -36,6 +36,7 @@ class UE(Base):
 
         self.handoverfinish = False  # I only want this to perform one handover
         self.targetID = None
+        self.retransmit_counter = 0
 
         # Running Process
         env.process(self.init())
@@ -62,6 +63,7 @@ class UE(Base):
                     # choose target
                     self.targetID = targets[0]
                     self.state = RRC_CONFIGURED
+                    self.retransmit_countere = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
@@ -92,7 +94,7 @@ class UE(Base):
                 self.sendingtime = self.env.now
                 self.timer = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
-            if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD:
+            if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < RETRANSMIT_THRESHOLD:
                 self.timer = self.env.now
                 data = {
                     "task": RETRANSMISSION,
@@ -105,6 +107,7 @@ class UE(Base):
                         to=self.serving_satellite
                     )
                 )
+                self.retransmit_counter += 1
             # send random access request
             if self.state == RRC_CONFIGURED:  # When the UE has the configuration
                 if self.targetID and self.covered_by(self.targetID):  # The condition can be added here
