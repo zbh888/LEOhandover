@@ -57,7 +57,9 @@ class UE(Base):
             if task == RRC_RECONFIGURATION:
                 yield request
                 satid = msg['from']
-                if satid == self.serving_satellite.identity and self.state == WAITING_RRC_CONFIGURATION:
+                # TODO one error raised for serveing satellite is none
+                # TODO the suspect reason is synchronization issue with "switch to inactive"
+                if self.state == WAITING_RRC_CONFIGURATION and satid == self.serving_satellite.identity:
                     # get candidate target
                     targets = msg['targets']
                     # choose target
