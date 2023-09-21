@@ -58,7 +58,7 @@ def generate_points(n, R, x, y):
     return points
 
 
-def draw_from_positions(unrequested_positions, success_position, requested_position, label, dir, satellite_pos, R):
+def draw_from_positions(inactive_positions, active_position, requesting_position, label, dir, satellite_pos, R):
     plt.close('all')
     plt.clf()
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -66,14 +66,14 @@ def draw_from_positions(unrequested_positions, success_position, requested_posit
     y_range = (-1.2*R, 1.2*R)
     plt.xlim(x_range)
     plt.ylim(y_range)
-    if len(unrequested_positions) != 0:
-        x_coords, y_coords = zip(*unrequested_positions)
+    if len(inactive_positions) != 0:
+        x_coords, y_coords = zip(*inactive_positions)
         plt.scatter(x_coords, y_coords, color='red', s=0.5)
-    if len(success_position) != 0:
-        x_coords, y_coords = zip(*success_position)
+    if len(active_position) != 0:
+        x_coords, y_coords = zip(*active_position)
         plt.scatter(x_coords, y_coords, color='blue', s=0.5)
-    if len(requested_position) != 0:
-        x_coords, y_coords = zip(*requested_position)
+    if len(requesting_position) != 0:
+        x_coords, y_coords = zip(*requesting_position)
         plt.scatter(x_coords, y_coords, color='green', s=0.5)
     x_coords, y_coords = zip(*satellite_pos)
     plt.scatter(x_coords, y_coords, color='black', s=10)

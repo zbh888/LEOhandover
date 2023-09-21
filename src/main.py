@@ -50,23 +50,23 @@ As drawing takes time, the timestep has to be big.
 
 def global_stats_collector_draw_middle(env, UEs, satellites, timestep):
     while True:
-        success_UE_positions = []
-        request_UE_positions = []
-        unrequested_UE_positions = []
+        active_UE_positions = []
+        requesting_UE_positions = []
+        inactive_positions = []
         for ue_id in UEs:
             ue = UEs[ue_id]
             pos = (ue.position_x, ue.position_y)
-            if ue.handoverfinish:  # success
-                success_UE_positions.append(pos)
-            elif ue.state != ACTIVE: # TODO This part may needs some change
-                request_UE_positions.append(pos)
+            if ue.state == ACTIVE:  # success
+                active_UE_positions.append(pos)
+            elif ue.state == INACTIVE:
+                inactive_positions.append(pos)
             else:
-                unrequested_UE_positions.append(pos)
+                requesting_UE_positions.append(pos)
         satellite_positions = []
         for s_id in satellites:
             s = satellites[s_id]
             satellite_positions.append((s.position_x, s.position_y))
-        utils.draw_from_positions(unrequested_UE_positions, success_UE_positions, request_UE_positions, env.now,
+        utils.draw_from_positions(inactive_positions, active_UE_positions, requesting_UE_positions, env.now,
                                   file_path + "/graph", satellite_positions, SATELLITE_R)
         yield env.timeout(timestep)
 
