@@ -34,7 +34,6 @@ class UE(Base):
         self.state = ACTIVE
         self.satellites = None
 
-        self.handoverfinish = False  # I only want this to perform one handover
         self.targetID = None
         self.retransmit_counter = 0
 
@@ -75,15 +74,19 @@ class UE(Base):
                     self.serving_satellite = satellite
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
-                    self.handoverfinish = True
                     self.endingtime = self.env.now
 
     def action_monitor(self):
         while True:
             # send measurement report
-            if self.state == ACTIVE and self.send_request_condition() and not self.handoverfinish:
+            if self.state == ACTIVE and self.send_request_condition():
+                candidates = []
+                for satid in self.satellites:
+                    if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                        candidates.append(satid)
                 data = {
                     "task": MEASUREMENT_REPORT,
+                    "candidate": candidates,
                 }
                 self.env.process(
                     self.send_message(

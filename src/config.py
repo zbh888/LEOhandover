@@ -8,7 +8,7 @@ CORE_DELAY = 10
 DURATION = 15000
 RETRANSMIT = True
 RETRANSMIT_THRESHOLD = 65
-MAX_RETRANSMIT = 5
+MAX_RETRANSMIT = 0
 # Parameters
 #TODO
 # 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.

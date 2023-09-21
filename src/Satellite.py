@@ -2,7 +2,7 @@ import simpy
 
 from Base import *
 from config import *
-
+import random
 
 class Satellite(Base):
     def __init__(self,
@@ -66,18 +66,20 @@ class Satellite(Base):
             # handle the task by cases
             if task == MEASUREMENT_REPORT:
                 ueid = msg['from']
+                candidates = msg['candidate']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
                     yield request
                     yield self.env.timeout(processing_time)
-                if self.connected(UE):
+                if self.connected(UE) and len(candidates) != 0:
                     # send the response to UE
                     data = {
                         "task": HANDOVER_REQUEST,
                         "ueid": ueid
                     }
                     # for now, just send it to the satellite 2. TODO
-                    target_satellite = self.satellites[2]
+                    target_satellite_id = random.choice(candidates)
+                    target_satellite = self.satellites[target_satellite_id]
                     self.env.process(
                         self.send_message(
                             delay=self.ISL_delay,
