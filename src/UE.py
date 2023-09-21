@@ -63,7 +63,7 @@ class UE(Base):
                     # choose target
                     self.targetID = targets[0]
                     self.state = RRC_CONFIGURED
-                    self.retransmit_countere = 0
+                    self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
@@ -94,6 +94,7 @@ class UE(Base):
                 self.sendingtime = self.env.now
                 self.timer = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
+            # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
                 data = {

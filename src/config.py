@@ -17,9 +17,9 @@ MAX_RETRANSMIT = 5
 
 # This labels the initial position of satellites
 POS_SATELLITES = {
-    1: (0, 0),
-    2: (-15 * 1000, 0),
-    3: (-30 * 1000, 0),
+    1: (-25 * 1000, 0),
+    2: (-35 * 1000, 0),
+    3: (-45 * 1000, 0),
 }
 
 MEASUREMENT_REPORT = "MEASUREMENT_REPORT"
