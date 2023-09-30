@@ -13,3 +13,8 @@ python3 src/animation.py "res/$DIR/graph"
 end_time=$(date +%s)
 elapsed_time=$((end_time - start_time))
 echo "Simulation takes $elapsed_time seconds"
+
+CURRENT_DIR=$(basename "$PWD")
+cd ./res
+zip -r "${CURRENT_DIR}_res.zip" *
+mv "${CURRENT_DIR}_res.zip" ..
