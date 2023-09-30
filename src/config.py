@@ -1,14 +1,14 @@
 # System level config
 SATELLITE_R = 25 * 1000
-NUMBER_UE = 10
+NUMBER_UE = 1
 SATELLITE_V = 7.56 * 1000
 SATELLITE_GROUND_DELAY = 30
 SATELLITE_SATELLITE_DELAY = 10
 CORE_DELAY = 10
 DURATION = 10000
 RETRANSMIT = True
-RETRANSMIT_THRESHOLD = 65
-MAX_RETRANSMIT = 0
+RETRANSMIT_THRESHOLD = 1
+MAX_RETRANSMIT = 20
 # Parameters
 #TODO
 # 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.
@@ -18,8 +18,8 @@ MAX_RETRANSMIT = 0
 # This labels the initial position of satellites
 POS_SATELLITES = {
     1: (-25 * 1000, 0),
-    2: (-35 * 1000, 0),
-    3: (-45 * 1000, 0),
+ #   2: (-35 * 1000, 0),
+  #  3: (-45 * 1000, 0),
 }
 
 MEASUREMENT_REPORT = "MEASUREMENT_REPORT"
@@ -37,10 +37,10 @@ PROCESSING_TIME = {
     HANDOVER_ACKNOWLEDGE: 0.1,
     RRC_RECONFIGURATION_COMPLETE: 0.1,
     PATH_SHIFT_REQUEST: 0.1,
-    RETRANSMISSION: 0.1
+    RETRANSMISSION: 100,
 }
 
-SATELLITE_CPU = 1
+SATELLITE_CPU = 8
 UE_CPU = 4
 
 '''

@@ -71,7 +71,7 @@ class Satellite(Base):
         """ Get the task from message Q and start a CPU processing process """
         while True:
             msg = yield self.messageQ.get()
-            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
+            print(f"{self.type} {self.identity} received msg:{msg} at time {self.env.now}")
             data = json.loads(msg)
             self.env.process(self.cpu_processing(data))
 
@@ -85,6 +85,8 @@ class Satellite(Base):
 
         """
         with self.cpus.request() as request:
+            yield request
+            print(f"{self.type} {self.identity} handling msg:{msg} at time {self.env.now}")
             # Get the task and processing time
             task = msg['task']
             processing_time = PROCESSING_TIME[task]
@@ -96,7 +98,6 @@ class Satellite(Base):
                 candidates = msg['candidate']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
-                    yield request
                     yield self.env.timeout(processing_time)
                 if self.connected(UE) and len(candidates) != 0:
                     # send the response to UE
@@ -121,7 +122,6 @@ class Satellite(Base):
                 ueid = msg['ueid']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
-                    yield request
                     yield self.env.timeout(processing_time)
                 if self.connected(UE):
                     data = {
@@ -140,7 +140,6 @@ class Satellite(Base):
                 self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
-                yield request
                 yield self.env.timeout(processing_time)
                 data = {
                     "task": HANDOVER_ACKNOWLEDGE,
@@ -159,7 +158,6 @@ class Satellite(Base):
                 self.counter.increment_UE_RA()
                 ue_id = msg['from']
                 UE = self.UEs[ue_id]
-                yield request
                 yield self.env.timeout(processing_time)
                 data = {
                     "task": RRC_RECONFIGURATION_COMPLETE_RESPONSE,
@@ -185,8 +183,8 @@ class Satellite(Base):
                 )
             elif task == RETRANSMISSION:
                 self.counter.increment_UE_retransmit()
-                yield request
                 yield self.env.timeout(processing_time)
+            print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
     def update_position(self):
         """ Continuous updating the object location. """
