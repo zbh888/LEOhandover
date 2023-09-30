@@ -81,9 +81,21 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
         data.x.append(env.now)
         for id in satellites:
             satellite = satellites[id]
-            if id not in data.numberMessages:
-                data.numberMessages[id] = []
-            data.numberMessages[id].append(len(satellite.messageQ.items))
+            counter = satellite.counter
+            if id not in data.numberUnProcessedMessages:
+                data.numberUnProcessedMessages[id] = []
+                data.cumulative_total_messages[id] = []
+                data.cumulative_message_from_UE_measurement[id] = []
+                data.cumulative_message_from_UE_retransmit[id] = []
+                data.cumulative_message_from_UE_RA[id] = []
+                data.cumulative_message_from_satellite[id] = []
+
+            data.numberUnProcessedMessages[id].append(len(satellite.messageQ.items))
+            data.cumulative_total_messages[id].append(counter.total_messages)
+            data.cumulative_message_from_UE_measurement[id].append(counter.message_from_UE_measurement)
+            data.cumulative_message_from_UE_retransmit[id].append(counter.message_from_UE_retransmit)
+            data.cumulative_message_from_UE_RA[id].append(counter.message_from_UE_RA)
+            data.cumulative_message_from_satellite[id].append(counter.message_from_satellite)
         numberUEWaitingRRC = 0
         for id in UEs:
             UE = UEs[id]

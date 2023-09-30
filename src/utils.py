@@ -4,26 +4,90 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
+import pickle
+
 
 class DataCollection:
     def __init__(self, graph_path):
         self.draw_path = graph_path
         self.x = []
-        self.numberMessages = {}
+        self.numberUnProcessedMessages = {}
         self.numberUEWaitingResponse = []
+
+        self.cumulative_total_messages = {}
+        self.cumulative_message_from_UE_measurement = {}
+        self.cumulative_message_from_UE_retransmit = {}
+        self.cumulative_message_from_UE_RA = {}
+        self.cumulative_message_from_satellite = {}
 
     def draw(self):
         # plot
-        for id in self.numberMessages:
+        for id in self.numberUnProcessedMessages:
             plt.close('all')
             plt.clf()
-            y = self.numberMessages[id]
+            y = self.numberUnProcessedMessages[id]
             x = self.x
             plt.plot(x, y)
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
-            plt.title('Satellite ' + str(id) + ' number of messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'numberMessages' + '.png')
+            plt.title('Satellite ' + str(id) + ' number of unprocessed total messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'numberUnProcessedMessages' + '.png')
+
+        for id in self.cumulative_total_messages:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_total_messages[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative total messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_total_messages' + '.png')
+
+        for id in self.cumulative_message_from_UE_measurement:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_UE_measurement[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative UE request messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_measurement' + '.png')
+
+        for id in self.cumulative_message_from_UE_retransmit:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_UE_retransmit[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of UE cumulative retransmit messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_retransmit' + '.png')
+
+        for id in self.cumulative_message_from_UE_RA:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_UE_RA[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative UE RA messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_RA' + '.png')
+
+        for id in self.cumulative_message_from_satellite:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_satellite[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative satellite messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_satellite' + '.png')
+
         # plot
         plt.close('all')
         plt.clf()
@@ -34,6 +98,9 @@ class DataCollection:
         plt.ylabel('Number of UE waiting for RRC configuration')
         plt.title('number of UEs waiting for response')
         plt.savefig(self.draw_path + '/numberUEwaitingforRRC.png')
+
+        with open(self.draw_path + 'data_object.pkl', 'wb') as outp:
+            pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
 
 
 # The number of devices requiring handover

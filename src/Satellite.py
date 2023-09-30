@@ -4,6 +4,31 @@ from Base import *
 from config import *
 import random
 
+class cumulativeMessageCount:
+    def __init__(self):
+        self.total_messages = 0
+        self.message_from_UE_measurement = 0
+        self.message_from_UE_retransmit = 0
+        self.message_from_UE_RA = 0
+        self.message_from_satellite = 0
+    def increment_UE_measurement(self):
+        self.total_messages += 1
+        self.message_from_UE_measurement += 1
+
+    def increment_UE_retransmit(self):
+        self.total_messages += 1
+        self.message_from_UE_retransmit += 1
+
+    def increment_satellite(self):
+        self.total_messages += 1
+        self.message_from_satellite += 1
+
+    def increment_UE_RA(self):
+        self.total_messages += 1
+        self.message_from_UE_RA += 1
+
+
+
 class Satellite(Base):
     def __init__(self,
                  identity,
@@ -35,6 +60,7 @@ class Satellite(Base):
         self.UEs = None
         self.satellites = None
         self.cpus = simpy.Resource(env, SATELLITE_CPU)  # Concurrent processing
+        self.counter = cumulativeMessageCount()
 
         # Running process
         self.env.process(self.init())  # Print Deployment information
@@ -65,6 +91,7 @@ class Satellite(Base):
 
             # handle the task by cases
             if task == MEASUREMENT_REPORT:
+                self.counter.increment_UE_measurement()
                 ueid = msg['from']
                 candidates = msg['candidate']
                 UE = self.UEs[ueid]
@@ -77,7 +104,7 @@ class Satellite(Base):
                         "task": HANDOVER_REQUEST,
                         "ueid": ueid
                     }
-                    # for now, just send it to the satellite 2. TODO
+                    # for now, just random. TODO
                     target_satellite_id = random.choice(candidates)
                     target_satellite = self.satellites[target_satellite_id]
                     self.env.process(
@@ -89,6 +116,7 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_ACKNOWLEDGE:
+                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 UE = self.UEs[ueid]
@@ -109,6 +137,7 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_REQUEST:
+                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 yield request
@@ -127,6 +156,7 @@ class Satellite(Base):
                     )
                 )
             elif task == RRC_RECONFIGURATION_COMPLETE:
+                self.counter.increment_UE_RA()
                 ue_id = msg['from']
                 UE = self.UEs[ue_id]
                 yield request
@@ -153,6 +183,10 @@ class Satellite(Base):
                         to=self.AMF
                     )
                 )
+            elif task == RETRANSMISSION:
+                self.counter.increment_UE_retransmit()
+                yield request
+                yield self.env.timeout(processing_time)
 
     def update_position(self):
         """ Continuous updating the object location. """
