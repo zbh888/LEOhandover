@@ -1,0 +1,556 @@
+==========================================
+============= Experiment Log =============
+==========================================
+AMF 1 deployed at time 0, positioned at (0,0)
+satellite 1 deployed at time 0, positioned at (-25000,0)
+satellite 2 deployed at time 0, positioned at (-37500.0,0)
+satellite 3 deployed at time 0, positioned at (-50000,0)
+UE 1 deployed at time 0, positioned at (14856.83708931576,-5694.626599361904)
+UE 2 deployed at time 0, positioned at (12384.419185888328,-9647.537636541425)
+UE 3 deployed at time 0, positioned at (-10844.02042736775,10479.230401600858)
+UE 4 deployed at time 0, positioned at (9966.567320184802,-14341.0038751136)
+UE 5 deployed at time 0, positioned at (-3329.7812684329933,-509.8875876472366)
+UE 6 deployed at time 0, positioned at (-15349.776254309763,2476.623338728461)
+UE 7 deployed at time 0, positioned at (21064.057744952886,-4782.566575932448)
+UE 8 deployed at time 0, positioned at (1302.828955601453,-10839.076839385474)
+UE 9 deployed at time 0, positioned at (-5616.4107218002755,-17398.17949607939)
+UE 10 deployed at time 0, positioned at (-2637.395417648581,-21416.15164576718)
+UE 10 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2], "from": 10, "to": 1} at 4068
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2], "from": 10, "to": 1} at time 4098
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2], 'from': 10, 'to': 1} at time 4098
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2], 'from': 10, 'to': 1} at time 4099.0
+satellite 1 sends satellite 2 the message {"task": "HANDOVER_REQUEST", "ueid": 10, "from": 1, "to": 2} at 4099.0
+satellite 2 received msg:{"task": "HANDOVER_REQUEST", "ueid": 10, "from": 1, "to": 2} at time 4109.0
+satellite 2 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 10, 'from': 1, 'to': 2} at time 4109.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 10, 'from': 1, 'to': 2} at time 4110.0
+satellite 2 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 10, "from": 2, "to": 1} at 4110.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 10, "from": 2, "to": 1} at time 4120.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 10, 'from': 2, 'to': 1} at time 4120.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 10, 'from': 2, 'to': 1} at time 4120.2
+satellite 1 sends UE 10 the message {"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 10} at 4120.2
+UE 10 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 10, "to": 1} at 4139
+UE 10 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 10} at time 4150.2
+UE 10 receives the configuration at 4150.2
+UE 10 sends satellite 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 10, "to": 2} at 4151
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 1} at time 4169
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 1} at time 4169
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 1} at time 4169.2
+satellite 2 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 10, "to": 2} at time 4181
+satellite 2 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 10, 'to': 2} at time 4181
+satellite 2 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 10, 'to': 2} at time 4181.2
+satellite 2 sends UE 10 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 10} at 4181.2
+satellite 2 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at 4181.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at time 4191.2
+UE 10 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 10} at time 4211.2
+UE 10 finished handover at 4211.2
+UE 6 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 6, "to": 1} at 4302
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 6, "to": 1} at time 4332
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 6, 'to': 1} at time 4332
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 6, 'to': 1} at time 4333.0
+satellite 1 sends satellite 2 the message {"task": "HANDOVER_REQUEST", "ueid": 6, "from": 1, "to": 2} at 4333.0
+satellite 2 received msg:{"task": "HANDOVER_REQUEST", "ueid": 6, "from": 1, "to": 2} at time 4343.0
+satellite 2 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 6, 'from': 1, 'to': 2} at time 4343.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 6, 'from': 1, 'to': 2} at time 4344.0
+satellite 2 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 6, "from": 2, "to": 1} at 4344.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 6, "from": 2, "to": 1} at time 4354.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 6, 'from': 2, 'to': 1} at time 4354.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 6, 'from': 2, 'to': 1} at time 4354.2
+satellite 1 sends UE 6 the message {"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 6} at 4354.2
+UE 6 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 6, "to": 1} at 4373
+UE 6 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 6} at time 4384.2
+UE 6 receives the configuration at 4384.2
+UE 6 sends satellite 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 6, "to": 2} at 4385
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 6, "to": 1} at time 4403
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 1} at time 4403
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 1} at time 4403.2
+satellite 2 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 6, "to": 2} at time 4415
+satellite 2 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 6, 'to': 2} at time 4415
+satellite 2 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 6, 'to': 2} at time 4415.2
+satellite 2 sends UE 6 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 6} at 4415.2
+satellite 2 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at 4415.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at time 4425.2
+UE 6 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 6} at time 4445.2
+UE 6 finished handover at 4445.2
+UE 9 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 9, "to": 1} at 4554
+UE 3 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 3, "to": 1} at 4581
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 9, "to": 1} at time 4584
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 9, 'to': 1} at time 4584
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 9, 'to': 1} at time 4585.0
+satellite 1 sends satellite 2 the message {"task": "HANDOVER_REQUEST", "ueid": 9, "from": 1, "to": 2} at 4585.0
+satellite 2 received msg:{"task": "HANDOVER_REQUEST", "ueid": 9, "from": 1, "to": 2} at time 4595.0
+satellite 2 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 9, 'from': 1, 'to': 2} at time 4595.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 9, 'from': 1, 'to': 2} at time 4596.0
+satellite 2 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 9, "from": 2, "to": 1} at 4596.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 9, "from": 2, "to": 1} at time 4606.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 9, 'from': 2, 'to': 1} at time 4606.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 9, 'from': 2, 'to': 1} at time 4606.2
+satellite 1 sends UE 9 the message {"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 9} at 4606.2
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 3, "to": 1} at time 4611
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 3, 'to': 1} at time 4611
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 3, 'to': 1} at time 4612.0
+satellite 1 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 3, "from": 1, "to": 3} at 4612.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 3, "from": 1, "to": 3} at time 4622.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 3, 'from': 1, 'to': 3} at time 4622.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 3, 'from': 1, 'to': 3} at time 4623.0
+satellite 3 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 3, "from": 3, "to": 1} at 4623.0
+UE 9 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 9, "to": 1} at 4625
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 3, "from": 3, "to": 1} at time 4633.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 3, 'from': 3, 'to': 1} at time 4633.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 3, 'from': 3, 'to': 1} at time 4633.2
+satellite 1 sends UE 3 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 3} at 4633.2
+UE 9 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 9} at time 4636.2
+UE 9 receives the configuration at 4636.2
+UE 9 sends satellite 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 9, "to": 2} at 4637
+UE 3 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 3, "to": 1} at 4652
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 1} at time 4655
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 1} at time 4655
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 1} at time 4655.2
+UE 3 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 3} at time 4663.2
+UE 3 receives the configuration at 4663.2
+UE 3 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 3, "to": 3} at 4664
+satellite 2 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 9, "to": 2} at time 4667
+satellite 2 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 9, 'to': 2} at time 4667
+satellite 2 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 9, 'to': 2} at time 4667.2
+satellite 2 sends UE 9 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 9} at 4667.2
+satellite 2 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at 4667.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at time 4677.2
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 3, "to": 1} at time 4682
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 1} at time 4682
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 1} at time 4682.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 3, "to": 3} at time 4694
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 3, 'to': 3} at time 4694
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 3, 'to': 3} at time 4694.2
+satellite 3 sends UE 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 3} at 4694.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 4694.2
+UE 9 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 9} at time 4697.2
+UE 9 finished handover at 4697.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 4704.2
+UE 3 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 3} at time 4724.2
+UE 3 finished handover at 4724.2
+UE 10 sends satellite 2 the message {"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 10, "to": 2} at 5721
+satellite 2 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 10, "to": 2} at time 5751
+satellite 2 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 10, 'to': 2} at time 5751
+satellite 2 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 10, 'to': 2} at time 5752.0
+satellite 2 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 10, "from": 2, "to": 3} at 5752.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 10, "from": 2, "to": 3} at time 5762.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 10, 'from': 2, 'to': 3} at time 5762.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 10, 'from': 2, 'to': 3} at time 5763.0
+satellite 3 sends satellite 2 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 10, "from": 3, "to": 2} at 5763.0
+satellite 2 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 10, "from": 3, "to": 2} at time 5773.0
+satellite 2 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 10, 'from': 3, 'to': 2} at time 5773.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 10, 'from': 3, 'to': 2} at time 5773.2
+satellite 2 sends UE 10 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 10} at 5773.2
+UE 10 sends satellite 2 the message {"task": "RETRANSMISSION", "from": 10, "to": 2} at 5792
+UE 10 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 10} at time 5803.2
+UE 10 receives the configuration at 5803.2
+UE 10 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 10, "to": 3} at 5804
+satellite 2 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 2} at time 5822
+satellite 2 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 2} at time 5822
+satellite 2 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 2} at time 5822.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 10, "to": 3} at time 5834
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 10, 'to': 3} at time 5834
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 10, 'to': 3} at time 5834.2
+satellite 3 sends UE 10 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 10} at 5834.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 5834.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 5844.2
+UE 10 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 10} at time 5864.2
+UE 10 finished handover at 5864.2
+UE 5 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 5, "to": 1} at 5909
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 5, "to": 1} at time 5939
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 5, 'to': 1} at time 5939
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 5, 'to': 1} at time 5940.0
+satellite 1 sends satellite 2 the message {"task": "HANDOVER_REQUEST", "ueid": 5, "from": 1, "to": 2} at 5940.0
+satellite 2 received msg:{"task": "HANDOVER_REQUEST", "ueid": 5, "from": 1, "to": 2} at time 5950.0
+satellite 2 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 5, 'from': 1, 'to': 2} at time 5950.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 5, 'from': 1, 'to': 2} at time 5951.0
+satellite 2 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 5, "from": 2, "to": 1} at 5951.0
+UE 6 sends satellite 2 the message {"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 6, "to": 2} at 5955
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 5, "from": 2, "to": 1} at time 5961.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 5, 'from': 2, 'to': 1} at time 5961.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 5, 'from': 2, 'to': 1} at time 5961.2
+satellite 1 sends UE 5 the message {"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 5} at 5961.2
+UE 5 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 5, "to": 1} at 5980
+satellite 2 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 6, "to": 2} at time 5985
+satellite 2 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 6, 'to': 2} at time 5985
+satellite 2 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 6, 'to': 2} at time 5986.0
+satellite 2 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 6, "from": 2, "to": 3} at 5986.0
+UE 5 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 5} at time 5991.2
+UE 5 receives the configuration at 5991.2
+UE 5 sends satellite 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 5, "to": 2} at 5992
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 6, "from": 2, "to": 3} at time 5996.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 6, 'from': 2, 'to': 3} at time 5996.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 6, 'from': 2, 'to': 3} at time 5997.0
+satellite 3 sends satellite 2 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 6, "from": 3, "to": 2} at 5997.0
+satellite 2 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 6, "from": 3, "to": 2} at time 6007.0
+satellite 2 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 6, 'from': 3, 'to': 2} at time 6007.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 6, 'from': 3, 'to': 2} at time 6007.2
+satellite 2 sends UE 6 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 6} at 6007.2
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 5, "to": 1} at time 6010
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 1} at time 6010
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 1} at time 6010.2
+satellite 2 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 5, "to": 2} at time 6022
+satellite 2 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 5, 'to': 2} at time 6022
+satellite 2 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 5, 'to': 2} at time 6022.2
+satellite 2 sends UE 5 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 5} at 6022.2
+satellite 2 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at 6022.2
+UE 6 sends satellite 2 the message {"task": "RETRANSMISSION", "from": 6, "to": 2} at 6026
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at time 6032.2
+UE 6 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 6} at time 6037.2
+UE 6 receives the configuration at 6037.2
+UE 6 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 6, "to": 3} at 6038
+UE 5 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 5} at time 6052.2
+UE 5 finished handover at 6052.2
+satellite 2 received msg:{"task": "RETRANSMISSION", "from": 6, "to": 2} at time 6056
+satellite 2 handling msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 2} at time 6056
+satellite 2 finished processing msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 2} at time 6056.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 6, "to": 3} at time 6068
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 6, 'to': 3} at time 6068
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 6, 'to': 3} at time 6068.2
+satellite 3 sends UE 6 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 6} at 6068.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 6068.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 6078.2
+UE 6 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 6} at time 6098.2
+UE 6 finished handover at 6098.2
+UE 8 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 8, "to": 1} at 6163
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 8, "to": 1} at time 6193
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 8, 'to': 1} at time 6193
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 8, 'to': 1} at time 6194.0
+satellite 1 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 8, "from": 1, "to": 3} at 6194.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 8, "from": 1, "to": 3} at time 6204.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 8, 'from': 1, 'to': 3} at time 6204.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 8, 'from': 1, 'to': 3} at time 6205.0
+satellite 3 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 8, "from": 3, "to": 1} at 6205.0
+UE 9 sends satellite 2 the message {"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 9, "to": 2} at 6208
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 8, "from": 3, "to": 1} at time 6215.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 8, 'from': 3, 'to': 1} at time 6215.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 8, 'from': 3, 'to': 1} at time 6215.2
+satellite 1 sends UE 8 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 8} at 6215.2
+UE 8 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 8, "to": 1} at 6234
+satellite 2 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 9, "to": 2} at time 6238
+satellite 2 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 9, 'to': 2} at time 6238
+satellite 2 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 9, 'to': 2} at time 6239.0
+satellite 2 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 9, "from": 2, "to": 3} at 6239.0
+UE 8 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 8} at time 6245.2
+UE 8 receives the configuration at 6245.2
+UE 8 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 8, "to": 3} at 6246
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 9, "from": 2, "to": 3} at time 6249.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 9, 'from': 2, 'to': 3} at time 6249.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 9, 'from': 2, 'to': 3} at time 6250.0
+satellite 3 sends satellite 2 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 9, "from": 3, "to": 2} at 6250.0
+satellite 2 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 9, "from": 3, "to": 2} at time 6260.0
+satellite 2 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 9, 'from': 3, 'to': 2} at time 6260.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 9, 'from': 3, 'to': 2} at time 6260.2
+satellite 2 sends UE 9 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 9} at 6260.2
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 8, "to": 1} at time 6264
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 1} at time 6264
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 1} at time 6264.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 8, "to": 3} at time 6276
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 8, 'to': 3} at time 6276
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 8, 'to': 3} at time 6276.2
+satellite 3 sends UE 8 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 8} at 6276.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 6276.2
+UE 9 sends satellite 2 the message {"task": "RETRANSMISSION", "from": 9, "to": 2} at 6279
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 6286.2
+UE 9 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 9} at time 6290.2
+UE 9 receives the configuration at 6290.2
+UE 9 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 9, "to": 3} at 6291
+UE 8 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 8} at time 6306.2
+UE 8 finished handover at 6306.2
+satellite 2 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 2} at time 6309
+satellite 2 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 2} at time 6309
+satellite 2 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 2} at time 6309.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 9, "to": 3} at time 6321
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 9, 'to': 3} at time 6321
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 9, 'to': 3} at time 6321.2
+satellite 3 sends UE 9 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 9} at 6321.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 6321.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 6331.2
+UE 9 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 9} at time 6351.2
+UE 9 finished handover at 6351.2
+UE 4 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 4, "to": 1} at 7004
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 4, "to": 1} at time 7034
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 4, 'to': 1} at time 7034
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 4, 'to': 1} at time 7035.0
+satellite 1 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 4, "from": 1, "to": 3} at 7035.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 4, "from": 1, "to": 3} at time 7045.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 4, 'from': 1, 'to': 3} at time 7045.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 4, 'from': 1, 'to': 3} at time 7046.0
+satellite 3 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 4, "from": 3, "to": 1} at 7046.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 4, "from": 3, "to": 1} at time 7056.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 4, 'from': 3, 'to': 1} at time 7056.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 4, 'from': 3, 'to': 1} at time 7056.2
+satellite 1 sends UE 4 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 4} at 7056.2
+UE 4 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 4, "to": 1} at 7075
+UE 4 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 4} at time 7086.2
+UE 4 receives the configuration at 7086.2
+UE 4 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 4, "to": 3} at 7087
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 4, "to": 1} at time 7105
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 4, 'to': 1} at time 7105
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 4, 'to': 1} at time 7105.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 4, "to": 3} at time 7117
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 4, 'to': 3} at time 7117
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 4, 'to': 3} at time 7117.2
+satellite 3 sends UE 4 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 4} at 7117.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 7117.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 7127.2
+UE 4 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 4} at time 7147.2
+UE 4 finished handover at 7147.2
+UE 10 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 10, "to": 3} at 7375
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 10, "to": 3} at time 7405
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 10, 'to': 3} at time 7405
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 10, 'to': 3} at time 7406.0
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7446
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7476
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7476
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7476.2
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7517
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7547
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7547
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7547.2
+UE 5 sends satellite 2 the message {"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 5, "to": 2} at 7562
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7588
+satellite 2 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [3], "from": 5, "to": 2} at time 7592
+satellite 2 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 5, 'to': 2} at time 7592
+satellite 2 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [3], 'from': 5, 'to': 2} at time 7593.0
+satellite 2 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 5, "from": 2, "to": 3} at 7593.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 5, "from": 2, "to": 3} at time 7603.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 5, 'from': 2, 'to': 3} at time 7603.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 5, 'from': 2, 'to': 3} at time 7604.0
+satellite 3 sends satellite 2 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 5, "from": 3, "to": 2} at 7604.0
+UE 6 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 6, "to": 3} at 7609
+satellite 2 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 5, "from": 3, "to": 2} at time 7614.0
+satellite 2 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 5, 'from': 3, 'to': 2} at time 7614.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 5, 'from': 3, 'to': 2} at time 7614.2
+satellite 2 sends UE 5 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 5} at 7614.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7618
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7618
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7618.2
+UE 5 sends satellite 2 the message {"task": "RETRANSMISSION", "from": 5, "to": 2} at 7633
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 6, "to": 3} at time 7639
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 6, 'to': 3} at time 7639
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 6, 'to': 3} at time 7640.0
+UE 5 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 2, "to": 5} at time 7644.2
+UE 5 receives the configuration at 7644.2
+UE 5 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 5, "to": 3} at 7645
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7659
+satellite 2 received msg:{"task": "RETRANSMISSION", "from": 5, "to": 2} at time 7663
+satellite 2 handling msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 2} at time 7663
+satellite 2 finished processing msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 2} at time 7663.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 5, "to": 3} at time 7675
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 5, 'to': 3} at time 7675
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 5, 'to': 3} at time 7675.2
+satellite 3 sends UE 5 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 5} at 7675.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 7675.2
+UE 6 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 6, "to": 3} at 7680
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 7685.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7689
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7689
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7689.2
+UE 5 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 5} at time 7705.2
+UE 5 finished handover at 7705.2
+UE 2 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 2, "to": 1} at 7707
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 6, "to": 3} at time 7710
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7710
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7710.2
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7730
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 2, "to": 1} at time 7737
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 2, 'to': 1} at time 7737
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 2, 'to': 1} at time 7738.0
+satellite 1 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 2, "from": 1, "to": 3} at 7738.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 2, "from": 1, "to": 3} at time 7748.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 2, 'from': 1, 'to': 3} at time 7748.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 2, 'from': 1, 'to': 3} at time 7749.0
+satellite 3 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 2, "from": 3, "to": 1} at 7749.0
+UE 6 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 6, "to": 3} at 7751
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 2, "from": 3, "to": 1} at time 7759.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 2, 'from': 3, 'to': 1} at time 7759.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 2, 'from': 3, 'to': 1} at time 7759.2
+satellite 1 sends UE 2 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 2} at 7759.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7760
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7760
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7760.2
+UE 2 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 2, "to": 1} at 7778
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 6, "to": 3} at time 7781
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7781
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7781.2
+UE 2 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 2} at time 7789.2
+UE 2 receives the configuration at 7789.2
+UE 2 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 2, "to": 3} at 7790
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7801
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 2, "to": 1} at time 7808
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 2, 'to': 1} at time 7808
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 2, 'to': 1} at time 7808.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 2, "to": 3} at time 7820
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 2, 'to': 3} at time 7820
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 2, 'to': 3} at time 7820.2
+satellite 3 sends UE 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 2} at 7820.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 7820.2
+UE 6 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 6, "to": 3} at 7822
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 7830.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7831
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7831
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7831.2
+UE 2 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 2} at time 7850.2
+UE 2 finished handover at 7850.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 6, "to": 3} at time 7852
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7852
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 6, 'to': 3} at time 7852.2
+UE 9 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 9, "to": 3} at 7861
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7872
+UE 6 lost connection at time 7874 from satellite 3
+UE 6 handover failure at time 7874
+UE 3 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 3, "to": 3} at 7888
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 9, "to": 3} at time 7891
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 9, 'to': 3} at time 7891
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 9, 'to': 3} at time 7892.0
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7902
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7902
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7902.2
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 3, "to": 3} at time 7918
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 3, 'to': 3} at time 7918
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 3, 'to': 3} at time 7919.0
+UE 9 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 9, "to": 3} at 7932
+UE 10 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 10, "to": 3} at 7943
+UE 3 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 3, "to": 3} at 7959
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 3} at time 7962
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 7962
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 7962.2
+UE 10 lost connection at time 7971 from satellite 3
+UE 10 handover failure at time 7971
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 10, "to": 3} at time 7973
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7973
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 10, 'to': 3} at time 7973.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 3, "to": 3} at time 7989
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 7989
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 7989.2
+UE 9 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 9, "to": 3} at 8003
+UE 3 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 3, "to": 3} at 8030
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 3} at time 8033
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8033
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8033.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 3, "to": 3} at time 8060
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8060
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8060.2
+UE 9 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 9, "to": 3} at 8074
+UE 3 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 3, "to": 3} at 8101
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 3} at time 8104
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8104
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8104.2
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 3, "to": 3} at time 8131
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8131
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8131.2
+UE 9 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 9, "to": 3} at 8145
+UE 3 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 3, "to": 3} at 8172
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 3} at time 8175
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8175
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8175.2
+UE 3 lost connection at time 8182 from satellite 3
+UE 3 handover failure at time 8182
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 3, "to": 3} at time 8202
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8202
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 3, 'to': 3} at time 8202.2
+UE 9 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 9, "to": 3} at 8216
+UE 1 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 1, "to": 1} at 8220
+UE 9 lost connection at time 8246 from satellite 3
+UE 9 handover failure at time 8246
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 9, "to": 3} at time 8246
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8246
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 9, 'to': 3} at time 8246.2
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 1, "to": 1} at time 8250
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 1, 'to': 1} at time 8250
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 1, 'to': 1} at time 8251.0
+satellite 1 sends satellite 3 the message {"task": "HANDOVER_REQUEST", "ueid": 1, "from": 1, "to": 3} at 8251.0
+satellite 3 received msg:{"task": "HANDOVER_REQUEST", "ueid": 1, "from": 1, "to": 3} at time 8261.0
+satellite 3 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 1, 'from': 1, 'to': 3} at time 8261.0
+satellite 3 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 1, 'from': 1, 'to': 3} at time 8262.0
+satellite 3 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 1, "from": 3, "to": 1} at 8262.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 1, "from": 3, "to": 1} at time 8272.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 1, 'from': 3, 'to': 1} at time 8272.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 1, 'from': 3, 'to': 1} at time 8272.2
+satellite 1 sends UE 1 the message {"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 1} at 8272.2
+UE 1 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 1, "to": 1} at 8291
+UE 1 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [3], "from": 1, "to": 1} at time 8302.2
+UE 1 receives the configuration at 8302.2
+UE 1 sends satellite 3 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 1, "to": 3} at 8303
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 1, "to": 1} at time 8321
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 1, 'to': 1} at time 8321
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 1, 'to': 1} at time 8321.2
+satellite 3 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 1, "to": 3} at time 8333
+satellite 3 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 1, 'to': 3} at time 8333
+satellite 3 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 1, 'to': 3} at time 8333.2
+satellite 3 sends UE 1 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 1} at 8333.2
+satellite 3 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at 8333.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 3, "to": 1} at time 8343.2
+UE 1 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 3, "to": 1} at time 8363.2
+UE 1 finished handover at 8363.2
+UE 7 sends satellite 1 the message {"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 7, "to": 1} at 9069
+satellite 1 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [2, 3], "from": 7, "to": 1} at time 9099
+satellite 1 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 7, 'to': 1} at time 9099
+satellite 1 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [2, 3], 'from': 7, 'to': 1} at time 9100.0
+satellite 1 sends satellite 2 the message {"task": "HANDOVER_REQUEST", "ueid": 7, "from": 1, "to": 2} at 9100.0
+satellite 2 received msg:{"task": "HANDOVER_REQUEST", "ueid": 7, "from": 1, "to": 2} at time 9110.0
+satellite 2 handling msg:{'task': 'HANDOVER_REQUEST', 'ueid': 7, 'from': 1, 'to': 2} at time 9110.0
+satellite 2 finished processing msg:{'task': 'HANDOVER_REQUEST', 'ueid': 7, 'from': 1, 'to': 2} at time 9111.0
+satellite 2 sends satellite 1 the message {"task": "HANDOVER_ACKNOWLEDGE", "ueid": 7, "from": 2, "to": 1} at 9111.0
+satellite 1 received msg:{"task": "HANDOVER_ACKNOWLEDGE", "ueid": 7, "from": 2, "to": 1} at time 9121.0
+satellite 1 handling msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 7, 'from': 2, 'to': 1} at time 9121.0
+satellite 1 finished processing msg:{'task': 'HANDOVER_ACKNOWLEDGE', 'ueid': 7, 'from': 2, 'to': 1} at time 9121.2
+satellite 1 sends UE 7 the message {"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 7} at 9121.2
+UE 7 sends satellite 1 the message {"task": "RETRANSMISSION", "from": 7, "to": 1} at 9140
+UE 7 start handling msg:{"task": "RRC_RECONFIGURATION", "targets": [2], "from": 1, "to": 7} at time 9151.2
+UE 7 receives the configuration at 9151.2
+UE 7 sends satellite 2 the message {"task": "RRC_RECONFIGURATION_COMPLETE", "from": 7, "to": 2} at 9152
+satellite 1 received msg:{"task": "RETRANSMISSION", "from": 7, "to": 1} at time 9170
+satellite 1 handling msg:{'task': 'RETRANSMISSION', 'from': 7, 'to': 1} at time 9170
+satellite 1 finished processing msg:{'task': 'RETRANSMISSION', 'from': 7, 'to': 1} at time 9170.2
+satellite 2 received msg:{"task": "RRC_RECONFIGURATION_COMPLETE", "from": 7, "to": 2} at time 9182
+satellite 2 handling msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 7, 'to': 2} at time 9182
+satellite 2 finished processing msg:{'task': 'RRC_RECONFIGURATION_COMPLETE', 'from': 7, 'to': 2} at time 9182.2
+satellite 2 sends UE 7 the message {"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 7} at 9182.2
+satellite 2 sends AMF 1 the message {"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at 9182.2
+AMF 1 start handling msg:{"task": "PATH_SHIFT_REQUEST", "from": 2, "to": 1} at time 9192.2
+UE 7 start handling msg:{"task": "RRC_RECONFIGURATION_COMPLETE_RESPONSE", "from": 2, "to": 7} at time 9212.2
+UE 7 finished handover at 9212.2
+UE 5 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 5, "to": 3} at 9215
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 5, "to": 3} at time 9245
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 5, 'to': 3} at time 9245
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 5, 'to': 3} at time 9246.0
+UE 5 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 5, "to": 3} at 9286
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 5, "to": 3} at time 9316
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9316
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9316.2
+UE 5 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 5, "to": 3} at 9357
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 5, "to": 3} at time 9387
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9387
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9387.2
+UE 5 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 5, "to": 3} at 9428
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 5, "to": 3} at time 9458
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9458
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 5, 'to': 3} at time 9458.2
+UE 8 sends satellite 3 the message {"task": "MEASUREMENT_REPORT", "candidate": [], "from": 8, "to": 3} at 9470
+UE 5 lost connection at time 9480 from satellite 3
+UE 5 handover failure at time 9480
+satellite 3 received msg:{"task": "MEASUREMENT_REPORT", "candidate": [], "from": 8, "to": 3} at time 9500
+satellite 3 handling msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 8, 'to': 3} at time 9500
+satellite 3 finished processing msg:{'task': 'MEASUREMENT_REPORT', 'candidate': [], 'from': 8, 'to': 3} at time 9501.0
+UE 8 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 8, "to": 3} at 9541
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 8, "to": 3} at time 9571
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9571
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9571.2
+UE 8 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 8, "to": 3} at 9612
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 8, "to": 3} at time 9642
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9642
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9642.2
+UE 8 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 8, "to": 3} at 9683
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 8, "to": 3} at time 9713
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9713
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9713.2
+UE 8 sends satellite 3 the message {"task": "RETRANSMISSION", "from": 8, "to": 3} at 9754
+UE 8 lost connection at time 9766 from satellite 3
+UE 8 handover failure at time 9766
+satellite 3 received msg:{"task": "RETRANSMISSION", "from": 8, "to": 3} at time 9784
+satellite 3 handling msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9784
+satellite 3 finished processing msg:{'task': 'RETRANSMISSION', 'from': 8, 'to': 3} at time 9784.2
+==========================================
+============= Experiment Ends =============
+==========================================
