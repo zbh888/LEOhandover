@@ -71,9 +71,12 @@ class Satellite(Base):
         """ Get the task from message Q and start a CPU processing process """
         while True:
             msg = yield self.messageQ.get()
-            print(f"{self.type} {self.identity} received msg:{msg} at time {self.env.now}")
             data = json.loads(msg)
-            self.env.process(self.cpu_processing(data))
+            if len(self.cpus.queue) < QUEUED_SIZE:
+                print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
+                self.env.process(self.cpu_processing(data))
+            else:
+                print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
 
     # =================== Satellite functions ======================
 
