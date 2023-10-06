@@ -95,14 +95,17 @@ class Satellite(Base):
             processing_time = PROCESSING_TIME[task]
 
             # handle the task by cases
-            if task == MEASUREMENT_REPORT:
-                self.counter.increment_UE_measurement()
+            if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
+                if task == MEASUREMENT_REPORT:
+                    self.counter.increment_UE_measurement()
+                else:
+                    self.counter.increment_UE_retransmit()
                 ueid = msg['from']
                 candidates = msg['candidate']
                 UE = self.UEs[ueid]
                 if self.connected(UE):
                     yield self.env.timeout(processing_time)
-                if self.connected(UE) and len(candidates) != 0:
+                if self.connected(UE):
                     # send the response to UE
                     data = {
                         "task": HANDOVER_REQUEST,
@@ -184,9 +187,6 @@ class Satellite(Base):
                         to=self.AMF
                     )
                 )
-            elif task == RETRANSMISSION:
-                self.counter.increment_UE_retransmit()
-                yield self.env.timeout(processing_time)
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
     def update_position(self):

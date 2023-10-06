@@ -57,6 +57,7 @@ class UE(Base):
                 satid = msg['from']
                 # TODO one error raised for serveing satellite is none
                 # TODO the suspect reason is synchronization issue with "switch to inactive"
+                # TODO Note that the UE didn't wait for the latest response for retransmission.
                 if self.state == WAITING_RRC_CONFIGURATION and satid == self.serving_satellite.identity:
                     # get candidate target
                     targets = msg['targets']
