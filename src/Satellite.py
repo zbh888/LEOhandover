@@ -59,7 +59,7 @@ class Satellite(Base):
         self.AMF = AMF
         self.UEs = None
         self.satellites = None
-        self.cpus = simpy.Resource(env, SATELLITE_CPU)  # Concurrent processing
+        self.cpus = simpy.PriorityResource(env, capacity=SATELLITE_CPU)  # Concurrent processing
         self.counter = cumulativeMessageCount()
 
         # Running process
