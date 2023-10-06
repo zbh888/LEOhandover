@@ -6,7 +6,6 @@ from matplotlib.patches import Circle
 
 import pickle
 
-
 class DataCollection:
     def __init__(self, graph_path):
         self.draw_path = graph_path
@@ -19,6 +18,13 @@ class DataCollection:
         self.cumulative_message_from_UE_retransmit = {}
         self.cumulative_message_from_UE_RA = {}
         self.cumulative_message_from_satellite = {}
+
+        self.UE_time_stamp = {}
+
+    def read_UEs(self, UEs):
+        for id in UEs:
+            UE = UEs[id]
+            self.UE_time_stamp[id] = UE.timestamps
 
     def draw(self):
         # plot

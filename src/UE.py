@@ -65,6 +65,8 @@ class UE(Base):
                     self.state = RRC_CONFIGURED
                     self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+                    self.timestamps[-1]['timestamp'].append(self.env.now)
+                    self.timestamps[-1]['isSuccess'] = "S"
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
                 satid = msg['from']
@@ -73,8 +75,7 @@ class UE(Base):
                     self.serving_satellite = satellite
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
-                    self.timestamps[-1].append(self.env.now)
-                    self.timestamps[-1].append("S")
+
 
     def action_monitor(self):
         while True:
@@ -88,21 +89,23 @@ class UE(Base):
                     "task": MEASUREMENT_REPORT,
                     "candidate": candidates,
                 }
-                self.env.process(
-                    self.send_message(
-                        delay=self.satellite_ground_delay,
-                        msg=data,
-                        Q=self.serving_satellite.messageQ,
-                        to=self.serving_satellite
+                if len(candidates) != 0:
+                    self.env.process(
+                        self.send_message(
+                            delay=self.satellite_ground_delay,
+                            msg=data,
+                            Q=self.serving_satellite.messageQ,
+                            to=self.serving_satellite
+                        )
                     )
-                )
-                self.timestamps.append([self.env.now]) # This is the start time
-                self.timer = self.env.now
-                self.state = WAITING_RRC_CONFIGURATION
+                    self.timestamps.append({'timestamp' : [self.env.now]}) # This is the start time
+                    self.timestamps[-1]['from'] = self.serving_satellite.identity
+                    self.timer = self.env.now
+                    self.state = WAITING_RRC_CONFIGURATION
             # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
-                self.timestamps[-1].append(self.env.now) # retransmission time
+                self.timestamps[-1]['timestamp'].append(self.env.now) # retransmission time
                 data = {
                     "task": RETRANSMISSION,
                 }
@@ -137,10 +140,11 @@ class UE(Base):
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.serving_satellite = None
                 if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION:
-                    print(f"UE {self.identity} handover failure at time {self.env.now}")
+                    if self.state == WAITING_RRC_CONFIGURATION:
+                        print(f"UE {self.identity} handover failure at time {self.env.now}")
+                        self.timestamps[-1]['timestamp'].append(self.env.now)
+                        self.timestamps[-1]['isSuccess'] = False
                     self.state = INACTIVE
-                    self.timestamps[-1].append(self.env.now)
-                    self.timestamps[-1].append("F")
             yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============

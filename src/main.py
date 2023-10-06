@@ -30,10 +30,6 @@ file.close()
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 
-
-# POSITIONS = [(-13000, -20711), (-13000, -20711), (-13000, 20711)]
-# POSITIONS = [(-13000, -20711)]
-
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
 def monitor_timestamp(env):
@@ -160,6 +156,7 @@ print('==========================================')
 print('============= Experiment Ends =============')
 print('==========================================')
 
+data.read_UEs(UEs)
 # draw from data
 data.draw()
 
