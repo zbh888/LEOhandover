@@ -26,8 +26,7 @@ class UE(Base):
         self.serving_satellite = serving_satellite
 
         # Logic Initialization
-        self.sendingtime = None
-        self.endingtime = None
+        self.timestamps = []
 
         self.messageQ = simpy.Store(env)
         self.cpus = simpy.Resource(env, UE_CPU)
@@ -74,7 +73,8 @@ class UE(Base):
                     self.serving_satellite = satellite
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
-                    self.endingtime = self.env.now
+                    self.timestamps[-1].append(self.env.now)
+                    self.timestamps[-1].append("S")
 
     def action_monitor(self):
         while True:
@@ -96,12 +96,13 @@ class UE(Base):
                         to=self.serving_satellite
                     )
                 )
-                self.sendingtime = self.env.now
+                self.timestamps.append([self.env.now]) # This is the start time
                 self.timer = self.env.now
                 self.state = WAITING_RRC_CONFIGURATION
             # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
+                self.timestamps[-1].append(self.env.now) # retransmission time
                 data = {
                     "task": RETRANSMISSION,
                 }
@@ -138,6 +139,8 @@ class UE(Base):
                 if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION:
                     print(f"UE {self.identity} handover failure at time {self.env.now}")
                     self.state = INACTIVE
+                    self.timestamps[-1].append(self.env.now)
+                    self.timestamps[-1].append("F")
             yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============
