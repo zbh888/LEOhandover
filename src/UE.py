@@ -106,18 +106,24 @@ class UE(Base):
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
                 self.timestamps[-1]['timestamp'].append(self.env.now) # retransmission time
+                candidates = []
+                for satid in self.satellites:
+                    if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                        candidates.append(satid)
                 data = {
                     "task": RETRANSMISSION,
+                    "candidate": candidates
                 }
-                self.env.process(
-                    self.send_message(
-                        delay=self.satellite_ground_delay,
-                        msg=data,
-                        Q=self.serving_satellite.messageQ,
-                        to=self.serving_satellite
+                if len(candidates) != 0:
+                    self.env.process(
+                        self.send_message(
+                            delay=self.satellite_ground_delay,
+                            msg=data,
+                            Q=self.serving_satellite.messageQ,
+                            to=self.serving_satellite
+                        )
                     )
-                )
-                self.retransmit_counter += 1
+                    self.retransmit_counter += 1
             # send random access request
             if self.state == RRC_CONFIGURED:  # When the UE has the configuration
                 if self.targetID and self.covered_by(self.targetID):  # The condition can be added here
