@@ -8,9 +8,9 @@ CORE_DELAY = 10
 DURATION = 10000
 RETRANSMIT = True
 RETRANSMIT_THRESHOLD = SATELLITE_GROUND_DELAY * 2 + SATELLITE_SATELLITE_DELAY * 2 + 15
-MAX_RETRANSMIT = 10
-CPU_SCALE = 2
-QUEUED_SIZE = 1000
+MAX_RETRANSMIT = 15
+CPU_SCALE = 4
+QUEUED_SIZE = 500
 # Parameters
 #TODO
 # 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.
@@ -42,6 +42,13 @@ PROCESSING_TIME = {
     PATH_SHIFT_REQUEST: 0.1 * CPU_SCALE,
     RETRANSMISSION: 0.5 * CPU_SCALE,
 }
+
+# TODO Under change, the message and Queue size.
+'''
+The satellite will handle inter-satellite tasks and Random access request at first priority
+Random Access and inter-satellite messages will not be restricted to Queue Size.
+because that's not the beginning of a handover.
+'''
 
 SATELLITE_CPU = 4
 UE_CPU = 4

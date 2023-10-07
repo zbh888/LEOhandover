@@ -72,22 +72,27 @@ class Satellite(Base):
         while True:
             msg = yield self.messageQ.get()
             data = json.loads(msg)
-            if len(self.cpus.queue) < QUEUED_SIZE:
-                print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
-                self.env.process(self.cpu_processing(data))
+            task = data['task']
+            if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
+                if len(self.cpus.queue) < QUEUED_SIZE:
+                    print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
+                    self.env.process(self.cpu_processing(msg=data, priority=2))
+                else:
+                    print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
             else:
-                print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
+                print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
+                self.env.process(self.cpu_processing(msg=data, priority=1))
 
     # =================== Satellite functions ======================
 
-    def cpu_processing(self, msg):
+    def cpu_processing(self, msg, priority):
         """ Processing the task from the message Q
 
         Args:
             msg: the json object from message Q
 
         """
-        with self.cpus.request() as request:
+        with self.cpus.request(priority=priority) as request:
             yield request
             print(f"{self.type} {self.identity} handling msg:{msg} at time {self.env.now}")
             # Get the task and processing time
