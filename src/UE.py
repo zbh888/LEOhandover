@@ -67,7 +67,7 @@ class UE(Base):
                     self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
                     self.timestamps[-1]['timestamp'].append(self.env.now)
-                    self.timestamps[-1]['isSuccess'] = "S"
+                    self.timestamps[-1]['isSuccess'] = True
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
                 satid = msg['from']

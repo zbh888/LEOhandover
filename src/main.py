@@ -26,6 +26,10 @@ t = 1
 d = SATELLITE_V * t
 number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
 file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+t = 0.001
+d = SATELLITE_V * t
+number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
+file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
 file.close()
 
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
@@ -159,16 +163,3 @@ print('==========================================')
 data.read_UEs(UEs)
 # draw from data
 data.draw()
-
-file = open(file_path + "/config_res.txt", "a")
-counter_request = 0
-counter_success = 0
-# for i in UEs:
-#     ue = UEs[i]
-#     if ue.hasHandoverConfiguration:
-#         counter_success += 1
-#     if ue.sentHandoverRequest:
-#         counter_request += 1
-file.write(f"{counter_request} UEs sent the handover requests\n")
-file.write(f"{counter_success} UEs received the handover configuration\n")
-file.close()

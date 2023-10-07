@@ -20,11 +20,13 @@ class DataCollection:
         self.cumulative_message_from_satellite = {}
 
         self.UE_time_stamp = {}
+        self.UE_positions = {}
 
     def read_UEs(self, UEs):
         for id in UEs:
             UE = UEs[id]
             self.UE_time_stamp[id] = UE.timestamps
+            self.UE_positions[id] = (UE.position_x, UE.position_y)
 
     def draw(self):
         # plot
