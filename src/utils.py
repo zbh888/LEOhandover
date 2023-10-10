@@ -1,10 +1,9 @@
+import math
+import pickle
 import random
 
-import math
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
-
-import pickle
 
 
 class DataCollection:
@@ -174,7 +173,8 @@ def determine_group_threshold(UEs, group_area_length):
             c3 += 1
         if res == (-1, 1):
             c4 += 1
-    return (c1+c2+c3+c4) / 4
+    return (c1 + c2 + c3 + c4) / 4
+
 
 def determine_groupID(x, y, area_length):
     if x >= 0:
@@ -187,8 +187,8 @@ def determine_groupID(x, y, area_length):
         res_y = (y // area_length)
     return int(res_x), int(res_y)
 
+
 def assign_group(UEs, area_length):
     for id in UEs:
         UE = UEs[id]
         UEs[id].groupID = determine_groupID(UE.position_x, UE.position_y, area_length)
-

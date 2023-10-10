@@ -13,7 +13,7 @@ CPU_SCALE = 4
 QUEUED_SIZE = 500
 GROUP_AREA_L = 1 * 1000
 # Parameters
-#TODO
+# TODO
 # 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.
 # 1.1 If restricting only one random access is weird, we can assign UEs during configuration.
 # 2. Handover Decision should be set too.
@@ -33,7 +33,6 @@ RRC_RECONFIGURATION_COMPLETE = "RRC_RECONFIGURATION_COMPLETE"
 RRC_RECONFIGURATION_COMPLETE_RESPONSE = "RRC_RECONFIGURATION_COMPLETE_RESPONSE"
 PATH_SHIFT_REQUEST = "PATH_SHIFT_REQUEST"
 RETRANSMISSION = "RETRANSMISSION"
-
 
 PROCESSING_TIME = {
     MEASUREMENT_REPORT: 0.5 * CPU_SCALE,
@@ -69,4 +68,3 @@ INACTIVE = "INACTIVE"
 RRC_CONFIGURED = "RRC_CONFIGURED"
 # The UE has sent the random access request with RRC_RECONFIGURATION_COMPLETE
 WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE = "WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE"
-

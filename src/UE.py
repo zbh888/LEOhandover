@@ -1,4 +1,5 @@
 import math
+
 import simpy
 
 from Base import *
@@ -78,7 +79,6 @@ class UE(Base):
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
 
-
     def action_monitor(self):
         while True:
             # send measurement report
@@ -100,14 +100,14 @@ class UE(Base):
                             to=self.serving_satellite
                         )
                     )
-                    self.timestamps.append({'timestamp' : [self.env.now]}) # This is the start time
+                    self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
                     self.timestamps[-1]['from'] = self.serving_satellite.identity
                     self.timer = self.env.now
                     self.state = WAITING_RRC_CONFIGURATION
             # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
-                self.timestamps[-1]['timestamp'].append(self.env.now) # retransmission time
+                self.timestamps[-1]['timestamp'].append(self.env.now)  # retransmission time
                 candidates = []
                 for satid in self.satellites:
                     if self.covered_by(satid) and satid != self.serving_satellite.identity:

@@ -1,3 +1,4 @@
+import random
 import sys
 
 import utils
@@ -5,15 +6,16 @@ from AMF import *
 from Satellite import *
 from UE import *
 from config import *
-import random
 
 random.seed(10)
+
 
 # This is simply for tracing time stamp
 def monitor_timestamp(env):
     while True:
         print(f"Current simulation time {env.now}", file=sys.stderr)
         yield env.timeout(1)
+
 
 '''
 The function draws screenshot of global Status. 
@@ -76,6 +78,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
                 numberUEWaitingRRC += 1
         data.numberUEWaitingResponse.append(numberUEWaitingRRC)
         yield env.timeout(timestep)
+
 
 # ===================== main =============================
 

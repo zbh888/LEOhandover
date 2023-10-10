@@ -1,8 +1,10 @@
+import random
+
 import simpy
 
 from Base import *
 from config import *
-import random
+
 
 class cumulativeMessageCount:
     def __init__(self):
@@ -11,6 +13,7 @@ class cumulativeMessageCount:
         self.message_from_UE_retransmit = 0
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
+
     def increment_UE_measurement(self):
         self.total_messages += 1
         self.message_from_UE_measurement += 1
@@ -26,7 +29,6 @@ class cumulativeMessageCount:
     def increment_UE_RA(self):
         self.total_messages += 1
         self.message_from_UE_RA += 1
-
 
 
 class Satellite(Base):
@@ -197,7 +199,7 @@ class Satellite(Base):
     def update_position(self):
         """ Continuous updating the object location. """
         while True:
-            #print((len(self.messageQ.items)))
+            # print((len(self.messageQ.items)))
             yield self.env.timeout(1)  # Time between position updates
             # Update x and y based on velocity
             # Calculate time ratio
