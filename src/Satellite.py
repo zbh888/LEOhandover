@@ -63,10 +63,13 @@ class Satellite(Base):
         self.satellites = None
         self.cpus = simpy.PriorityResource(env, capacity=SATELLITE_CPU)  # Concurrent processing
         self.counter = cumulativeMessageCount()
+        self.group_count = {}
+        self.hybrid_threshold = None
 
         # Running process
         self.env.process(self.init())  # Print Deployment information
         self.env.process(self.update_position())
+        self.env.process(self.monitor_group_information())
         self.env.process(self.handle_messages())
 
     def handle_messages(self):
@@ -199,13 +202,29 @@ class Satellite(Base):
     def update_position(self):
         """ Continuous updating the object location. """
         while True:
-            # print((len(self.messageQ.items)))
             yield self.env.timeout(1)  # Time between position updates
             # Update x and y based on velocity
             # Calculate time ratio
             ratio = 1 / 1000
             # direction set to right
             self.position_x += self.velocity * ratio
+
+    # TODO The group information should be dynamic in real deployment.
+    # Such update in real life should not cause delay, so, in our simulation, we update every ms.
+    # TODO But accuracy may be affected
+    def monitor_group_information(self):
+        while True:
+            yield self.env.timeout(1)
+            group_info = {}
+            for id in self.UEs:
+                UE = self.UEs[id]
+                if UE.serving_satellite is not None and UE.serving_satellite == self.identity:
+                    groupID = UE.groupID
+                    if groupID not in group_info:
+                        group_info[groupID] = 1
+                    else:
+                        group_info[groupID] += 1
+            self.group_count = group_info
 
     # ==================== Utils (Not related to Simpy) ==============
     def connected(self, UE):

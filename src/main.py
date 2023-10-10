@@ -123,18 +123,18 @@ for index, position in enumerate(POSITIONS, start=1):
         env=env)
 
 # Connecting objects
+utils.assign_group(UEs, GROUP_AREA_L)
+HYBRID_THRESHOLD = utils.determine_group_threshold(UEs, GROUP_AREA_L)
 
 for identity in satellites:
     satellites[identity].UEs = UEs
     satellites[identity].satellites = satellites
+    satellites[identity].hybrid_threshold = HYBRID_THRESHOLD // 2
 
 for identity in UEs:
     UEs[identity].satellites = satellites
 
 amf.satellites = satellites
-
-utils.assign_group(UEs, GROUP_AREA_L)
-HYBRID_THRESHOLD = utils.determine_group_threshold(UEs, GROUP_AREA_L)
 
 # ===================== Record Experiment Parameters =============================
 
@@ -170,7 +170,8 @@ file.close()
 # ===================== Running Experiment =============================
 
 env.process(monitor_timestamp(env))
-env.process(global_stats_collector_draw_middle(env, UEs, satellites, 200))
+drawing_interval = 300
+env.process(global_stats_collector_draw_middle(env, UEs, satellites, drawing_interval))
 data = utils.DataCollection(file_path + "/graph_data")
 env.process(global_stats_collector_draw_final(env, data, UEs, satellites, 1))
 print('==========================================')

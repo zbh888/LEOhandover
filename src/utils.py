@@ -191,4 +191,6 @@ def determine_groupID(x, y, area_length):
 def assign_group(UEs, area_length):
     for id in UEs:
         UE = UEs[id]
-        UEs[id].groupID = determine_groupID(UE.position_x, UE.position_y, area_length)
+        x, y = determine_groupID(UE.position_x, UE.position_y, area_length)
+        groupID = str(x) + "_" + str(y)
+        UEs[id].groupID = groupID
