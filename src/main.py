@@ -141,23 +141,30 @@ HYBRID_THRESHOLD = utils.determine_group_threshold(UEs, GROUP_AREA_L)
 file = open(file_path + "/config_res.txt", "w")
 # Close the file
 file.write("System Configuration:\n")
+file.write(f"  #Simulation Duration: {DURATION/1000} s\n")
 file.write(f"  #Satellite Radius: {SATELLITE_R} m\n")
 file.write(f"  #Satellite speed: {SATELLITE_V} m/s\n")
 file.write(f"  #Number of UEs: {NUMBER_UE}\n")
 file.write(f"  #Satellite CPU number: {SATELLITE_CPU}\n")
 file.write(f"  #Satellite to ground delay: {SATELLITE_GROUND_DELAY} ms\n")
 file.write(f"  #Inter Satellite delay: {SATELLITE_SATELLITE_DELAY} ms\n")
+file.write(f"\n")
+file.write(f"  #Retransmission timout: {RETRANSMIT_THRESHOLD} ms\n")
+file.write(f"  #Allowed maximum number of retransmission: {MAX_RETRANSMIT}\n")
+file.write(f"  #Allowed maximum number of messages: {QUEUED_SIZE}\n")
+file.write(f"  #Group Area Length: {GROUP_AREA_L} m\n")
+file.write(f"\n")
 
 t = 1
 d = SATELLITE_V * t
 number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
-file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+file.write(f"  #Measurement: approximate {number_handover} need to be handed over within {t} seconds\n")
 t = 0.001
 d = SATELLITE_V * t
 number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
-file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+file.write(f"  #Measurement: approximate {number_handover} need to be handed over within {t} seconds\n")
 
-file.write(f"  #Example: approximate {HYBRID_THRESHOLD} UE in one group area.\n")
+file.write(f"  #Measurement: approximate {HYBRID_THRESHOLD} UE in one group area.\n")
 file.close()
 
 # ===================== Running Experiment =============================
