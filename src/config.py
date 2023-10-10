@@ -11,6 +11,7 @@ RETRANSMIT_THRESHOLD = SATELLITE_GROUND_DELAY * 2 + SATELLITE_SATELLITE_DELAY * 
 MAX_RETRANSMIT = 15
 CPU_SCALE = 4
 QUEUED_SIZE = 500
+GROUP_AREA_L = 1 * 1000
 # Parameters
 #TODO
 # 1. The UEs will perform random access only the first time, which means the satellites will first goes to the massive UEs.

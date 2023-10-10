@@ -33,6 +33,7 @@ class UE(Base):
         self.state = ACTIVE
         self.satellites = None
 
+        self.groupID = None
         self.targetID = None
         self.retransmit_counter = 0
 

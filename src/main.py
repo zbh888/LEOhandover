@@ -4,43 +4,16 @@ import utils
 from AMF import *
 from Satellite import *
 from UE import *
+from config import *
+import random
 
-dir = "defaultres"
-if len(sys.argv) != 1:  # This is for automation
-    dir = sys.argv[1]
-    SATELLITE_CPU = int(sys.argv[2])
-    SATELLITE_GROUND_DELAY = int(sys.argv[3])
+random.seed(10)
 
-file_path = f"res/{dir}"
-file = open(file_path + "/config_res.txt", "w")
-# Close the file
-file.write("System Configuration:\n")
-file.write(f"  #Satellite Radius: {SATELLITE_R} m\n")
-file.write(f"  #Satellite speed: {SATELLITE_V} m/s\n")
-file.write(f"  #Number of UEs: {NUMBER_UE}\n")
-file.write(f"  #Satellite CPU number: {SATELLITE_CPU}\n")
-file.write(f"  #Satellite to ground delay: {SATELLITE_GROUND_DELAY} ms\n")
-file.write(f"  #Inter Satellite delay: {SATELLITE_SATELLITE_DELAY} ms\n")
-
-t = 1
-d = SATELLITE_V * t
-number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
-file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
-t = 0.001
-d = SATELLITE_V * t
-number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
-file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
-file.close()
-
-POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
-
-# ===================== Running Experiment =============================
 # This is simply for tracing time stamp
 def monitor_timestamp(env):
     while True:
         print(f"Current simulation time {env.now}", file=sys.stderr)
         yield env.timeout(1)
-
 
 '''
 The function draws screenshot of global Status. 
@@ -104,13 +77,22 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
         data.numberUEWaitingResponse.append(numberUEWaitingRRC)
         yield env.timeout(timestep)
 
+# ===================== main =============================
+
+dir = "defaultres"
+if len(sys.argv) != 1:  # This is for automation
+    dir = sys.argv[1]
+    SATELLITE_CPU = int(sys.argv[2])
+    SATELLITE_GROUND_DELAY = int(sys.argv[3])
+
+file_path = f"res/{dir}"
+
+# ===================== Deployment =============================
 
 env = simpy.Environment()
-# Deploy Core Function AMF
+POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 
 amf = AMF(core_delay=CORE_DELAY, env=env)
-
-# Deploy source Satellite
 UEs = {}
 satellites = {}
 
@@ -148,6 +130,35 @@ for identity in UEs:
 
 amf.satellites = satellites
 
+utils.assign_group(UEs, GROUP_AREA_L)
+HYBRID_THRESHOLD = utils.determine_group_threshold(UEs, GROUP_AREA_L)
+
+# ===================== Record Experiment Parameters =============================
+
+file = open(file_path + "/config_res.txt", "w")
+# Close the file
+file.write("System Configuration:\n")
+file.write(f"  #Satellite Radius: {SATELLITE_R} m\n")
+file.write(f"  #Satellite speed: {SATELLITE_V} m/s\n")
+file.write(f"  #Number of UEs: {NUMBER_UE}\n")
+file.write(f"  #Satellite CPU number: {SATELLITE_CPU}\n")
+file.write(f"  #Satellite to ground delay: {SATELLITE_GROUND_DELAY} ms\n")
+file.write(f"  #Inter Satellite delay: {SATELLITE_SATELLITE_DELAY} ms\n")
+
+t = 1
+d = SATELLITE_V * t
+number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
+file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+t = 0.001
+d = SATELLITE_V * t
+number_handover = utils.handout(SATELLITE_R, NUMBER_UE, d)
+file.write(f"  #Example: approximate {number_handover} need to be handed over within {t} seconds\n")
+
+file.write(f"  #Example: approximate {HYBRID_THRESHOLD} UE in one group area.\n")
+file.close()
+
+# ===================== Running Experiment =============================
+
 env.process(monitor_timestamp(env))
 env.process(global_stats_collector_draw_middle(env, UEs, satellites, 200))
 data = utils.DataCollection(file_path + "/graph_data")
@@ -159,6 +170,8 @@ env.run(until=DURATION)
 print('==========================================')
 print('============= Experiment Ends =============')
 print('==========================================')
+
+# ===================== Collect Data =============================
 
 data.read_UEs(UEs)
 # draw from data

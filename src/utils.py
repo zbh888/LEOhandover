@@ -6,6 +6,7 @@ from matplotlib.patches import Circle
 
 import pickle
 
+
 class DataCollection:
     def __init__(self, graph_path):
         self.draw_path = graph_path
@@ -21,12 +22,14 @@ class DataCollection:
 
         self.UE_time_stamp = {}
         self.UE_positions = {}
+        self.UE_groupID = {}
 
     def read_UEs(self, UEs):
         for id in UEs:
             UE = UEs[id]
             self.UE_time_stamp[id] = UE.timestamps
             self.UE_positions[id] = (UE.position_x, UE.position_y)
+            self.UE_groupID[id] = UE.groupID
 
     def draw(self):
         # plot
@@ -111,6 +114,31 @@ class DataCollection:
             pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
 
 
+def draw_from_positions(inactive_positions, active_position, requesting_position, label, dir, satellite_pos, R):
+    plt.close('all')
+    plt.clf()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    x_range = (-1.2 * R, 1.2 * R)
+    y_range = (-1.2 * R, 1.2 * R)
+    plt.xlim(x_range)
+    plt.ylim(y_range)
+    if len(inactive_positions) != 0:
+        x_coords, y_coords = zip(*inactive_positions)
+        plt.scatter(x_coords, y_coords, color='red', s=0.5)
+    if len(active_position) != 0:
+        x_coords, y_coords = zip(*active_position)
+        plt.scatter(x_coords, y_coords, color='blue', s=0.5)
+    if len(requesting_position) != 0:
+        x_coords, y_coords = zip(*requesting_position)
+        plt.scatter(x_coords, y_coords, color='green', s=0.5)
+    x_coords, y_coords = zip(*satellite_pos)
+    plt.scatter(x_coords, y_coords, color='black', s=10)
+    for point in satellite_pos:
+        circle = Circle((point[0], point[1]), R, color='black', fill=False, linewidth=0.5)
+        ax.add_patch(circle)
+    plt.savefig(f'{dir}/res_positions_{label}.png', dpi=300, bbox_inches='tight')
+
+
 # The number of devices requiring handover
 def handout(R, N, d):
     pi = math.pi
@@ -133,26 +161,34 @@ def generate_points(n, R, x, y):
     return points
 
 
-def draw_from_positions(inactive_positions, active_position, requesting_position, label, dir, satellite_pos, R):
-    plt.close('all')
-    plt.clf()
-    fig, ax = plt.subplots(figsize=(8, 8))
-    x_range = (-1.2*R, 1.2*R)
-    y_range = (-1.2*R, 1.2*R)
-    plt.xlim(x_range)
-    plt.ylim(y_range)
-    if len(inactive_positions) != 0:
-        x_coords, y_coords = zip(*inactive_positions)
-        plt.scatter(x_coords, y_coords, color='red', s=0.5)
-    if len(active_position) != 0:
-        x_coords, y_coords = zip(*active_position)
-        plt.scatter(x_coords, y_coords, color='blue', s=0.5)
-    if len(requesting_position) != 0:
-        x_coords, y_coords = zip(*requesting_position)
-        plt.scatter(x_coords, y_coords, color='green', s=0.5)
-    x_coords, y_coords = zip(*satellite_pos)
-    plt.scatter(x_coords, y_coords, color='black', s=10)
-    for point in satellite_pos:
-        circle = Circle((point[0], point[1]), R, color='black', fill=False, linewidth=0.5)
-        ax.add_patch(circle)
-    plt.savefig(f'{dir}/res_positions_{label}.png', dpi=300, bbox_inches='tight')
+def determine_group_threshold(UEs, group_area_length):
+    c1, c2, c3, c4 = 0, 0, 0, 0
+    for id in UEs:
+        UE = UEs[id]
+        res = determine_groupID(UE.position_x, UE.position_y, group_area_length)
+        if res == (1, 1):
+            c1 += 1
+        if res == (-1, -1):
+            c2 += 1
+        if res == (1, -1):
+            c3 += 1
+        if res == (-1, 1):
+            c4 += 1
+    return (c1+c2+c3+c4) / 4
+
+def determine_groupID(x, y, area_length):
+    if x >= 0:
+        res_x = (x // area_length) + 1
+    else:
+        res_x = (x // area_length)
+    if y >= 0:
+        res_y = (y // area_length) + 1
+    else:
+        res_y = (y // area_length)
+    return int(res_x), int(res_y)
+
+def assign_group(UEs, area_length):
+    for id in UEs:
+        UE = UEs[id]
+        UEs[id].groupID = determine_groupID(UE.position_x, UE.position_y, area_length)
+
