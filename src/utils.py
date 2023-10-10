@@ -4,7 +4,30 @@ import random
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
+import hashlib
 
+# The number of devices requiring handover
+def handout(R, N, d):
+    pi = math.pi
+    RES = N - 2 * N / pi * math.acos(d / 2 / R) + d * N / pi * (1 / R / R - (d * d) / (4 * R ** 4)) ** 0.5
+    return RES
+
+
+# uniform devices generator
+def generate_points(n, R, x, y):
+    def generate_one(R, x, y):
+        r = R * math.sqrt(random.uniform(0, 1))
+        theta = random.uniform(0, 1) * 2 * math.pi
+        px = x + r * math.cos(theta)
+        py = y + r * math.sin(theta)
+        return px, py
+
+    points = []
+    for i in range(n):
+        points.append(generate_one(R, x, y))
+    return points
+
+# ===================== Data Collection and drawing =============================
 
 class DataCollection:
     def __init__(self, graph_path):
@@ -137,28 +160,7 @@ def draw_from_positions(inactive_positions, active_position, requesting_position
         ax.add_patch(circle)
     plt.savefig(f'{dir}/res_positions_{label}.png', dpi=300, bbox_inches='tight')
 
-
-# The number of devices requiring handover
-def handout(R, N, d):
-    pi = math.pi
-    RES = N - 2 * N / pi * math.acos(d / 2 / R) + d * N / pi * (1 / R / R - (d * d) / (4 * R ** 4)) ** 0.5
-    return RES
-
-
-# uniform devices generator
-def generate_points(n, R, x, y):
-    def generate_one(R, x, y):
-        r = R * math.sqrt(random.uniform(0, 1))
-        theta = random.uniform(0, 1) * 2 * math.pi
-        px = x + r * math.cos(theta)
-        py = y + r * math.sin(theta)
-        return px, py
-
-    points = []
-    for i in range(n):
-        points.append(generate_one(R, x, y))
-    return points
-
+# ===================== clustering =============================
 
 def determine_group_threshold(UEs, group_area_length):
     c1, c2, c3, c4 = 0, 0, 0, 0
@@ -194,3 +196,15 @@ def assign_group(UEs, area_length):
         x, y = determine_groupID(UE.position_x, UE.position_y, area_length)
         groupID = str(x) + "_" + str(y)
         UEs[id].groupID = groupID
+
+# ===================== Secret Sharing =============================
+def generate_share():
+    return random.randint(10000000, 100000000)
+
+def generate_commitment(share):
+    encode_int = str(share).encode()
+    result = hashlib.md5(encode_int).hexdigest()
+    return result
+
+def verify_share_commitment(share, commitment):
+    return generate_commitment(share) == commitment

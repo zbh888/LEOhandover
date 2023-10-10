@@ -221,9 +221,8 @@ class Satellite(Base):
                 if UE.serving_satellite is not None and UE.serving_satellite == self.identity:
                     groupID = UE.groupID
                     if groupID not in group_info:
-                        group_info[groupID] = 1
-                    else:
-                        group_info[groupID] += 1
+                        group_info[groupID] = []
+                    group_info[groupID].append(id)
             self.group_count = group_info
 
     # ==================== Utils (Not related to Simpy) ==============
