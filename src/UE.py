@@ -35,6 +35,7 @@ class UE(Base):
         self.satellites = None
 
         self.groupID = None
+        self.groupHandover = False
         self.targetID = None
         self.retransmit_counter = 0
 
@@ -160,7 +161,7 @@ class UE(Base):
         satellite = self.satellites[satelliteID]
         d = math.sqrt(((self.position_x - satellite.position_x) ** 2) + (
                 (self.position_y - satellite.position_y) ** 2))
-        return d <= 25 * 1000
+        return d <= SATELLITE_R
 
     def send_request_condition(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (

@@ -1,10 +1,10 @@
 import random
 
 import simpy
-
+import math
 from Base import *
 from config import *
-
+import utils
 
 class cumulativeMessageCount:
     def __init__(self):
@@ -64,6 +64,7 @@ class Satellite(Base):
         self.cpus = simpy.PriorityResource(env, capacity=SATELLITE_CPU)  # Concurrent processing
         self.counter = cumulativeMessageCount()
         self.group_count = {}
+        self.group_aggregators = {}
         self.hybrid_threshold = None
 
         # Running process
@@ -218,12 +219,39 @@ class Satellite(Base):
             group_info = {}
             for id in self.UEs:
                 UE = self.UEs[id]
-                if UE.serving_satellite is not None and UE.serving_satellite == self.identity:
+                if UE.serving_satellite is not None and UE.serving_satellite == self.identity and UE.state == ACTIVE:
                     groupID = UE.groupID
                     if groupID not in group_info:
                         group_info[groupID] = []
                     group_info[groupID].append(id)
             self.group_count = group_info
+            for groupID in group_info:
+                if groupID not in self.group_aggregators:
+                    xy =  groupID.split('_')
+                    x = int(xy[0])
+                    y = int(xy[1])
+                    ul, ru, rd, ld = utils.determine_edge_point(x, y, GROUP_AREA_L)
+                    R = 24* 1000
+                    if (self.cover_point_with_range(ru[0], ru[1], R)
+                            and self.cover_point_with_range(rd[0], rd[1], R)
+                            and ul[0] > self.position_x
+                            and len(group_info[groupID])) >= min(self.hybrid_threshold, 3):
+                        self.group_aggregators[groupID] = []
+                        # Notify UEs and assign aggregators Task.
+                        data = {
+                            "task": GROUP_HANDOVER_NOTIFY,
+                            "groupID": groupID,
+                        }
+                        self.env.process(
+                            self.send_message(
+                                delay=0,
+                                msg=data,
+                                Q=self.messageQ,
+                                to=self
+                            )
+                        )
+
+
 
     # ==================== Utils (Not related to Simpy) ==============
     def connected(self, UE):
@@ -231,3 +259,7 @@ class Satellite(Base):
             return False
         else:
             return UE.serving_satellite.identity == self.identity
+    def cover_point_with_range(self, pos_x, pos_y, R):
+        d = math.sqrt(((pos_x - self.position_x) ** 2) + (
+                (pos_y - self.position_y) ** 2))
+        return d <= R

@@ -197,6 +197,37 @@ def assign_group(UEs, area_length):
         groupID = str(x) + "_" + str(y)
         UEs[id].groupID = groupID
 
+def determine_edge_point(x,y,area_length):
+    if x < 0:
+        left = x
+        right = (x + 1)
+    else:
+        left = (x - 1)
+        right = x
+
+    if y < 0:
+        up = y + 1
+        down = y
+    else:
+        up = y
+        down = y - 1
+
+    left *= area_length
+    right *= area_length
+    up *= area_length
+    down *= area_length
+
+    # left up
+    ul = (left, up)
+    # right up
+    ru = (right, up)
+    # right down
+    rd = (right, down)
+    # left down
+    ld = (left, down)
+    return ul, ru, rd, ld
+
+
 # ===================== Secret Sharing =============================
 def generate_share():
     return random.randint(10000000, 100000000)
