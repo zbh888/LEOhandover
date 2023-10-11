@@ -129,7 +129,7 @@ HYBRID_THRESHOLD = utils.determine_group_threshold(UEs, GROUP_AREA_L)
 for identity in satellites:
     satellites[identity].UEs = UEs
     satellites[identity].satellites = satellites
-    satellites[identity].hybrid_threshold = HYBRID_THRESHOLD // 2
+    satellites[identity].hybrid_threshold = max(HYBRID_THRESHOLD // 2, 3)
 
 for identity in UEs:
     UEs[identity].satellites = satellites

@@ -65,6 +65,7 @@ class Satellite(Base):
         self.counter = cumulativeMessageCount()
         self.group_count = {}
         self.group_aggregators = {}
+        self.group_share_commit = {}
         self.hybrid_threshold = None
 
         # Running process
@@ -208,9 +209,33 @@ class Satellite(Base):
                 UE_list = self.group_count[groupID]
                 processing_time = len(UE_list) * PROCESSING_TIME[PROCESS_ONE_UE]
                 estimate_time = processing_time + self.satellite_ground_delay
-                if estimate_time * self.velocity + self.position_x < left_x:
-                    print(f"{self.type} {self.identity} notify group {groupID} at time {self.env.now}")
-                    # TODO Do some logic here
+                ratio = 1 / 1000
+                if ratio * estimate_time * self.velocity + self.position_x < left_x:
+                    yield self.env.timeout(processing_time)
+                    aggregatorIDs = random.sample(UE_list, 2)
+                    print(f"{self.type} {self.identity} notifies group {groupID} at time {self.env.now}")
+                    for ueID in UE_list:
+                        UE = self.UEs[ueID]
+                        if self.connected(UE):
+                            share = utils.generate_share()
+                            commit = utils.generate_commitment(share)
+                            self.group_share_commit[ueID] = (share, commit)
+                            data = {
+                                "task": SWITCH_TO_GROUP_HANDOVER,
+                                "share": share,
+                                "commit": commit,
+                                "head": aggregatorIDs
+                            }
+                            self.env.process(
+                                self.send_message(
+                                    delay=self.satellite_ground_delay,
+                                    msg=data,
+                                    Q=UE.messageQ,
+                                    to=UE
+                                )
+                            )
+                        else:
+                            print("ERROR This shouldn't happen")
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
@@ -233,7 +258,7 @@ class Satellite(Base):
             group_info = {}
             for id in self.UEs:
                 UE = self.UEs[id]
-                if UE.serving_satellite is not None and UE.serving_satellite == self.identity and UE.state == ACTIVE:
+                if UE.serving_satellite is not None and UE.serving_satellite.identity == self.identity and UE.state == ACTIVE:
                     groupID = UE.groupID
                     if groupID not in group_info:
                         group_info[groupID] = []
@@ -249,7 +274,7 @@ class Satellite(Base):
                     if (self.cover_point_with_range(ru[0], ru[1], R)
                             and self.cover_point_with_range(rd[0], rd[1], R)
                             and ul[0] > self.position_x
-                            and len(group_info[groupID])) >= min(self.hybrid_threshold, 3):
+                            and len(group_info[groupID])) >= self.hybrid_threshold:
                         self.group_aggregators[groupID] = []
                         # Notify UEs and assign aggregators Task.
                         data = {
