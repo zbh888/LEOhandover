@@ -103,10 +103,10 @@ class Satellite(Base):
             print(f"{self.type} {self.identity} handling msg:{msg} at time {self.env.now}")
             # Get the task and processing time
             task = msg['task']
-            processing_time = PROCESSING_TIME[task]
 
             # handle the task by cases
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
+                processing_time = PROCESSING_TIME[task]
                 if task == MEASUREMENT_REPORT:
                     self.counter.increment_UE_measurement()
                 else:
@@ -134,6 +134,7 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_ACKNOWLEDGE:
+                processing_time = PROCESSING_TIME[task]
                 self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
@@ -154,6 +155,7 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_REQUEST:
+                processing_time = PROCESSING_TIME[task]
                 self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
@@ -172,6 +174,7 @@ class Satellite(Base):
                     )
                 )
             elif task == RRC_RECONFIGURATION_COMPLETE:
+                processing_time = PROCESSING_TIME[task]
                 self.counter.increment_UE_RA()
                 ue_id = msg['from']
                 UE = self.UEs[ue_id]
@@ -198,6 +201,17 @@ class Satellite(Base):
                         to=self.AMF
                     )
                 )
+            elif task == GROUP_HANDOVER_NOTIFY:
+                # Determine processing time and estimate if worth processing
+                groupID = msg['groupID']
+                left_x = msg['left_x']
+                UE_list = self.group_count[groupID]
+                processing_time = len(UE_list) * PROCESSING_TIME[PROCESS_ONE_UE]
+                estimate_time = processing_time + self.satellite_ground_delay
+                if estimate_time * self.velocity + self.position_x < left_x:
+                    print(f"{self.type} {self.identity} notify group {groupID} at time {self.env.now}")
+                    # TODO Do some logic here
+
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
     def update_position(self):
@@ -241,6 +255,7 @@ class Satellite(Base):
                         data = {
                             "task": GROUP_HANDOVER_NOTIFY,
                             "groupID": groupID,
+                            "left_x": ul[0]
                         }
                         self.env.process(
                             self.send_message(
