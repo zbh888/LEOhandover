@@ -214,28 +214,34 @@ class Satellite(Base):
                     yield self.env.timeout(processing_time)
                     aggregatorIDs = random.sample(UE_list, 2)
                     print(f"{self.type} {self.identity} notifies group {groupID} at time {self.env.now}")
+                    ID_commitment = {}
                     for ueID in UE_list:
                         UE = self.UEs[ueID]
                         if self.connected(UE):
                             share = utils.generate_share()
                             commit = utils.generate_commitment(share)
                             self.group_share_commit[ueID] = (share, commit)
-                            data = {
-                                "task": SWITCH_TO_GROUP_HANDOVER,
-                                "share": share,
-                                "commit": commit,
-                                "head": aggregatorIDs
-                            }
-                            self.env.process(
-                                self.send_message(
-                                    delay=self.satellite_ground_delay,
-                                    msg=data,
-                                    Q=UE.messageQ,
-                                    to=UE
-                                )
-                            )
+                            ID_commitment[ueID] = commit
                         else:
                             print("ERROR This shouldn't happen")
+                    for ueID in UE_list:
+                        UE = self.UEs[ueID]
+                        data = {
+                            "task": SWITCH_TO_GROUP_HANDOVER,
+                            "share": share,
+                            "commit": commit,
+                            "head": aggregatorIDs,
+                            "commitment_map": ID_commitment,
+                            "threshold": 3 #TODO This needs some change
+                        }
+                        self.env.process(
+                            self.send_message(
+                                delay=self.satellite_ground_delay,
+                                msg=data,
+                                Q=UE.messageQ,
+                                to=UE
+                            )
+                        )
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
@@ -270,6 +276,7 @@ class Satellite(Base):
                     x = int(xy[0])
                     y = int(xy[1])
                     ul, ru, rd, ld = utils.determine_edge_point(x, y, GROUP_AREA_L)
+                    # TODO This parameter really means some UEs must random access in time.
                     R = 24* 1000
                     if (self.cover_point_with_range(ru[0], ru[1], R)
                             and self.cover_point_with_range(rd[0], rd[1], R)

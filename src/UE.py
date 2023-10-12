@@ -35,7 +35,6 @@ class UE(Base):
         self.satellites = None
 
         self.groupID = None
-        self.groupHandover = False
         self.targetID = None
         self.retransmit_counter = 0
 
@@ -79,6 +78,15 @@ class UE(Base):
                     self.serving_satellite = satellite
                     self.state = ACTIVE
                     print(f"{self.type} {self.identity} finished handover at {self.env.now}")
+            elif task == SWITCH_TO_GROUP_HANDOVER:
+                yield request
+                satid = msg['from']
+                heads = msg['head']
+                if self.state == ACTIVE and self.serving_satellite.identity == satid:
+                    self.state = GROUP_ACTIVE
+                    if self.identity in heads:
+                        self.state = GROUP_ACTIVE_HEAD
+
 
     def action_monitor(self):
         while True:
