@@ -3,6 +3,7 @@ import math
 import simpy
 
 from Base import *
+import utils
 from config import *
 
 
@@ -40,9 +41,10 @@ class UE(Base):
 
         self.groupID = None # Fixed
         self.share = None
-        self.share_commitment_map = None
+        self.commitment_map = None
         self.threshold = None
         self.heads = None
+        self.group_aggregation_map = {}
 
 
         # Running Process
@@ -94,14 +96,43 @@ class UE(Base):
                     if self.identity in heads:
                         self.state = GROUP_ACTIVE_HEAD
                     self.share = msg['share']
-                    self.share_commitment_map = msg['commitment_map']
+                    self.commitment_map = msg['commitment_map']
                     self.threshold = msg['threshold']
                     self.heads = heads
 
-            elif task == GROUP_AGGREGATION:
+            elif task == GROUP_AGGREGATION and self.state == GROUP_HEAD_AGGREGATING:
                 yield request
                 processing_time = PROCESSING_TIME[task]
+                ue_id = msg['from']
+                share = msg['share']
+                commit = self.commitment_map[str(ue_id)]
                 yield self.env.timeout(processing_time)
+                if utils.verify_share_commitment(share, commit):
+                    self.group_aggregation_map[ue_id] = share
+                if len(self.group_aggregation_map) >= self.threshold:
+                    candidates = []
+                    for satid in self.satellites:
+                        if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                            candidates.append(satid)
+                    data = {
+                        "task": GROUP_HANDOVER_MEASUREMENT,
+                        "candidate": candidates,
+                        "groupID": self.groupID,
+                        "ticket": 'ticket' # TODO Without group handover ticket
+                    }
+                    if len(candidates) != 0 and self.state == GROUP_HEAD_AGGREGATING:
+                        self.env.process(
+                            self.send_message(
+                                delay=self.satellite_ground_delay,
+                                msg=data,
+                                Q=self.serving_satellite.messageQ,
+                                to=self.serving_satellite
+                            )
+                        )
+                        self.state = GROUP_WAITING_RRC_CONFIGURATION_HEAD
+
+
+
 
 
     def action_monitor(self):

@@ -63,8 +63,9 @@ class Satellite(Base):
         self.satellites = None
         self.cpus = simpy.PriorityResource(env, capacity=SATELLITE_CPU)  # Concurrent processing
         self.counter = cumulativeMessageCount()
-        self.group_count = {}
-        self.group_aggregators = {}
+        self.group_info = {}
+        self.stored_notified_group_member = {} # This is the record UEs that notified
+        self.group_aggregators = {} # This ensures only one task to notify UEs
         self.group_share_commit = {}
         self.hybrid_threshold = None
 
@@ -206,7 +207,7 @@ class Satellite(Base):
                 # Determine processing time and estimate if worth processing
                 groupID = msg['groupID']
                 left_x = msg['left_x']
-                UE_list = self.group_count[groupID]
+                UE_list = self.group_info[groupID]
                 processing_time = len(UE_list) * PROCESSING_TIME[PROCESS_ONE_UE]
                 estimate_time = processing_time + self.satellite_ground_delay
                 ratio = 1 / 1000
@@ -224,6 +225,7 @@ class Satellite(Base):
                             ID_commitment[ueID] = commit
                         else:
                             print("ERROR This shouldn't happen")
+                    self.stored_notified_group_member[groupID] = UE_list
                     for ueID in UE_list:
                         UE = self.UEs[ueID]
                         share = self.group_share_commit[ueID][0]
@@ -244,6 +246,31 @@ class Satellite(Base):
                                 to=UE
                             )
                         )
+            elif task == GROUP_HANDOVER_MEASUREMENT:
+                ticket = msg['ticket']
+                groupID = msg['groupID']
+                UEList = self.stored_notified_group_member[groupID]
+                # TODO Verify the ticket
+                if ticket == "ticket":
+                    processing_time = PROCESSING_TIME[task] * len(UEList)
+                    yield self.env.timeout(processing_time)
+                    candidates = msg['candidate']
+                    target_satellite_id = random.choice(candidates)
+                    target_satellite = self.satellites[target_satellite_id]
+                    data = {
+                        "task": GROUP_HANDOVER_REQUEST,
+                        "ue_list": UEList,
+                    }
+                    self.env.process(
+                        self.send_message(
+                            delay=self.ISL_delay,
+                            msg=data,
+                            Q=target_satellite.messageQ,
+                            to=target_satellite
+                        )
+                    )
+
+
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
@@ -263,6 +290,7 @@ class Satellite(Base):
     def monitor_group_information(self):
         while True:
             yield self.env.timeout(1)
+            # This records the ACTIVE UEs within the coverage
             group_info = {}
             for id in self.UEs:
                 UE = self.UEs[id]
@@ -271,15 +299,14 @@ class Satellite(Base):
                     if groupID not in group_info:
                         group_info[groupID] = []
                     group_info[groupID].append(id)
-            self.group_count = group_info
+            self.group_info = group_info
             for groupID in group_info:
                 if groupID not in self.group_aggregators:
                     xy =  groupID.split('_')
                     x = int(xy[0])
                     y = int(xy[1])
                     ul, ru, rd, ld = utils.determine_edge_point(x, y, GROUP_AREA_L)
-                    # TODO This parameter really means some UEs must random access in time.
-                    R = 24* 1000
+                    R = 24* 1000 # TODO This parameter means some UEs must random access in time.
                     if (self.cover_point_with_range(ru[0], ru[1], R)
                             and self.cover_point_with_range(rd[0], rd[1], R)
                             and ul[0] > self.position_x
