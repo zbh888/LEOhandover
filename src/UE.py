@@ -66,7 +66,7 @@ class UE(Base):
             if task == RRC_RECONFIGURATION:
                 yield request
                 satid = msg['from']
-                # TODO one error raised for serveing satellite is none
+                # TODO one error once raised for serveing satellite is none
                 # TODO the suspect reason is synchronization issue with "switch to inactive"
                 # TODO Note that the UE didn't wait for the latest response for retransmission.
                 if self.state == WAITING_RRC_CONFIGURATION and satid == self.serving_satellite.identity:
@@ -79,6 +79,13 @@ class UE(Base):
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
                     self.timestamps[-1]['timestamp'].append(self.env.now)
                     self.timestamps[-1]['isSuccess'] = True
+                elif ((self.state == GROUP_WAITING_RRC_CONFIGURATION or self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD)
+                     and satid == self.serving_satellite.identity):
+                    targets = msg['targets']
+                    # choose target
+                    self.targetID = targets[0]
+                    self.state = RRC_CONFIGURED
+                    self.retransmit_counter = 0
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
                 satid = msg['from']
@@ -246,7 +253,7 @@ class UE(Base):
     def send_request_condition(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
-        decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x
+        decision = (d > 20 * 1000 and self.position_x < self.serving_satellite.position_x
                     and self.state == ACTIVE)
         return decision
 
@@ -254,11 +261,11 @@ class UE(Base):
         # TODO this needs modification
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
-        decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x)
+        decision = (d > 20 * 1000 and self.position_x < self.serving_satellite.position_x)
         return decision
 
     def outside_coverage(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
         # TODO this is not accurate
-        return d >= 25 * 1000 and self.position_x < self.serving_satellite.position_x
+        return d >= SATELLITE_R and self.position_x < self.serving_satellite.position_x

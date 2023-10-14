@@ -20,9 +20,9 @@ GROUP_AREA_L = 1 * 1000
 
 # This labels the initial position of satellites
 POS_SATELLITES = {
-    1: (-25 * 1000, 0),
-    2: (-37.5 * 1000, 0),
-    3: (-50 * 1000, 0),
+    1: (-SATELLITE_R, 0),
+    2: (-2*SATELLITE_R, 0),
+    3: (-3*SATELLITE_R, 0),
 }
 
 MEASUREMENT_REPORT = "MEASUREMENT_REPORT"

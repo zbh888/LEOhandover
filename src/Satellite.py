@@ -253,6 +253,7 @@ class Satellite(Base):
                 # TODO Verify the ticket
                 if ticket == "ticket":
                     processing_time = PROCESSING_TIME[task] * len(UEList)
+                    # TODO We need to verify geometric information to see if this task worth processing.
                     yield self.env.timeout(processing_time)
                     candidates = msg['candidate']
                     target_satellite_id = random.choice(candidates)
@@ -290,7 +291,25 @@ class Satellite(Base):
                 )
             elif task == GROUP_HANDOVER_ACKNOWLEDGE:
                 UE_list = msg['ue_list']
-                print(UE_list)
+                processing_time = PROCESSING_TIME[task]
+                yield self.env.timeout(processing_time)
+                #self.counter.increment_satellite()
+                satellite_id = msg['from']
+                for ue_id in UE_list:
+                    UE = self.UEs[ue_id]
+                    if self.connected(UE):
+                        data = {
+                            "task": RRC_RECONFIGURATION,
+                            "targets": [satellite_id],
+                        }
+                        self.env.process(
+                            self.send_message(
+                                delay=self.satellite_ground_delay,
+                                msg=data,
+                                Q=UE.messageQ,
+                                to=UE
+                            )
+                        )
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
