@@ -33,10 +33,17 @@ class UE(Base):
         self.cpus = simpy.Resource(env, UE_CPU)
         self.state = ACTIVE
         self.satellites = None
+        self.UEs = None
 
-        self.groupID = None
         self.targetID = None
         self.retransmit_counter = 0
+
+        self.groupID = None # Fixed
+        self.share = None
+        self.share_commitment_map = None
+        self.threshold = None
+        self.heads = None
+
 
         # Running Process
         env.process(self.init())
@@ -47,7 +54,7 @@ class UE(Base):
     def handle_messages(self):
         while True:
             msg = yield self.messageQ.get()
-            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}")
+            print(f"{self.type} {self.identity} start handling msg:{msg} at time {self.env.now}, STATE: {self.state}")
             data = json.loads(msg)
             self.env.process(self.cpu_processing(data))
 
@@ -86,6 +93,15 @@ class UE(Base):
                     self.state = GROUP_ACTIVE
                     if self.identity in heads:
                         self.state = GROUP_ACTIVE_HEAD
+                    self.share = msg['share']
+                    self.share_commitment_map = msg['commitment_map']
+                    self.threshold = msg['threshold']
+                    self.heads = heads
+
+            elif task == GROUP_AGGREGATION:
+                yield request
+                processing_time = PROCESSING_TIME[task]
+                yield self.env.timeout(processing_time)
 
 
     def action_monitor(self):
@@ -113,6 +129,31 @@ class UE(Base):
                     self.timestamps[-1]['from'] = self.serving_satellite.identity
                     self.timer = self.env.now
                     self.state = WAITING_RRC_CONFIGURATION
+            if (self.state == GROUP_ACTIVE or self.state == GROUP_ACTIVE_HEAD) and self.group_broadcasting_condition(): # Broadcasting
+                candidates = []
+                for satid in self.satellites:
+                    if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                        candidates.append(satid)
+                if len(candidates) != 0:
+                    if self.state == GROUP_ACTIVE:
+                        self.state = GROUP_WAITING_RRC_CONFIGURATION
+                    if self.state == GROUP_ACTIVE_HEAD:
+                        self.state = GROUP_HEAD_AGGREGATING
+                    data = {
+                        'task': GROUP_AGGREGATION,
+                        'share': self.share
+                    }
+                    for id in self.heads:
+                        head = self.UEs[id]
+                        self.env.process(
+                            self.send_message(
+                                delay=0,
+                                msg=data,
+                                Q=head.messageQ,
+                                to=head
+                            )
+                        )
+
             # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
                 self.timer = self.env.now
@@ -176,6 +217,13 @@ class UE(Base):
                 (self.position_y - self.serving_satellite.position_y) ** 2))
         decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x
                     and self.state == ACTIVE)
+        return decision
+
+    def group_broadcasting_condition(self):
+        # TODO this needs modification
+        d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
+                (self.position_y - self.serving_satellite.position_y) ** 2))
+        decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x)
         return decision
 
     def outside_coverage(self):

@@ -133,6 +133,7 @@ for identity in satellites:
 
 for identity in UEs:
     UEs[identity].satellites = satellites
+    UEs[identity].UEs = UEs
 
 amf.satellites = satellites
 

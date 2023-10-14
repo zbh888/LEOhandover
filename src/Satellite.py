@@ -226,6 +226,8 @@ class Satellite(Base):
                             print("ERROR This shouldn't happen")
                     for ueID in UE_list:
                         UE = self.UEs[ueID]
+                        share = self.group_share_commit[ueID][0]
+                        commit = self.group_share_commit[ueID][1]
                         data = {
                             "task": SWITCH_TO_GROUP_HANDOVER,
                             "share": share,
