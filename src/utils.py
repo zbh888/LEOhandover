@@ -233,8 +233,9 @@ def generate_share():
     return random.randint(10000000, 100000000)
 
 def generate_commitment(share):
-    encode_int = str(share).encode()
-    result = hashlib.md5(encode_int).hexdigest()
+    result = str(share)
+    #encode_int = str(share).encode()
+    #result = hashlib.md5(encode_int).hexdigest()
     return result
 
 def verify_share_commitment(share, commitment):

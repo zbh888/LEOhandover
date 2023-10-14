@@ -269,8 +269,28 @@ class Satellite(Base):
                             to=target_satellite
                         )
                     )
-
-
+            elif task == GROUP_HANDOVER_REQUEST:
+                UE_list = msg['ue_list']
+                processing_time = PROCESSING_TIME[task]
+                #self.counter.increment_satellite() TODO I am pretty sure we need this, but we do it together
+                satellite_id = msg['from']
+                yield self.env.timeout(processing_time)
+                data = {
+                    "task": GROUP_HANDOVER_ACKNOWLEDGE,
+                    "ue_list": UE_list
+                }
+                source_satellite = self.satellites[satellite_id]
+                self.env.process(
+                    self.send_message(
+                        delay=self.ISL_delay,
+                        msg=data,
+                        Q=source_satellite.messageQ,
+                        to=source_satellite
+                    )
+                )
+            elif task == GROUP_HANDOVER_ACKNOWLEDGE:
+                UE_list = msg['ue_list']
+                print(UE_list)
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
