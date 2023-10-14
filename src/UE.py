@@ -159,12 +159,12 @@ class UE(Base):
         satellite = self.satellites[satelliteID]
         d = math.sqrt(((self.position_x - satellite.position_x) ** 2) + (
                 (self.position_y - satellite.position_y) ** 2))
-        return d <= 25 * 1000
+        return d <= SATELLITE_R
 
     def send_request_condition(self):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
-        decision = (d > 23 * 1000 and self.position_x < self.serving_satellite.position_x
+        decision = (d > 18 * 1000 and self.position_x < self.serving_satellite.position_x
                     and self.state == ACTIVE)
         return decision
 
@@ -172,4 +172,4 @@ class UE(Base):
         d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
                 (self.position_y - self.serving_satellite.position_y) ** 2))
         # TODO this is not accurate
-        return d >= 25 * 1000 and self.position_x < self.serving_satellite.position_x
+        return d >= SATELLITE_R and self.position_x < self.serving_satellite.position_x
