@@ -162,14 +162,17 @@ class UE(Base):
         return d <= SATELLITE_R
 
     def send_request_condition(self):
-        d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
-                (self.position_y - self.serving_satellite.position_y) ** 2))
-        decision = (d > 18 * 1000 and self.position_x < self.serving_satellite.position_x
-                    and self.state == ACTIVE)
-        return decision
+        p = (self.position_x, self.position_y)
+        d1_serve = math.dist(p, (self.serving_satellite.position_x, self.serving_satellite.position_y))
+        for satid in self.satellites:
+            satellite = self.satellites[satid]
+            d = math.dist(p, (satellite.position_x, satellite.position_y))
+            if d + 100 < d1_serve:
+                return True
+        return False
 
     def outside_coverage(self):
-        d = math.sqrt(((self.position_x - self.serving_satellite.position_x) ** 2) + (
-                (self.position_y - self.serving_satellite.position_y) ** 2))
-        # TODO this is not accurate
-        return d >= SATELLITE_R and self.position_x < self.serving_satellite.position_x
+        p = (self.position_x, self.position_y)
+        d1_serve = math.dist(p, (self.serving_satellite.position_x, self.serving_satellite.position_y))
+        # TODO We may want to remove the second condition someday...
+        return d1_serve >= SATELLITE_R and self.position_x < self.serving_satellite.position_x
