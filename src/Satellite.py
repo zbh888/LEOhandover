@@ -207,7 +207,7 @@ class Satellite(Base):
                 # Determine processing time and estimate if worth processing
                 groupID = msg['groupID']
                 left_x = msg['left_x']
-                UE_list = self.group_info[groupID]
+                UE_list = msg['ue_list']
                 processing_time = len(UE_list) * PROCESSING_TIME[PROCESS_ONE_UE]
                 estimate_time = processing_time + self.satellite_ground_delay
                 ratio = 1 / 1000
@@ -226,6 +226,7 @@ class Satellite(Base):
                         else:
                             print("ERROR This shouldn't happen")
                     self.stored_notified_group_member[groupID] = UE_list
+                    #self.group_aggregators[groupID] = aggregatorIDs
                     for ueID in UE_list:
                         UE = self.UEs[ueID]
                         share = self.group_share_commit[ueID][0]
@@ -328,12 +329,12 @@ class Satellite(Base):
     # TODO But accuracy may be affected
     def monitor_group_information(self):
         while True:
-            yield self.env.timeout(1)
+            yield self.env.timeout(10)
             # This records the ACTIVE UEs within the coverage
             group_info = {}
             for id in self.UEs:
                 UE = self.UEs[id]
-                if UE.serving_satellite is not None and UE.serving_satellite.identity == self.identity and UE.state == ACTIVE:
+                if self.connected(UE) and UE.state == ACTIVE:
                     groupID = UE.groupID
                     if groupID not in group_info:
                         group_info[groupID] = []
@@ -355,7 +356,8 @@ class Satellite(Base):
                         data = {
                             "task": GROUP_HANDOVER_NOTIFY,
                             "groupID": groupID,
-                            "left_x": ul[0]
+                            "left_x": ul[0],
+                            "ue_list": group_info[groupID]
                         }
                         self.env.process(
                             self.send_message(
