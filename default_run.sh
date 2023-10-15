@@ -14,6 +14,9 @@ end_time=$(date +%s)
 elapsed_time=$((end_time - start_time))
 echo "Simulation takes $elapsed_time seconds"
 
+cp src/dataprocess.ipynb ./res/"$DIR"/dataprocess.ipynb
+cp src/utils.py ./res/"$DIR"/utils.py
+
 CURRENT_DIR=$(basename "$PWD")
 cd ./res
 zip -r "${CURRENT_DIR}_res.zip" *
