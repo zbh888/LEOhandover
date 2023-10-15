@@ -1,5 +1,6 @@
 import random
 import sys
+import os
 
 import utils
 from AMF import *
@@ -89,6 +90,8 @@ if len(sys.argv) != 1:  # This is for automation
     SATELLITE_GROUND_DELAY = int(sys.argv[3])
 
 file_path = f"res/{dir}"
+for id in POS_SATELLITES:
+    os.mkdir(file_path + "/graph_data/sat_" + str(id))
 
 # ===================== Deployment =============================
 

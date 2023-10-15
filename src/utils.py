@@ -64,7 +64,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of unprocessed total messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'numberUnProcessedMessages' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'numberUnProcessedMessages' + '.png')
 
         for id in self.cumulative_total_messages:
             plt.close('all')
@@ -75,7 +75,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative total messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_total_messages' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_total_messages' + '.png')
 
         for id in self.cumulative_message_from_UE_measurement:
             plt.close('all')
@@ -86,7 +86,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative UE request messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_measurement' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_UE_measurement' + '.png')
 
         for id in self.cumulative_message_from_UE_retransmit:
             plt.close('all')
@@ -97,7 +97,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of UE cumulative retransmit messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_retransmit' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_UE_retransmit' + '.png')
 
         for id in self.cumulative_message_from_UE_RA:
             plt.close('all')
@@ -108,7 +108,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative UE RA messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_UE_RA' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_UE_RA' + '.png')
 
         for id in self.cumulative_message_from_satellite:
             plt.close('all')
@@ -119,7 +119,7 @@ class DataCollection:
             plt.xlabel('Time (ms)')
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative satellite messages')
-            plt.savefig(self.draw_path + '/sat_' + str(id) + 'cumulative_message_from_satellite' + '.png')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_satellite' + '.png')
 
         # plot
         plt.close('all')
