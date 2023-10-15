@@ -29,20 +29,24 @@ def global_stats_collector_draw_middle(env, UEs, satellites, timestep):
         active_UE_positions = []
         requesting_UE_positions = []
         inactive_positions = []
+        group_requesting_UE_positions = []
         for ue_id in UEs:
             ue = UEs[ue_id]
             pos = (ue.position_x, ue.position_y)
             if ue.state == ACTIVE:  # success
                 active_UE_positions.append(pos)
-            elif ue.state == INACTIVE:
+            elif ue.state == INACTIVE: # lost connection
                 inactive_positions.append(pos)
+            elif ue.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD or ue.state == GROUP_WAITING_RRC_CONFIGURATION:
+                group_requesting_UE_positions.append(pos)
             else:
                 requesting_UE_positions.append(pos)
         satellite_positions = []
         for s_id in satellites:
             s = satellites[s_id]
             satellite_positions.append((s.position_x, s.position_y))
-        utils.draw_from_positions(inactive_positions, active_UE_positions, requesting_UE_positions, env.now,
+        utils.draw_from_positions(inactive_positions, active_UE_positions, requesting_UE_positions, group_requesting_UE_positions,
+                                  env.now,
                                   file_path + "/graph", satellite_positions, SATELLITE_R)
         yield env.timeout(timestep)
 

@@ -136,7 +136,7 @@ class DataCollection:
             pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
 
 
-def draw_from_positions(inactive_positions, active_position, requesting_position, label, dir, satellite_pos, R):
+def draw_from_positions(inactive_positions, active_position, requesting_position, group_requesting_position, label, dir, satellite_pos, R):
     plt.close('all')
     plt.clf()
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -153,6 +153,9 @@ def draw_from_positions(inactive_positions, active_position, requesting_position
     if len(requesting_position) != 0:
         x_coords, y_coords = zip(*requesting_position)
         plt.scatter(x_coords, y_coords, color='green', s=0.5)
+    if len(requesting_position) != 0:
+        x_coords, y_coords = zip(*group_requesting_position)
+        plt.scatter(x_coords, y_coords, color='purple', s=0.5)
     x_coords, y_coords = zip(*satellite_pos)
     plt.scatter(x_coords, y_coords, color='black', s=10)
     for point in satellite_pos:
