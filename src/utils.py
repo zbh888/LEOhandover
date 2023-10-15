@@ -21,14 +21,12 @@ class DataCollection:
 
         self.UE_time_stamp = {}
         self.UE_positions = {}
-        self.UE_groupID = {}
 
     def read_UEs(self, UEs):
         for id in UEs:
             UE = UEs[id]
             self.UE_time_stamp[id] = UE.timestamps
             self.UE_positions[id] = (UE.position_x, UE.position_y)
-            self.UE_groupID[id] = UE.groupID
 
     def draw(self):
         # plot
