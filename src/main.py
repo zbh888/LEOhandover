@@ -101,7 +101,7 @@ for id in POS_SATELLITES:
 
 env = simpy.Environment()
 POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
-
+POSITIONS = [(20000,0)] * 10
 amf = AMF(core_delay=CORE_DELAY, env=env)
 UEs = {}
 satellites = {}
@@ -178,7 +178,7 @@ file.close()
 # ===================== Running Experiment =============================
 
 env.process(monitor_timestamp(env))
-drawing_interval = 300
+drawing_interval = 50
 env.process(global_stats_collector_draw_middle(env, UEs, satellites, drawing_interval))
 data = utils.DataCollection(file_path + "/graph_data")
 env.process(global_stats_collector_draw_final(env, data, UEs, satellites, 1))
