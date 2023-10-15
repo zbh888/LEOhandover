@@ -167,7 +167,7 @@ def draw_from_positions(inactive_positions, active_position, requesting_position
         plt.scatter(x_coords, y_coords, color='green', s=0.5)
     if len(group_requesting_position) != 0:
         x_coords, y_coords = zip(*group_requesting_position)
-        plt.scatter(x_coords, y_coords, color='purple', s=0.5)
+        plt.scatter(x_coords, y_coords, color='yellow', s=0.5)
     x_coords, y_coords = zip(*satellite_pos)
     plt.scatter(x_coords, y_coords, color='black', s=10)
     for point in satellite_pos:
