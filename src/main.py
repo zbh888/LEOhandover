@@ -33,7 +33,7 @@ def global_stats_collector_draw_middle(env, UEs, satellites, timestep):
         for ue_id in UEs:
             ue = UEs[ue_id]
             pos = (ue.position_x, ue.position_y)
-            if ue.state == ACTIVE:  # success
+            if ue.state == ACTIVE or GROUP_ACTIVE or GROUP_ACTIVE_HEAD:  # success
                 active_UE_positions.append(pos)
             elif ue.state == INACTIVE: # lost connection
                 inactive_positions.append(pos)
