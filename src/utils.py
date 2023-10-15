@@ -41,6 +41,7 @@ class DataCollection:
         self.cumulative_message_from_UE_retransmit = {}
         self.cumulative_message_from_UE_RA = {}
         self.cumulative_message_from_satellite = {}
+        self.cumulative_message_from_UE_Group = {}
 
         self.UE_time_stamp = {}
         self.UE_positions = {}
@@ -65,6 +66,17 @@ class DataCollection:
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of unprocessed total messages')
             plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'numberUnProcessedMessages' + '.png')
+
+        for id in self.cumulative_message_from_UE_Group:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_UE_Group[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative group messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_group_messages' + '.png')
 
         for id in self.cumulative_total_messages:
             plt.close('all')
