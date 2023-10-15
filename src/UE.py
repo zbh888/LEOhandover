@@ -230,12 +230,14 @@ class UE(Base):
                         )
                     )
                     self.state = WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE
+            if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING] and self.terminate_group_handover():
+                self.state = ACTIVE
             # switch to inactive
             if self.serving_satellite is not None and self.outside_coverage():
                 print(
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.serving_satellite = None
-                if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION:
+                if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION or self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING]:
                     if self.state == WAITING_RRC_CONFIGURATION:
                         print(f"UE {self.identity} handover failure at time {self.env.now}")
                         self.timestamps[-1]['timestamp'].append(self.env.now)
@@ -268,3 +270,8 @@ class UE(Base):
 
     def group_broadcasting_condition(self):
         return self.send_request_condition()
+
+    def terminate_group_handover(self):
+        p = (self.position_x, self.position_y)
+        d1_serve = math.dist(p, (self.serving_satellite.position_x, self.serving_satellite.position_y))
+        return d1_serve >= 24*1000 and self.position_x < self.serving_satellite.position_x
