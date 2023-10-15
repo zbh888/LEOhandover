@@ -10,6 +10,7 @@ class cumulativeMessageCount:
     def __init__(self):
         self.total_messages = 0
         self.message_from_UE_measurement = 0
+        self.message_from_UE_group_measurement = 0
         self.message_from_UE_retransmit = 0
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
@@ -17,6 +18,10 @@ class cumulativeMessageCount:
     def increment_UE_measurement(self):
         self.total_messages += 1
         self.message_from_UE_measurement += 1
+
+    def increment_UE_group_measurement(self):
+        self.total_messages += 1
+        self.message_from_UE_group_measurement += 1
 
     def increment_UE_retransmit(self):
         self.total_messages += 1
@@ -253,6 +258,7 @@ class Satellite(Base):
                 UEList = self.stored_notified_group_member[groupID]
                 # TODO Verify the ticket
                 if ticket == "ticket":
+                    self.counter.increment_UE_group_measurement()
                     processing_time = PROCESSING_TIME[task] * len(UEList)
                     # TODO We need to verify geometric information to see if this task worth processing.
                     yield self.env.timeout(processing_time)
@@ -274,7 +280,7 @@ class Satellite(Base):
             elif task == GROUP_HANDOVER_REQUEST:
                 UE_list = msg['ue_list']
                 processing_time = PROCESSING_TIME[task]
-                #self.counter.increment_satellite() TODO I am pretty sure we need this, but we do it together
+                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 yield self.env.timeout(processing_time)
                 data = {
@@ -294,7 +300,7 @@ class Satellite(Base):
                 UE_list = msg['ue_list']
                 processing_time = PROCESSING_TIME[task]
                 yield self.env.timeout(processing_time)
-                #self.counter.increment_satellite()
+                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 for ue_id in UE_list:
                     UE = self.UEs[ue_id]

@@ -79,7 +79,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
         numberUEWaitingRRC = 0
         for id in UEs:
             UE = UEs[id]
-            if UE.state == WAITING_RRC_CONFIGURATION:
+            if UE.state == WAITING_RRC_CONFIGURATION or UE.state==GROUP_WAITING_RRC_CONFIGURATION or UE.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD:
                 numberUEWaitingRRC += 1
         data.numberUEWaitingResponse.append(numberUEWaitingRRC)
         yield env.timeout(timestep)

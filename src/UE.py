@@ -175,8 +175,10 @@ class UE(Base):
                 if len(candidates) != 0:
                     if self.state == GROUP_ACTIVE:
                         self.state = GROUP_WAITING_RRC_CONFIGURATION
+                        #TODO You may want to record the time here.
                     if self.state == GROUP_ACTIVE_HEAD:
                         self.state = GROUP_HEAD_AGGREGATING
+                        # TODO You may want to record the time here.
                     data = {
                         'task': GROUP_AGGREGATION,
                         'share': self.share
@@ -191,6 +193,7 @@ class UE(Base):
                                 to=head
                             )
                         )
+
 
             # Retransmit
             if RETRANSMIT and self.state == WAITING_RRC_CONFIGURATION and self.env.now - self.timer > RETRANSMIT_THRESHOLD and self.retransmit_counter < MAX_RETRANSMIT:
