@@ -252,11 +252,11 @@ class Satellite(Base):
                                 to=UE
                             )
                         )
-            elif task == GROUP_HANDOVER_MEASUREMENT:
+            elif task == GROUP_HANDOVER_MEASUREMENT or task == GROUP_RETRANSMISSION:
                 ticket = msg['ticket']
                 groupID = msg['groupID']
                 UEList = self.stored_notified_group_member[groupID]
-                # TODO Verify the ticket
+                # TODO Verify the ticket [Will not Implement]
                 if ticket == "ticket":
                     self.counter.increment_UE_group_measurement()
                     processing_time = PROCESSING_TIME[task] * len(UEList)
