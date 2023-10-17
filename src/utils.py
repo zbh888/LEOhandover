@@ -27,6 +27,21 @@ def generate_points(n, R, x, y):
         points.append(generate_one(R, x, y))
     return points
 
+def generate_points_with_ylim(n, R, x, y, ylim):
+    def generate_one(R, x, y):
+        r = R * math.sqrt(random.uniform(0, 1))
+        theta = random.uniform(0, 1) * 2 * math.pi
+        px = x + r * math.cos(theta)
+        py = y + r * math.sin(theta)
+        return px, py
+
+    points = []
+    while len(points) < n:
+        x_, y_ = generate_one(R, x, y)
+        if abs(y_) < ylim:
+            points.append((x_, y_))
+    return points
+
 # ===================== Data Collection and drawing =============================
 
 class DataCollection:

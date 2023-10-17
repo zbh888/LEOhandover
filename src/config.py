@@ -19,10 +19,11 @@ GROUP_AREA_L = 1 * 1000
 # 2. Handover Decision should be set too.
 
 # This labels the initial position of satellites
+HORIZONTAL_DISTANCE = SATELLITE_R
 POS_SATELLITES = {
     1: (-SATELLITE_R, 0),
-    2: (-2*SATELLITE_R, 0),
-    3: (-3*SATELLITE_R, 0),
+    2: (SATELLITE_R - HORIZONTAL_DISTANCE , 0),
+    3: (SATELLITE_R - 2*HORIZONTAL_DISTANCE, 0),
 }
 
 MEASUREMENT_REPORT = "MEASUREMENT_REPORT"

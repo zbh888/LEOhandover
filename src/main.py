@@ -7,6 +7,7 @@ from AMF import *
 from Satellite import *
 from UE import *
 from config import *
+import math
 
 random.seed(10)
 
@@ -102,7 +103,13 @@ for id in POS_SATELLITES:
 # ===================== Deployment =============================
 
 env = simpy.Environment()
-POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
+# We use this if the satellites is not linearly deployed
+#POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
+
+# We use this if the satellites are linearly deployed
+ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
+POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0, ylim)
+
 amf = AMF(core_delay=CORE_DELAY, env=env)
 UEs = {}
 satellites = {}
