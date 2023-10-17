@@ -40,8 +40,10 @@ file.close()
  #POSITIONS = utils.generate_points(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0)
 
  # We use this if the satellites are linearly deployed
-ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
-POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0, ylim)
+if len(POS_SATELLITES) < 4:
+    ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
+else:
+    ylim = sys.maxsize
 
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
