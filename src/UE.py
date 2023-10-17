@@ -86,6 +86,10 @@ class UE(Base):
                     self.targetID = targets[0]
                     self.state = RRC_CONFIGURED
                     self.retransmit_counter = 0
+                    print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+                    self.timestamps[-1]['timestamp'].append(self.env.now)
+                    self.timestamps[-1]['isSuccess'] = True
+
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
                 satid = msg['from']
@@ -176,9 +180,15 @@ class UE(Base):
                     if self.state == GROUP_ACTIVE:
                         self.state = GROUP_WAITING_RRC_CONFIGURATION
                         #TODO You may want to record the time here.
+                        self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
+                        self.timestamps[-1]['from'] = self.serving_satellite.identity
+                        self.timestamps[-1]['group'] = True
                     if self.state == GROUP_ACTIVE_HEAD:
                         self.state = GROUP_HEAD_AGGREGATING
                         # TODO You may want to record the time here.
+                        self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
+                        self.timestamps[-1]['from'] = self.serving_satellite.identity
+                        self.timestamps[-1]['group'] = True
                     data = {
                         'task': GROUP_AGGREGATION,
                         'share': self.share
