@@ -352,7 +352,7 @@ class Satellite(Base):
                     x = int(xy[0])
                     y = int(xy[1])
                     ul, ru, rd, ld = utils.determine_edge_point(x, y, GROUP_AREA_L)
-                    R = 23* 1000 # TODO This parameter means some UEs must random access in time.
+                    R = 0.9 * SATELLITE_R # TODO This parameter means some UEs must random access in time.
                     if (self.cover_point_with_range(ru[0], ru[1], R)
                             and self.cover_point_with_range(rd[0], rd[1], R)
                             and ul[0] > self.position_x

@@ -110,7 +110,7 @@ env = simpy.Environment()
 if len(POS_SATELLITES) < 4:
     ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
 else:
-    ylim = sys.maxsize
+    ylim = VERTICAL_DISTANCE / 2
 
 POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0, ylim)
 
