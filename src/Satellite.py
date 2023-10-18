@@ -100,6 +100,15 @@ class Satellite(Base):
             msg = yield self.messageQ.get()
             data = json.loads(msg)
             task = data['task']
+            if task == MEASUREMENT_REPORT: self.counter.increment_UE_measurement()
+            if task == RETRANSMISSION: self.counter.increment_UE_retransmit()
+            if task == HANDOVER_ACKNOWLEDGE or task == GROUP_HANDOVER_REQUEST or task == HANDOVER_REQUEST or task == GROUP_HANDOVER_ACKNOWLEDGE:
+                self.counter.increment_satellite()
+            if task == RRC_RECONFIGURATION_COMPLETE: self.counter.increment_UE_RA()
+            if task == GROUP_HANDOVER_MEASUREMENT: self.counter.increment_UE_group_measurement()
+            if task == GROUP_RETRANSMISSION: self.counter.increment_UE_group_retransmit()
+
+
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
                 if len(self.cpus.queue) < QUEUED_SIZE:
                     print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
@@ -137,10 +146,6 @@ class Satellite(Base):
             # handle the task by cases
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
                 processing_time = PROCESSING_TIME[task]
-                if task == MEASUREMENT_REPORT:
-                    self.counter.increment_UE_measurement()
-                else:
-                    self.counter.increment_UE_retransmit()
                 ueid = msg['from']
                 candidates = msg['candidate']
                 UE = self.UEs[ueid]
@@ -165,7 +170,6 @@ class Satellite(Base):
                     )
             elif task == HANDOVER_ACKNOWLEDGE:
                 processing_time = PROCESSING_TIME[task]
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 UE = self.UEs[ueid]
@@ -186,7 +190,6 @@ class Satellite(Base):
                     )
             elif task == HANDOVER_REQUEST:
                 processing_time = PROCESSING_TIME[task]
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 yield self.env.timeout(processing_time)
@@ -205,7 +208,6 @@ class Satellite(Base):
                 )
             elif task == RRC_RECONFIGURATION_COMPLETE:
                 processing_time = PROCESSING_TIME[task]
-                self.counter.increment_UE_RA()
                 ue_id = msg['from']
                 UE = self.UEs[ue_id]
                 yield self.env.timeout(processing_time)
@@ -283,10 +285,6 @@ class Satellite(Base):
                 if ticket == "ticket":
                     processing_time = PROCESSING_TIME[task] * len(UEList)
                     # TODO We need to verify geometric information to see if this task worth processing.
-                    if task == GROUP_HANDOVER_MEASUREMENT:
-                        self.counter.increment_UE_group_measurement()
-                    else:
-                        self.counter.increment_UE_group_retransmit()
                     yield self.env.timeout(processing_time)
                     candidates = msg['candidate']
                     target_satellite_id = random.choice(candidates)
@@ -307,7 +305,6 @@ class Satellite(Base):
             elif task == GROUP_HANDOVER_REQUEST:
                 UE_list = msg['ue_list']
                 processing_time = PROCESSING_TIME[task]
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 yield self.env.timeout(processing_time)
                 data = {
@@ -327,7 +324,6 @@ class Satellite(Base):
                 UE_list = msg['ue_list']
                 processing_time = PROCESSING_TIME[task]
                 yield self.env.timeout(processing_time)
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 for ue_id in UE_list:
                     UE = self.UEs[ue_id]
