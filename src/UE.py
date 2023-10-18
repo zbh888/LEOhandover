@@ -130,7 +130,7 @@ class UE(Base):
                         "task": GROUP_HANDOVER_MEASUREMENT,
                         "candidate": candidates,
                         "groupID": self.groupID,
-                        "ticket": 'ticket' # TODO Without group handover ticket
+                        "ticket": 'ticket' # TODO Without group handover ticket [will not be implemented]
                     }
                     if len(candidates) != 0 and self.state == GROUP_HEAD_AGGREGATING:
                         self.env.process(
@@ -180,13 +180,11 @@ class UE(Base):
                 if len(candidates) != 0:
                     if self.state == GROUP_ACTIVE:
                         self.state = GROUP_WAITING_RRC_CONFIGURATION
-                        #TODO You may want to record the time here.
                         self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
                         self.timestamps[-1]['from'] = self.serving_satellite.identity
                         self.timestamps[-1]['group'] = True
                     if self.state == GROUP_ACTIVE_HEAD:
                         self.state = GROUP_HEAD_AGGREGATING
-                        # TODO You may want to record the time here.
                         self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
                         self.timestamps[-1]['from'] = self.serving_satellite.identity
                         self.timestamps[-1]['group'] = True
@@ -275,6 +273,7 @@ class UE(Base):
                 print(
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.serving_satellite = None
+                # TODO because of switch to active condition, I never see one UE from the [...] state to inactive
                 if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION or self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING]:
                     if self.state == WAITING_RRC_CONFIGURATION:
                         print(f"UE {self.identity} handover failure at time {self.env.now}")
@@ -303,7 +302,7 @@ class UE(Base):
     def outside_coverage(self):
         p = (self.position_x, self.position_y)
         d1_serve = math.dist(p, (self.serving_satellite.position_x, self.serving_satellite.position_y))
-        # TODO We may want to remove the second condition someday...
+        # TODO We may want to remove the second condition someday... [may be never because we don't want to have random access to the first satellite]
         return d1_serve >= SATELLITE_R and self.position_x < self.serving_satellite.position_x
 
     def group_broadcasting_condition(self):
@@ -312,4 +311,4 @@ class UE(Base):
     def terminate_group_handover(self):
         p = (self.position_x, self.position_y)
         d1_serve = math.dist(p, (self.serving_satellite.position_x, self.serving_satellite.position_y))
-        return d1_serve >= 24*1000 and self.position_x < self.serving_satellite.position_x
+        return d1_serve >= 0.9 * SATELLITE_R and self.position_x < self.serving_satellite.position_x
