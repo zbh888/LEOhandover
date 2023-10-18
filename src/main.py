@@ -100,6 +100,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
                 data.cumulative_message_from_UE_retransmit[id] = []
                 data.cumulative_message_from_UE_RA[id] = []
                 data.cumulative_message_from_satellite[id] = []
+                data.cumulative_message_from_dropped[id] = []
 
             data.numberUnProcessedMessages[id].append(len(satellite.cpus.queue))
             data.cumulative_total_messages[id].append(counter.total_messages)
@@ -107,6 +108,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
             data.cumulative_message_from_UE_retransmit[id].append(counter.message_from_UE_retransmit)
             data.cumulative_message_from_UE_RA[id].append(counter.message_from_UE_RA)
             data.cumulative_message_from_satellite[id].append(counter.message_from_satellite)
+            data.cumulative_message_from_dropped[id].append(counter.message_dropped)
         numberUEWaitingRRC = 0
         for id in UEs:
             UE = UEs[id]

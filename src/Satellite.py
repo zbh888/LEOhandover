@@ -11,6 +11,7 @@ class cumulativeMessageCount:
         self.message_from_UE_retransmit = 0
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
+        self.message_dropped = 0
     def increment_UE_measurement(self):
         self.total_messages += 1
         self.message_from_UE_measurement += 1
@@ -26,6 +27,9 @@ class cumulativeMessageCount:
     def increment_UE_RA(self):
         self.total_messages += 1
         self.message_from_UE_RA += 1
+
+    def increment_dropped(self):
+        self.message_dropped += 1
 
 
 
@@ -78,6 +82,7 @@ class Satellite(Base):
                     print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
                     self.env.process(self.cpu_processing(msg=data, priority=2))
                 else:
+                    self.counter.increment_dropped()
                     print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
             else:
                 print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")

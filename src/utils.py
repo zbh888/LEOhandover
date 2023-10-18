@@ -19,6 +19,8 @@ class DataCollection:
         self.cumulative_message_from_UE_RA = {}
         self.cumulative_message_from_satellite = {}
 
+        self.cumulative_message_from_dropped = {}
+
         self.UE_time_stamp = {}
         self.UE_positions = {}
 
@@ -95,6 +97,17 @@ class DataCollection:
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative satellite messages')
             plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_satellite' + '.png')
+        for id in self.cumulative_message_from_dropped:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_dropped[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of dropped request')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(
+                id) + 'cumulative_message_from_dropped' + '.png')
 
         # plot
         plt.close('all')
