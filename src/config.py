@@ -18,7 +18,9 @@ QUEUED_SIZE = 500
 # 2. Handover Decision should be set too.
 
 # This labels the initial position of satellites
-HORIZONTAL_DISTANCE = SATELLITE_R
+HORIZONTAL_DISTANCE = 1.25 * SATELLITE_R
+VERTICAL_DISTANCE = 1.25 * SATELLITE_R
+
 POS_SATELLITES = {
      1: (-SATELLITE_R, 0),
      2: (-SATELLITE_R - HORIZONTAL_DISTANCE , 0),

@@ -43,7 +43,7 @@ file.close()
 if len(POS_SATELLITES) < 4:
     ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
 else:
-    ylim = sys.maxsize
+    ylim = VERTICAL_DISTANCE / 2
 
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
