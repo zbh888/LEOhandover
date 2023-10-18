@@ -57,6 +57,10 @@ class DataCollection:
         self.cumulative_message_from_UE_RA = {}
         self.cumulative_message_from_satellite = {}
         self.cumulative_message_from_UE_Group = {}
+        # new things
+        self.cumulative_message_from_UE_Group_retransmit = {}
+        self.cumulative_message_from_dropped_from_non_group = {}
+        self.cumulative_message_from_dropped_from_group = {}
 
         self.UE_time_stamp = {}
         self.UE_positions = {}
@@ -147,6 +151,38 @@ class DataCollection:
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of cumulative satellite messages')
             plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_satellite' + '.png')
+
+        for id in self.cumulative_message_from_UE_Group_retransmit:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_UE_Group_retransmit[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of cumulative group retransmission')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_UE_Group_retransmit' + '.png')
+        for id in self.cumulative_message_from_dropped_from_group:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_dropped_from_group[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of dropped group request')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_dropped_from_group' + '.png')
+        for id in self.cumulative_message_from_dropped_from_non_group:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_dropped_from_non_group[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of dropped non-group request')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_dropped_from_non_group' + '.png')
+
 
         # plot
         plt.close('all')
