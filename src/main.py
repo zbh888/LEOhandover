@@ -75,6 +75,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
                 data.cumulative_message_from_UE_Group_retransmit[id] = []
                 data.cumulative_message_from_dropped_from_group[id] = []
                 data.cumulative_message_from_dropped_from_non_group[id] = []
+                data.cumulative_message_from_AMF[id] = []
 
 
             data.numberUnProcessedMessages[id].append(len(satellite.cpus.queue))
@@ -88,6 +89,8 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
             data.cumulative_message_from_UE_Group_retransmit[id].append(counter.message_from_UE_group_retransmit)
             data.cumulative_message_from_dropped_from_non_group[id].append(counter.dropped_message_from_non_group)
             data.cumulative_message_from_dropped_from_group[id].append(counter.dropped_message_from_group)
+
+            data.cumulative_message_from_AMF[id].append(counter.message_from_AMF)
 
         numberUEWaitingRRC = 0
         for id in UEs:

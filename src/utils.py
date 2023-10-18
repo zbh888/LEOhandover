@@ -66,6 +66,8 @@ class DataCollection:
         self.UE_positions = {}
         self.UE_groupID = {}
 
+        self.cumulative_message_from_AMF = {}
+
     def read_UEs(self, UEs):
         for id in UEs:
             UE = UEs[id]
@@ -182,6 +184,17 @@ class DataCollection:
             plt.ylabel('Number of Messages')
             plt.title('Satellite ' + str(id) + ' number of dropped non-group request')
             plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(id) + 'cumulative_message_from_dropped_from_non_group' + '.png')
+        for id in self.cumulative_message_from_AMF:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_AMF[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of AMF messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(
+                id) + 'cumulative_message_from_AMF' + '.png')
 
 
         # plot

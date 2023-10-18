@@ -15,6 +15,7 @@ class cumulativeMessageCount:
         self.message_from_UE_group_retransmit = 0
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
+        self.message_from_AMF = 0
 
         self.dropped_message_from_non_group = 0
         self.dropped_message_from_group = 0
@@ -42,6 +43,10 @@ class cumulativeMessageCount:
     def increment_UE_RA(self):
         self.total_messages += 1
         self.message_from_UE_RA += 1
+
+    def increment_AMF(self):
+        self.total_messages += 1
+        self.message_from_AMF += 1
 
     def increment_dropped_from_group(self):
         self.dropped_message_from_group += 1
@@ -107,6 +112,7 @@ class Satellite(Base):
             if task == RRC_RECONFIGURATION_COMPLETE: self.counter.increment_UE_RA()
             if task == GROUP_HANDOVER_MEASUREMENT: self.counter.increment_UE_group_measurement()
             if task == GROUP_RETRANSMISSION: self.counter.increment_UE_group_retransmit()
+            if task == AMF_RESPONSE: self.counter.increment_AMF()
 
 
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
