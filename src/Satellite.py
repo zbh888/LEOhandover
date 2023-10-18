@@ -12,8 +12,12 @@ class cumulativeMessageCount:
         self.message_from_UE_measurement = 0
         self.message_from_UE_group_measurement = 0
         self.message_from_UE_retransmit = 0
+        self.message_from_UE_group_retransmit = 0
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
+
+        self.dropped_message_from_non_group = 0
+        self.dropped_message_from_group = 0
 
     def increment_UE_measurement(self):
         self.total_messages += 1
@@ -27,6 +31,10 @@ class cumulativeMessageCount:
         self.total_messages += 1
         self.message_from_UE_retransmit += 1
 
+    def increment_UE_group_retransmit(self):
+        self.total_messages += 1
+        self.message_from_UE_group_retransmit += 1
+
     def increment_satellite(self):
         self.total_messages += 1
         self.message_from_satellite += 1
@@ -34,6 +42,12 @@ class cumulativeMessageCount:
     def increment_UE_RA(self):
         self.total_messages += 1
         self.message_from_UE_RA += 1
+
+    def increment_dropped_from_group(self):
+        self.dropped_message_from_group += 1
+
+    def increment_dropped_from_nongroup(self):
+        self.dropped_message_from_non_group += 1
 
 
 class Satellite(Base):
@@ -89,9 +103,18 @@ class Satellite(Base):
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
                 if len(self.cpus.queue) < QUEUED_SIZE:
                     print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
+                    self.env.process(self.cpu_processing(msg=data, priority=3))
+                else:
+                    self.counter.increment_dropped_from_nongroup()
+                    print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
+            elif task == GROUP_HANDOVER_MEASUREMENT or task == GROUP_RETRANSMISSION:
+                if len(self.cpus.queue) < QUEUED_SIZE:
+                    print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
                     self.env.process(self.cpu_processing(msg=data, priority=2))
                 else:
+                    self.counter.increment_dropped_from_group()
                     print(f"{self.type} {self.identity} dropped msg:{msg} at time {self.env.now}")
+
             else:
                 print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
                 self.env.process(self.cpu_processing(msg=data, priority=1))
@@ -258,9 +281,12 @@ class Satellite(Base):
                 UEList = self.stored_notified_group_member[groupID]
                 # TODO Verify the ticket [Will not Implement]
                 if ticket == "ticket":
-                    self.counter.increment_UE_group_measurement()
                     processing_time = PROCESSING_TIME[task] * len(UEList)
                     # TODO We need to verify geometric information to see if this task worth processing.
+                    if task == GROUP_HANDOVER_MEASUREMENT:
+                        self.counter.increment_UE_group_measurement()
+                    else:
+                        self.counter.increment_UE_group_retransmit()
                     yield self.env.timeout(processing_time)
                     candidates = msg['candidate']
                     target_satellite_id = random.choice(candidates)
@@ -277,6 +303,7 @@ class Satellite(Base):
                             to=target_satellite
                         )
                     )
+
             elif task == GROUP_HANDOVER_REQUEST:
                 UE_list = msg['ue_list']
                 processing_time = PROCESSING_TIME[task]

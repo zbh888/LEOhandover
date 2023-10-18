@@ -72,6 +72,7 @@ def global_stats_collector_draw_final(env, data, UEs, satellites, timestep):
                 data.cumulative_message_from_satellite[id] = []
                 data.cumulative_message_from_UE_Group[id] = []
 
+
             data.numberUnProcessedMessages[id].append(len(satellite.cpus.queue))
             data.cumulative_total_messages[id].append(counter.total_messages)
             data.cumulative_message_from_UE_measurement[id].append(counter.message_from_UE_measurement)
