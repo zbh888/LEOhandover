@@ -110,9 +110,9 @@ env = simpy.Environment()
 if len(POS_SATELLITES) < 4:
     ylim = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
 else:
-    ylim = VERTICAL_DISTANCE / 2
+    ylim = VERTICAL_DISTANCE / 2 - 200
 
-POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 1 * 1000, 0, 0, ylim)
+POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 100, 0, 0, ylim)
 
 amf = AMF(core_delay=CORE_DELAY, env=env)
 UEs = {}
