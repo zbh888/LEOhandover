@@ -13,6 +13,7 @@ class cumulativeMessageCount:
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
         self.message_dropped = 0
+        self.message_from_AMF = 0
 
     def increment_UE_measurement(self):
         self.total_messages += 1
@@ -29,6 +30,10 @@ class cumulativeMessageCount:
     def increment_UE_RA(self):
         self.total_messages += 1
         self.message_from_UE_RA += 1
+
+    def increment_AMF(self):
+        self.total_messages += 1
+        self.message_from_AMF += 1
 
     def increment_dropped(self):
         self.message_dropped += 1
@@ -84,6 +89,7 @@ class Satellite(Base):
             if task == HANDOVER_ACKNOWLEDGE: self.counter.increment_satellite()
             if task == HANDOVER_REQUEST: self.counter.increment_satellite()
             if task == RRC_RECONFIGURATION_COMPLETE: self.counter.increment_UE_RA()
+            if task == AMF_RESPONSE: self.counter.increment_AMF()
 
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
                 if len(self.cpus.queue) < QUEUED_SIZE:

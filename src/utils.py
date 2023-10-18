@@ -18,6 +18,7 @@ class DataCollection:
         self.cumulative_message_from_UE_retransmit = {}
         self.cumulative_message_from_UE_RA = {}
         self.cumulative_message_from_satellite = {}
+        self.cumulative_message_from_AMF = {}
 
         self.cumulative_message_from_dropped = {}
 
@@ -108,6 +109,17 @@ class DataCollection:
             plt.title('Satellite ' + str(id) + ' number of dropped request')
             plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(
                 id) + 'cumulative_message_from_dropped' + '.png')
+        for id in self.cumulative_message_from_AMF:
+            plt.close('all')
+            plt.clf()
+            y = self.cumulative_message_from_AMF[id]
+            x = self.x
+            plt.plot(x, y)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Number of Messages')
+            plt.title('Satellite ' + str(id) + ' number of AMF messages')
+            plt.savefig(self.draw_path + '/sat_' + str(id) + '/' + str(
+                id) + 'cumulative_message_from_AMF' + '.png')
 
         # plot
         plt.close('all')
