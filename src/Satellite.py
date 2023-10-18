@@ -4,6 +4,7 @@ from Base import *
 from config import *
 import random
 
+
 class cumulativeMessageCount:
     def __init__(self):
         self.total_messages = 0
@@ -12,6 +13,7 @@ class cumulativeMessageCount:
         self.message_from_UE_RA = 0
         self.message_from_satellite = 0
         self.message_dropped = 0
+
     def increment_UE_measurement(self):
         self.total_messages += 1
         self.message_from_UE_measurement += 1
@@ -30,7 +32,6 @@ class cumulativeMessageCount:
 
     def increment_dropped(self):
         self.message_dropped += 1
-
 
 
 class Satellite(Base):
@@ -77,6 +78,13 @@ class Satellite(Base):
             msg = yield self.messageQ.get()
             data = json.loads(msg)
             task = data['task']
+            # Measure the message count
+            if task == MEASUREMENT_REPORT: self.counter.increment_UE_measurement()
+            if task == RETRANSMISSION: self.counter.increment_UE_retransmit()
+            if task == HANDOVER_ACKNOWLEDGE: self.counter.increment_satellite()
+            if task == HANDOVER_REQUEST: self.counter.increment_satellite()
+            if task == RRC_RECONFIGURATION_COMPLETE: self.counter.increment_UE_RA()
+
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
                 if len(self.cpus.queue) < QUEUED_SIZE:
                     print(f"{self.type} {self.identity} accepted msg:{msg} at time {self.env.now}")
@@ -106,10 +114,6 @@ class Satellite(Base):
 
             # handle the task by cases
             if task == MEASUREMENT_REPORT or task == RETRANSMISSION:
-                if task == MEASUREMENT_REPORT:
-                    self.counter.increment_UE_measurement()
-                else:
-                    self.counter.increment_UE_retransmit()
                 ueid = msg['from']
                 candidates = msg['candidate']
                 UE = self.UEs[ueid]
@@ -133,7 +137,6 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_ACKNOWLEDGE:
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 UE = self.UEs[ueid]
@@ -153,7 +156,6 @@ class Satellite(Base):
                         )
                     )
             elif task == HANDOVER_REQUEST:
-                self.counter.increment_satellite()
                 satellite_id = msg['from']
                 ueid = msg['ueid']
                 yield self.env.timeout(processing_time)
@@ -171,7 +173,6 @@ class Satellite(Base):
                     )
                 )
             elif task == RRC_RECONFIGURATION_COMPLETE:
-                self.counter.increment_UE_RA()
                 ue_id = msg['from']
                 UE = self.UEs[ue_id]
                 yield self.env.timeout(processing_time)
@@ -202,7 +203,7 @@ class Satellite(Base):
     def update_position(self):
         """ Continuous updating the object location. """
         while True:
-            #print((len(self.messageQ.items)))
+            # print((len(self.messageQ.items)))
             yield self.env.timeout(1)  # Time between position updates
             # Update x and y based on velocity
             # Calculate time ratio
