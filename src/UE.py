@@ -33,6 +33,7 @@ class UE(Base):
         self.state = ACTIVE
         self.satellites = None
 
+        self.previous_serving_sat_id = None
         self.targetID = None
         self.retransmit_counter = 0
 
@@ -64,6 +65,7 @@ class UE(Base):
                     # choose target
                     self.targetID = targets[0]
                     self.state = RRC_CONFIGURED
+                    self.previous_serving_sat_id = self.serving_satellite.identity
                     self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
                     self.timestamps[-1]['timestamp'].append(self.env.now)
@@ -131,6 +133,7 @@ class UE(Base):
                     target = self.satellites[self.targetID]
                     data = {
                         "task": RRC_RECONFIGURATION_COMPLETE,
+                        "previous_id": self.previous_serving_sat_id,
                     }
                     self.env.process(
                         self.send_message(
@@ -152,6 +155,7 @@ class UE(Base):
                         self.timestamps[-1]['timestamp'].append(self.env.now)
                         self.timestamps[-1]['isSuccess'] = False
                     self.state = INACTIVE
+
             yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============

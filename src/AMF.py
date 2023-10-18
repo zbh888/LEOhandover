@@ -54,6 +54,31 @@ class AMF(Base):
             # handle the task by cases
             if task == PATH_SHIFT_REQUEST:
                 satellite_id = msg['from']
+                previous_id = msg['previous_id']
                 satellite = self.satellites[satellite_id]
+                previous_satellite = self.satellites[previous_id]
                 yield request
                 yield self.env.timeout(processing_time)
+                data1 = {
+                    "task": AMF_RESPONSE,
+                }
+                self.env.process(
+                    self.send_message(
+                        delay=self.core_delay,
+                        msg=data1,
+                        Q=satellite.messageQ,
+                        to=satellite
+                    )
+                )
+                data2 = {
+                    "task": AMF_RESPONSE,
+                }
+                self.env.process(
+                    self.send_message(
+                        delay=self.core_delay,
+                        msg=data2,
+                        Q=previous_satellite.messageQ,
+                        to=previous_satellite
+                    )
+                )
+
