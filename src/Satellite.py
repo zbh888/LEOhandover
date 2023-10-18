@@ -238,7 +238,7 @@ class Satellite(Base):
                 groupID = msg['groupID']
                 left_x = msg['left_x']
                 UE_list = msg['ue_list']
-                processing_time = PROCESSING_TIME[PROCESS_GROUP]
+                processing_time = PROCESSING_TIME[PREPARE_SIGNATURE]
                 estimate_time = processing_time + self.satellite_ground_delay
                 ratio = 1 / 1000
                 if ratio * estimate_time * self.velocity + self.position_x < left_x:
@@ -283,7 +283,7 @@ class Satellite(Base):
                 UEList = self.stored_notified_group_member[groupID]
                 # TODO Verify the ticket [Will not Implement]
                 if ticket == "ticket":
-                    processing_time = PROCESSING_TIME[PROCESS_GROUP]
+                    processing_time = PROCESSING_TIME[task]
                     # TODO We need to verify geometric information to see if this task worth processing.
                     yield self.env.timeout(processing_time)
                     candidates = msg['candidate']
