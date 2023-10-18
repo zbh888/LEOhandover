@@ -224,6 +224,7 @@ class Satellite(Base):
                 )
                 data2 = {
                     "task": PATH_SHIFT_REQUEST,
+                    "previous_id": msg['previous_id']
                 }
                 self.env.process(
                     self.send_message(
@@ -340,6 +341,9 @@ class Satellite(Base):
                                 to=UE
                             )
                         )
+            elif task == AMF_RESPONSE:
+                processing_time = PROCESSING_TIME[AMF_RESPONSE]
+                yield self.env.timeout(processing_time)
 
             print(f"{self.type} {self.identity} finished processing msg:{msg} at time {self.env.now}")
 
