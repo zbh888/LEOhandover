@@ -145,6 +145,7 @@ class UE(Base):
                             )
                         )
                         self.state = GROUP_WAITING_RRC_CONFIGURATION_HEAD
+                        self.group_aggregation_map = {}
 
 
 
@@ -290,6 +291,7 @@ class UE(Base):
                         self.timestamps[-1]['timestamp'].append(self.env.now)
                         self.timestamps[-1]['isSuccess'] = False
                     self.state = INACTIVE
+                    self.group_aggregation_map = {}
             yield self.env.timeout(1)
 
     # ==================== Utils (Not related to Simpy) ==============
