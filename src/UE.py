@@ -45,6 +45,7 @@ class UE(Base):
         self.commitment_map = None
         self.threshold = None
         self.heads = None
+        self.already_broadcast = False
         self.group_retransmit_counter = 0
         self.group_aggregation_map = {}
 
@@ -169,6 +170,7 @@ class UE(Base):
                         self.timestamps[-1]['group'] = True
                         self.group_timer = self.env.now
                         self.state = GROUP_WAITING_RRC_CONFIGURATION_HEAD
+                        self.already_broadcast = False
                         self.group_aggregation_map = {}
 
 
@@ -205,9 +207,11 @@ class UE(Base):
                 for satid in self.satellites:
                     if self.covered_by(satid) and satid != self.serving_satellite.identity:
                         candidates.append(satid)
-                if len(candidates) != 0:
+                if len(candidates) != 0 and not self.already_broadcast:
+                    self.already_broadcast = True
                     if self.state == GROUP_ACTIVE:
                         self.state = GROUP_WAITING_RRC_CONFIGURATION
+                        self.already_broadcast = False
                         self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
                         self.timestamps[-1]['from'] = self.serving_satellite.identity
                         self.timestamps[-1]['group'] = True
@@ -215,6 +219,7 @@ class UE(Base):
                         'task': GROUP_AGGREGATION,
                         'share': self.share
                     }
+
                     for id in self.heads:
                         head = self.UEs[id]
                         self.env.process(
