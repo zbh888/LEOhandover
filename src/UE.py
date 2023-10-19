@@ -72,10 +72,19 @@ class UE(Base):
                 # TODO the suspect reason is synchronization issue with "switch to inactive"
                 # TODO Note that the UE didn't wait for the latest response for retransmission.
                 if self.state == WAITING_RRC_CONFIGURATION and satid == self.serving_satellite.identity:
-                    # get candidate target
+                    # # get candidate target
+                    # self.retransmit_counter = 0
+                    # print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+                    # self.state = RRC_CONFIGURED
+                    # self.timestamps[-1]['timestamp'].append(self.env.now)
+                    # self.timestamps[-1]['isSuccess'] = True
+                    targets = msg['targets']
+                    # choose target
+                    self.targetID = targets[0]
+                    self.state = RRC_CONFIGURED
+                    self.previous_serving_sat_id = self.serving_satellite.identity
                     self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
-                    self.state = RRC_CONFIGURED
                     self.timestamps[-1]['timestamp'].append(self.env.now)
                     self.timestamps[-1]['isSuccess'] = True
                 elif ((self.state == GROUP_WAITING_RRC_CONFIGURATION or self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD)
