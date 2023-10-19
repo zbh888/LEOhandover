@@ -242,10 +242,11 @@ class Satellite(Base):
                 )
             elif task == GROUP_HANDOVER_NOTIFY:
                 # Determine processing time and estimate if worth processing
+                number_aggregator = 2
                 groupID = msg['groupID']
                 left_x = msg['left_x']
                 UE_list = msg['ue_list']
-                processing_time = PROCESSING_TIME[PREPARE_SIGNATURE]
+                processing_time = PROCESSING_TIME[PREPARE_SIGNATURE] + number_aggregator * PROCESSING_TIME[NOTIFY_AGGREGATOR]
                 estimate_time = processing_time + self.satellite_ground_delay
                 ratio = 1 / 1000
                 if ratio * estimate_time * self.velocity + self.position_x < left_x:
