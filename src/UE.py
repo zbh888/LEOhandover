@@ -230,7 +230,7 @@ class UE(Base):
                         )
                     )
                     self.retransmit_counter += 1
-            if RETRANSMIT and self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD and self.env.now - self.group_timer > RETRANSMIT_THRESHOLD and self.group_retransmit_counter < MAX_RETRANSMIT:
+            if RETRANSMIT and self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD and self.env.now - self.group_timer > GROUP_RETRANSMIT_THRESHOLD and self.group_retransmit_counter < MAX_RETRANSMIT:
                 self.group_timer = self.env.now
                 self.timestamps[-1]['timestamp'].append(self.env.now)
                 candidates = []
@@ -270,16 +270,22 @@ class UE(Base):
                         )
                     )
                     self.state = WAITING_RRC_RECONFIGURATION_COMPLETE_RESPONSE
-            if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING] and self.terminate_group_handover():
-                self.state = ACTIVE
+        #    if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING] and self.terminate_group_handover():
+        #        self.state = ACTIVE
             # switch to inactive
             if self.serving_satellite is not None and self.outside_coverage():
                 print(
                     f"UE {self.identity} lost connection at time {self.env.now} from satellite {self.serving_satellite.identity}")
                 self.serving_satellite = None
                 # TODO because of switch to active condition, I never see one UE from the [...] state to inactive
-                if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION or self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING]:
+                if self.state == ACTIVE or self.state == WAITING_RRC_CONFIGURATION:
                     if self.state == WAITING_RRC_CONFIGURATION:
+                        print(f"UE {self.identity} handover failure at time {self.env.now}")
+                        self.timestamps[-1]['timestamp'].append(self.env.now)
+                        self.timestamps[-1]['isSuccess'] = False
+                    self.state = INACTIVE
+                if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING]:
+                    if self.state == GROUP_WAITING_RRC_CONFIGURATION or self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD:
                         print(f"UE {self.identity} handover failure at time {self.env.now}")
                         self.timestamps[-1]['timestamp'].append(self.env.now)
                         self.timestamps[-1]['isSuccess'] = False
