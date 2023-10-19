@@ -88,6 +88,7 @@ class Satellite(Base):
         self.cpus = simpy.PriorityResource(env, capacity=SATELLITE_CPU)  # Concurrent processing
         self.counter = cumulativeMessageCount()
         self.group_info = {}
+        self.group_sending_time = {} # To avoid send duplicate tasks
         self.stored_notified_group_member = {} # This is the record UEs that notified
         self.group_aggregators = {} # This ensures only one task to notify UEs
         self.group_share_commit = {}
@@ -292,23 +293,29 @@ class Satellite(Base):
                 # TODO Verify the ticket [Will not Implement]
                 if ticket == "ticket":
                     processing_time = PROCESSING_TIME[task]
+                    previous_time = 0
+                    if groupID in self.group_sending_time:
+                        previous_time = self.group_sending_time[groupID]
+                    difference = self.env.now - previous_time
+                    if difference > 1:
+                        self.group_sending_time[groupID] = self.env.now
                     # TODO We need to verify geometric information to see if this task worth processing.
-                    yield self.env.timeout(processing_time)
-                    candidates = msg['candidate']
-                    target_satellite_id = random.choice(candidates)
-                    target_satellite = self.satellites[target_satellite_id]
-                    data = {
-                        "task": GROUP_HANDOVER_REQUEST,
-                        "ue_list": UEList,
-                    }
-                    self.env.process(
-                        self.send_message(
-                            delay=self.ISL_delay,
-                            msg=data,
-                            Q=target_satellite.messageQ,
-                            to=target_satellite
+                        yield self.env.timeout(processing_time)
+                        candidates = msg['candidate']
+                        target_satellite_id = random.choice(candidates)
+                        target_satellite = self.satellites[target_satellite_id]
+                        data = {
+                            "task": GROUP_HANDOVER_REQUEST,
+                            "ue_list": UEList,
+                        }
+                        self.env.process(
+                            self.send_message(
+                                delay=self.ISL_delay,
+                                msg=data,
+                                Q=target_satellite.messageQ,
+                                to=target_satellite
+                            )
                         )
-                    )
 
             elif task == GROUP_HANDOVER_REQUEST:
                 UE_list = msg['ue_list']

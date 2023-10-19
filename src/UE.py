@@ -5,6 +5,7 @@ import simpy
 from Base import *
 import utils
 from config import *
+import random
 
 
 class UE(Base):
@@ -138,7 +139,8 @@ class UE(Base):
                     if len(candidates) != 0 and self.state == GROUP_HEAD_AGGREGATING:
                         self.env.process(
                             self.send_message(
-                                delay=self.satellite_ground_delay,
+                                # add some noise
+                                delay=self.satellite_ground_delay + random.random()/100,
                                 msg=data,
                                 Q=self.serving_satellite.messageQ,
                                 to=self.serving_satellite
