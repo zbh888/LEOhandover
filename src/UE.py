@@ -205,7 +205,7 @@ class UE(Base):
             if (self.state == GROUP_ACTIVE or self.state == GROUP_ACTIVE_HEAD) and self.group_broadcasting_condition(): # Broadcasting
                 candidates = []
                 for satid in self.satellites:
-                    if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                    if self.covered_by(satid) and satid != self.serving_satellite.identity and satid != self.previous_serving_sat_id:
                         candidates.append(satid)
                 if len(candidates) != 0 and not self.already_broadcast:
                     self.already_broadcast = True
