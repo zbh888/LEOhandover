@@ -1,4 +1,5 @@
 import json
+import random
 
 
 class Base:
@@ -37,5 +38,5 @@ class Base:
         msg['to'] = to.identity
         msg = json.dumps(msg)
         print(f"{self.type} {self.identity} sends {to.type} {to.identity} the message {msg} at {self.env.now}")
-        yield self.env.timeout(delay)
+        yield self.env.timeout(delay + random.random()/1000)
         Q.put(msg)

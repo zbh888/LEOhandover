@@ -5,7 +5,6 @@ import simpy
 from Base import *
 import utils
 from config import *
-import random
 
 
 class UE(Base):
@@ -74,11 +73,6 @@ class UE(Base):
                 # TODO Note that the UE didn't wait for the latest response for retransmission.
                 if self.state == WAITING_RRC_CONFIGURATION and satid == self.serving_satellite.identity:
                     # get candidate target
-                    targets = msg['targets']
-                    # choose target
-                    self.targetID = targets[0]
-                    self.state = RRC_CONFIGURED
-                    self.previous_serving_sat_id = self.serving_satellite.identity
                     self.retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
                     self.timestamps[-1]['timestamp'].append(self.env.now)
@@ -90,10 +84,22 @@ class UE(Base):
                     self.targetID = targets[0]
                     self.state = RRC_CONFIGURED
                     self.previous_serving_sat_id = self.serving_satellite.identity
-                    self.retransmit_counter = 0
+                    self.group_retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
                     self.timestamps[-1]['timestamp'].append(self.env.now)
                     self.timestamps[-1]['isSuccess'] = True
+                elif (self.state == GROUP_ACTIVE or self.state == GROUP_ACTIVE_HEAD) and satid == self.serving_satellite.identity:
+                    targets = msg['targets']
+                    # choose target
+                    self.targetID = targets[0]
+                    self.state = RRC_CONFIGURED
+                    self.previous_serving_sat_id = self.serving_satellite.identity
+                    self.group_retransmit_counter = 0
+                    print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
+                    self.timestamps[-1]['timestamp'].append(self.env.now)
+                    self.timestamps[-1]['timestamp'].append(self.env.now)
+                    self.timestamps[-1]['isSuccess'] = True
+
 
             elif task == RRC_RECONFIGURATION_COMPLETE_RESPONSE:
                 yield request
@@ -116,7 +122,7 @@ class UE(Base):
                     self.threshold = msg['threshold']
                     self.heads = heads
 
-            elif task == GROUP_AGGREGATION and self.state == GROUP_HEAD_AGGREGATING:
+            elif task == GROUP_AGGREGATION and self.state == GROUP_ACTIVE_HEAD:
                 yield request
                 processing_time = PROCESSING_TIME[task]
                 ue_id = msg['from']
@@ -136,11 +142,11 @@ class UE(Base):
                         "groupID": self.groupID,
                         "ticket": 'ticket' # TODO Without group handover ticket [will not be implemented]
                     }
-                    if len(candidates) != 0 and self.state == GROUP_HEAD_AGGREGATING:
+                    if len(candidates) != 0 and self.state == GROUP_ACTIVE_HEAD:
                         self.env.process(
                             self.send_message(
                                 # add some noise
-                                delay=self.satellite_ground_delay + random.random()/100,
+                                delay=self.satellite_ground_delay,
                                 msg=data,
                                 Q=self.serving_satellite.messageQ,
                                 to=self.serving_satellite
@@ -190,7 +196,6 @@ class UE(Base):
                         self.timestamps[-1]['from'] = self.serving_satellite.identity
                         self.timestamps[-1]['group'] = True
                     if self.state == GROUP_ACTIVE_HEAD:
-                        self.state = GROUP_HEAD_AGGREGATING
                         self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
                         self.timestamps[-1]['from'] = self.serving_satellite.identity
                         self.timestamps[-1]['group'] = True
@@ -203,6 +208,7 @@ class UE(Base):
                         head = self.UEs[id]
                         self.env.process(
                             self.send_message(
+                                # to avoid group head send same request
                                 delay=0,
                                 msg=data,
                                 Q=head.messageQ,
@@ -287,7 +293,7 @@ class UE(Base):
                         self.timestamps[-1]['timestamp'].append(self.env.now)
                         self.timestamps[-1]['isSuccess'] = False
                     self.state = INACTIVE
-                if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD ,GROUP_HEAD_AGGREGATING]:
+                if self.state in [GROUP_ACTIVE,GROUP_ACTIVE_HEAD,GROUP_WAITING_RRC_CONFIGURATION,GROUP_WAITING_RRC_CONFIGURATION_HEAD]:
                     if self.state == GROUP_WAITING_RRC_CONFIGURATION or self.state == GROUP_WAITING_RRC_CONFIGURATION_HEAD:
                         print(f"UE {self.identity} handover failure at time {self.env.now}")
                         self.timestamps[-1]['timestamp'].append(self.env.now)
