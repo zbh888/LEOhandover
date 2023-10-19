@@ -251,7 +251,7 @@ class Satellite(Base):
                 ratio = 1 / 1000
                 if ratio * estimate_time * self.velocity + self.position_x < left_x:
                     yield self.env.timeout(processing_time)
-                    aggregatorIDs = random.sample(UE_list, 2)
+                    aggregatorIDs = random.sample(UE_list, number_aggregator)
                     print(f"{self.type} {self.identity} notifies group {groupID} at time {self.env.now}")
                     ID_commitment = {}
                     for ueID in UE_list:
