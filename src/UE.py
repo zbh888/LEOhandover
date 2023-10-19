@@ -96,7 +96,9 @@ class UE(Base):
                     self.previous_serving_sat_id = self.serving_satellite.identity
                     self.group_retransmit_counter = 0
                     print(f"{self.type} {self.identity} receives the configuration at {self.env.now}")
-                    self.timestamps[-1]['timestamp'].append(self.env.now)
+                    self.timestamps.append({'timestamp': [self.env.now]})  # This is the start time
+                    self.timestamps[-1]['from'] = self.serving_satellite.identity
+                    self.timestamps[-1]['group'] = True
                     self.timestamps[-1]['timestamp'].append(self.env.now)
                     self.timestamps[-1]['isSuccess'] = True
 
