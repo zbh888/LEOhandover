@@ -183,7 +183,7 @@ class UE(Base):
             if self.state == ACTIVE and self.send_request_condition():
                 candidates = []
                 for satid in self.satellites:
-                    if self.covered_by(satid) and satid != self.serving_satellite.identity:
+                    if self.covered_by(satid) and satid != self.serving_satellite.identity and satid != self.previous_serving_sat_id:
                         candidates.append(satid)
                 data = {
                     "task": MEASUREMENT_REPORT,
