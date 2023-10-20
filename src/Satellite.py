@@ -243,7 +243,7 @@ class Satellite(Base):
                 )
             elif task == GROUP_HANDOVER_NOTIFY:
                 # Determine processing time and estimate if worth processing
-                number_aggregator = 2
+                number_aggregator = 3
                 groupID = msg['groupID']
                 left_x = msg['left_x']
                 UE_list = msg['ue_list']
@@ -265,6 +265,7 @@ class Satellite(Base):
                         else:
                             print("ERROR This shouldn't happen")
                     self.stored_notified_group_member[groupID] = UE_list
+                    threshold = len(UE_list) // 2 + 1
                     #self.group_aggregators[groupID] = aggregatorIDs
                     for ueID in UE_list:
                         UE = self.UEs[ueID]
@@ -276,7 +277,7 @@ class Satellite(Base):
                             "commit": commit,
                             "head": aggregatorIDs,
                             "commitment_map": ID_commitment,
-                            "threshold": 3 #TODO This needs some change
+                            "threshold": threshold,  #TODO This needs some change
                         }
                         self.env.process(
                             self.send_message(
