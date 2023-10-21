@@ -5,6 +5,9 @@ from AMF import *
 from Satellite import *
 from UE import *
 import math
+import random
+
+random.seed(SEED)
 
 dir = "defaultres"
 if len(sys.argv) != 1:  # This is for automation
