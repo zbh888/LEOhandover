@@ -1,4 +1,5 @@
 # System level config
+SEED = 10
 SATELLITE_R = 25 * 1000
 NUMBER_UE = 2000
 SATELLITE_V = 7.56 * 1000

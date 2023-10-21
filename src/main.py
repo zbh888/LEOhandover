@@ -9,7 +9,7 @@ from UE import *
 from config import *
 import math
 
-random.seed(10)
+random.seed(SEED)
 
 
 # This is simply for tracing time stamp
