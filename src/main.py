@@ -45,10 +45,10 @@ file.close()
  # We use this if the satellites are linearly deployed
 if len(POS_SATELLITES) < 4:
     ylim_intersect = math.sqrt(SATELLITE_R ** 2 - (HORIZONTAL_DISTANCE / 2) ** 2) - 500
-    ylim = (ylim_intersect // GROUP_AREA_L) * GROUP_AREA_L
+    ylim = (ylim_intersect // GROUP_AREA_L - 1) * GROUP_AREA_L
 else:
     ylim_half = VERTICAL_DISTANCE / 2 - 200
-    ylim = (ylim_half // GROUP_AREA_L) * GROUP_AREA_L
+    ylim = (ylim_half // GROUP_AREA_L - 1) * GROUP_AREA_L
 POSITIONS = utils.generate_points_with_ylim(NUMBER_UE, SATELLITE_R - 100, 0, 0, ylim)
 # ===================== Running Experiment =============================
 # This is simply for tracing time stamp
