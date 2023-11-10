@@ -20,7 +20,7 @@ The handover process is implemented in discrete-event tool "simpy"
 
 `result`: batch running experiments and generate analysis
 
-# animations
+# animations (HO vs GHO)
 
 <p align="center">
   <img width="200" src=./gifs/main10000.gif>
