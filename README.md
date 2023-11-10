@@ -23,30 +23,30 @@ The handover process is implemented in discrete-event tool "simpy"
 # animations
 
 <p align="center">
-  <img width="400" src=./gifs/main10000.gif>
-  <img width="400" src=./gifs/group10000.gif>
+  <img width="200" src=./gifs/main10000.gif>
+  <img width="200" src=./gifs/group10000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main20000.gif>
-  <img width="400" src=./gifs/group20000.gif>
+  <img width="200" src=./gifs/main20000.gif>
+  <img width="200" src=./gifs/group20000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main30000.gif>
-  <img width="400" src=./gifs/group30000.gif>
+  <img width="200" src=./gifs/main30000.gif>
+  <img width="200" src=./gifs/group30000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main40000.gif>
-  <img width="400" src=./gifs/group40000.gif>
+  <img width="200" src=./gifs/main40000.gif>
+  <img width="200" src=./gifs/group40000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main50000.gif>
-  <img width="400" src=./gifs/group50000.gif>
+  <img width="200" src=./gifs/main50000.gif>
+  <img width="200" src=./gifs/group50000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main60000.gif>
-  <img width="400" src=./gifs/group60000.gif>
+  <img width="200" src=./gifs/main60000.gif>
+  <img width="200" src=./gifs/group60000.gif>
 </p>
 <p align="center">
-  <img width="400" src=./gifs/main70000.gif>
-  <img width="400" src=./gifs/group70000.gif>
+  <img width="200" src=./gifs/main70000.gif>
+  <img width="200" src=./gifs/group70000.gif>
 </p>
