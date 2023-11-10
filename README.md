@@ -2,21 +2,20 @@
 
 The handover process is implemented in discrete-event tool "simpy"
 
-# Design Idea
+# How to run the code
 
-## Communication Channel
+1. go to ./src/config.py to apply your experiment setting.
 
-1. The sender should wait the time and put the message in the receiver's Q
-2. The sending action should through method "send_message()"
+2. `./default_run.sh`
 
-## Signal Processing
+3. `./clean.sh` if you want to remove everything.
 
-1. The processing of the signal is using CPU tasks
+(You can batch run everything and generate results, check `result` branch)
 
-## Identity management
+# branches
 
-1. Each device including satellite will have a unique identifier (Not implemented)
+`main`: Xn-based baseline handover, location based trigger
 
-## Message format
+`group`: group Xn-based handover, location based trigger
 
-1. The message should follow the same format (Not implemented)
+`result`: batch running experiments and generate analysis
