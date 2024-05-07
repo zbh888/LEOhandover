@@ -21,7 +21,7 @@ The handover process is implemented in discrete-event tool "simpy"
 `result`: batch running experiments and generate analysis
 
 # animations (HO vs GHO)
-(HO draw every 200 ms, GHO draw every 300 ms, why? I forgot to change it....Wait a few seconds to show gif...)
+(HO draw every 200 ms, GHO draw every 300 ms, why? I forgot to change it....Wait a few seconds to show gif... It won't affect the result though. just visualization)
 
 
 <p align="center">
