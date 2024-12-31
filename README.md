@@ -9,6 +9,8 @@ Or you can use this repo to batch run experiments, get the result, generate anal
 
 3. So, after you waited for a few hours, you will see a folder namely `seed10`, which contains GHO and HO results.
 
-4. If you want to aggregate the result from different seeds, you can go to folder `datagroup` and `datamain`. You need to run two notebook to generate pickle file.
+4. Suppose you have run with different seed and obtain folders `seed10`, `seed20`, `seed30`, `seed40`, `seed50`. 
 
-5. Now you can use `data_aggregate_seeds` notebook to generate the results.
+5. If you want to aggregate the result from different seeds, you can go to folder `datagroup` and `datamain`. You need to run two notebook to generate pickle file.
+
+6. Now you can use `data_aggregate_seeds` notebook to generate the results.
