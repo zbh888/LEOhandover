@@ -9,10 +9,10 @@ Or you can use this repo to batch run experiments, get the result, generate anal
 
 3. So, after you waited for a few hours, you will see a folder namely `seed10`, which contains GHO and HO results.
 
-4. Suppose you have run with different seed and obtain folders `seed10`, `seed20`, `seed30`, `seed40`, `seed50`. 
+4. Suppose you have run with different seed and obtain folders `seed10`, `seed20`, `seed30`, `seed40`, `seed50`.
 
-5. You could use `copy_res_local.sh`  to process results. Here, I provided the result folder that can be downloaded https://drive.google.com/file/d/12G8Q1eSfHVpzL0Rb21YSic8ATTGOBTJd/view?usp=drive_link.
+5. You could use `copy_res_local.sh`  to process these results. Here, I provided the results that can be downloaded from https://drive.google.com/file/d/12G8Q1eSfHVpzL0Rb21YSic8ATTGOBTJd/view?usp=drive_link.
 
-7. If you want to aggregate the result from different seeds, you can use these pickle files. Format them like in the example folder `datagroup` and `datamain`.
+6. The script will generate two folders `datamain` and `datagroup`. Go to each folder and run the notebook. It will give you the pickle files (the same as what already there).
 
-8. Now you can use `data_aggregate_seeds` notebook to generate the results.
+7. If you want to aggregate the result from different seeds, you can use these pickle files. Now you can use `data_aggregate_seeds` notebook to generate the results.
