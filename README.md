@@ -11,7 +11,7 @@ Or you can use this repo to batch run experiments, get the result, generate anal
 
 4. Suppose you have run with different seed and obtain folders `seed10`, `seed20`, `seed30`, `seed40`, `seed50`. If they are in a server, you could use `copy_res.sh` to get them.
 
-5. If they are not in a server. You could use ``  to get process result. Here, I provided the result folder that can be downloaded https://drive.google.com/file/d/12G8Q1eSfHVpzL0Rb21YSic8ATTGOBTJd/view?usp=drive_link.
+5. If they are not in a server. You could use `copy_res_local.sh`  to get process result. Here, I provided the result folder that can be downloaded https://drive.google.com/file/d/12G8Q1eSfHVpzL0Rb21YSic8ATTGOBTJd/view?usp=drive_link.
 
 6. If you want to aggregate the result from different seeds, you can go to folder `datagroup` and `datamain`. You need to run two notebook to generate pickle file.
 
