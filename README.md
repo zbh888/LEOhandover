@@ -3,7 +3,7 @@
 Well, you can run each experiment individually....
 Or you can use this repo to batch run experiments, get the result, generate analysis
 
-1. specify the seed and how many UEs you want to simulate in `run_experiment.sh`, default is 10.
+1. specify the seed and how many UEs you want to simulate in `run_experiment.sh`, default seed is 10.
   
 2. Run `./run_experiment.sh`. (1. Need Linux environment becuase the use of `sed` 2. I suggest you do this in a server with `nohup`) 
 
