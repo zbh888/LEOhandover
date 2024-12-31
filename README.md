@@ -13,6 +13,10 @@ Or you can use this repo to batch run experiments, get the result, generate anal
 
 5. If they are not in a server. You could use `copy_res_local.sh`  to get process result. Here, I provided the result folder that can be downloaded https://drive.google.com/file/d/12G8Q1eSfHVpzL0Rb21YSic8ATTGOBTJd/view?usp=drive_link.
 
-6. If you want to aggregate the result from different seeds, you can go to folder `datagroup` and `datamain`. You need to run two notebook to generate pickle file.
+   a. Change seed from 10 to 50 in `copy_res_local.sh` and run
 
-7. Now you can use `data_aggregate_seeds` notebook to generate the results.
+   b. In `seed10/main` run `dataprocess.ipynb` and gives `main.pickle'. In `seed10/group` run `dataprocess.ipynb` and gives `group.pickle'. Do it for seed from 10 to 50.
+
+7. If you want to aggregate the result from different seeds, you can use these pickle files. Format them like in the example folder `datagroup` and `datamain`.
+
+8. Now you can use `data_aggregate_seeds` notebook to generate the results.
